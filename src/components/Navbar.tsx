@@ -45,13 +45,7 @@ const Navbar: React.FC = () => {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-2">
-            <Button 
-              variant="ghost" 
-              onClick={handleLogin} 
-              className="text-empower-brown hover:text-white hover:bg-empower-terracotta transition-all duration-300"
-            >
-              Login
-            </Button>
+            <Button variant="ghost" onClick={handleLogin} className="text-empower-brown hover:text-empower-terracotta">Login</Button>
             <Button className="bg-empower-terracotta hover:bg-empower-terracotta/90" onClick={handleSignUp}>Sign Up</Button>
           </div>
 
@@ -72,13 +66,7 @@ const Navbar: React.FC = () => {
               <Link to="/workshops" className="text-empower-brown hover:text-empower-terracotta transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-empower-terracotta after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Workshops</Link>
               <Link to="/events" className="text-empower-brown hover:text-empower-terracotta transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-empower-terracotta after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Events</Link>
               <div className="flex space-x-2 pt-2">
-                <Button 
-                  variant="ghost" 
-                  onClick={handleLogin} 
-                  className="text-empower-brown hover:text-white hover:bg-empower-terracotta transition-all duration-300"
-                >
-                  Login
-                </Button>
+                <Button variant="ghost" onClick={handleLogin} className="text-empower-brown hover:text-empower-terracotta">Login</Button>
                 <Button className="bg-empower-terracotta hover:bg-empower-terracotta/90" onClick={handleSignUp}>Sign Up</Button>
               </div>
             </div>
