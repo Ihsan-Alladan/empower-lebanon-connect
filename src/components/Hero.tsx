@@ -102,35 +102,41 @@ const Hero: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.8, duration: 0.8 }}
             >
-              <Button 
-                size="lg"
-                className="bg-empower-terracotta hover:bg-empower-terracotta/90 shadow-lg"
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+              <motion.div
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
-                as={motion.button}
               >
-                <Book className="mr-2 h-5 w-5" /> Explore Courses
-              </Button>
+                <Button 
+                  size="lg"
+                  className="bg-empower-terracotta hover:bg-empower-terracotta/90 shadow-lg"
+                >
+                  <Book className="mr-2 h-5 w-5" /> Explore Courses
+                </Button>
+              </motion.div>
               
-              <Button 
-                size="lg"
-                className="bg-[#F97316] hover:bg-[#F97316]/90 shadow-lg"
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+              <motion.div
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
-                as={motion.button}
               >
-                <ShoppingCart className="mr-2 h-5 w-5" /> Visit Our Shop
-              </Button>
+                <Button 
+                  size="lg"
+                  className="bg-[#F97316] hover:bg-[#F97316]/90 shadow-lg"
+                >
+                  <ShoppingCart className="mr-2 h-5 w-5" /> Visit Our Shop
+                </Button>
+              </motion.div>
               
-              <Button 
-                size="lg"
-                className="bg-[#D946EF] hover:bg-[#D946EF]/90 shadow-lg text-white"
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+              <motion.div
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
-                as={motion.button}
               >
-                <Heart className="mr-2 h-5 w-5" /> Donate Now
-              </Button>
+                <Button 
+                  size="lg"
+                  className="bg-[#D946EF] hover:bg-[#D946EF]/90 shadow-lg text-white"
+                >
+                  <Heart className="mr-2 h-5 w-5" /> Donate Now
+                </Button>
+              </motion.div>
             </motion.div>
           </div>
         </div>
