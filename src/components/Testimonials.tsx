@@ -16,7 +16,7 @@ const testimonials = [
   },
   {
     quote: "As a donor, I can see the direct impact of my contributions. The transparency and community focus make supporting EmpowEra incredibly rewarding.",
-    name: "Michel Hadid",
+    name: "Ibrahim Bitar",
     role: "Monthly Donor",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop"
   }
