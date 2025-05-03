@@ -23,7 +23,7 @@ const RoleButton: React.FC<RoleButtonProps> = ({ role, icon, label, onClick }) =
   return (
     <Button
       variant="ghost"
-      className="bg-empower-terracotta hover:bg-empower-terracotta/90 text-white font-bold py-4 flex flex-col items-center justify-center gap-2 transition-all duration-300 hover:scale-105 glow-on-hover w-full h-24"
+      className="bg-empower-terracotta hover:bg-empower-terracotta/90 text-white font-bold py-4 flex flex-col items-center justify-center gap-2 transition-all duration-300 hover:scale-105 w-full h-24"
       onClick={() => onClick(role)}
     >
       {icon}
@@ -48,71 +48,71 @@ const SignUp = () => {
       <div className="min-h-screen flex flex-col">
         <Navbar />
         
-        <div className="flex-grow relative flex items-center justify-center py-12 px-4">
-          {/* Background blur effect */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat filter blur-sm"
-            style={{ 
-              backgroundImage: "url('https://images.unsplash.com/photo-1497215842964-222b430dc094?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')",
-              opacity: 0.6,
-            }}
-          ></div>
-          
-          {/* Overlay to darken the background slightly */}
-          <div className="absolute inset-0 bg-empower-brown/20"></div>
-          
-          {/* Card containing sign up options */}
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative z-10 w-full max-w-2xl"
-          >
-            <Card className="bg-white shadow-xl rounded-xl overflow-hidden p-8">
-              <div className="flex flex-col items-center justify-center mb-8">
-                <h1 className="text-5xl md:text-6xl font-bold text-empower-terracotta mb-4 text-center">
-                  Sign up
-                </h1>
-                <h2 className="text-2xl italic text-empower-brown text-center">
-                  How do you like to join us?
-                </h2>
-              </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-8">
+        <div className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-empower-ivory to-white">
+          <div className="max-w-md w-full space-y-8">
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-center"
+            >
+              <h2 className="mt-6 text-3xl font-bold text-empower-brown">
+                Sign Up
+              </h2>
+              <p className="mt-2 text-sm text-empower-brown/80">
+                How would you like to join EmpowEra?
+              </p>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="mt-8 bg-white rounded-lg shadow-lg p-8"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <RoleButton
                   role="learner"
-                  icon={<Book className="w-9 h-9" />}
+                  icon={<Book className="w-8 h-8" />}
                   label="Learner"
                   onClick={handleRoleSelection}
                 />
                 
                 <RoleButton
                   role="customer"
-                  icon={<ShoppingCart className="w-9 h-9" />}
+                  icon={<ShoppingCart className="w-8 h-8" />}
                   label="Customer"
                   onClick={handleRoleSelection}
                 />
                 
                 <RoleButton
                   role="seller"
-                  icon={<Store className="w-9 h-9" />}
+                  icon={<Store className="w-8 h-8" />}
                   label="Seller"
                   onClick={handleRoleSelection}
                 />
                 
                 <RoleButton
                   role="instructor"
-                  icon={<BookOpen className="w-9 h-9" />}
+                  icon={<BookOpen className="w-8 h-8" />}
                   label="Instructor"
                   onClick={handleRoleSelection}
                 />
               </div>
               
-              <p className="text-center text-sm text-empower-brown/70 mt-8">
-                Already have an account? <a href="/login" className="text-empower-terracotta font-medium hover:underline">Log in</a>
-              </p>
-            </Card>
-          </motion.div>
+              <div className="text-center mt-6">
+                <p className="text-sm text-empower-brown/80">
+                  Already have an account?{" "}
+                  <a 
+                    href="/login" 
+                    className="font-medium text-empower-terracotta hover:text-empower-brown transition-colors"
+                  >
+                    Log in
+                  </a>
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </PageTransition>
