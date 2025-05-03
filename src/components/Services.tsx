@@ -9,7 +9,7 @@ const serviceCards = [
     icon: Book,
     color: "bg-empower-terracotta",
     textColor: "text-empower-terracotta",
-    borderClass: "",
+    borderClass: "border-2 border-[#1EAEDB]",
     delay: 100
   },
   {
@@ -45,7 +45,7 @@ const serviceCards = [
     icon: Hammer,
     color: "bg-empower-olive",
     textColor: "text-empower-olive",
-    borderClass: "",
+    borderClass: "border-2 border-[#33C3F0]",
     delay: 500
   },
   {
@@ -54,7 +54,7 @@ const serviceCards = [
     icon: Users,
     color: "bg-empower-gold",
     textColor: "text-empower-gold",
-    borderClass: "",
+    borderClass: "border-2 border-[#87CEEB]",
     delay: 600
   }
 ];
@@ -77,14 +77,13 @@ const Services: React.FC = () => {
           {serviceCards.map((service, index) => (
             <div 
               key={index} 
-              className={`bg-white rounded-xl shadow-md overflow-hidden hover-zoom transition-all duration-300 ${service.borderClass}`}
-              style={{animationDelay: `${service.delay}ms`}}
+              className={`bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ${service.borderClass}`}
             >
               <div className={`p-6 flex flex-col items-center text-center`}>
                 <div className={`${service.color} p-4 rounded-full mb-6`}>
                   <service.icon className="h-8 w-8 text-white" />
                 </div>
-                <h3 className={`font-poppins font-semibold text-xl mb-3 text-float ${service.textColor}`}>
+                <h3 className={`font-poppins font-semibold text-xl mb-3 ${service.textColor}`}>
                   {service.title}
                 </h3>
                 <p className="text-empower-brown">
