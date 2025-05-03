@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const AboutUs: React.FC = () => {
@@ -7,7 +6,7 @@ const AboutUs: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gradient text-gradient-pink font-poppins mb-2 text-shadow-pop">
-            Who We Are
+            About Us
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-[#D946EF] via-[#F97316] to-[#1EAEDB] mx-auto mb-6"></div>
         </div>
@@ -18,20 +17,13 @@ const AboutUs: React.FC = () => {
             data-aos="fade-right"
           >
             <p className="text-lg mb-6 text-empower-brown leading-relaxed text-focus-in" style={{animationDelay: '0.3s'}}>
-              EmpowEra is a vibrant online platform fostering community development by connecting 
-              learners, artisans, donors, and volunteers. Our goal is to uplift marginalized 
-              communities in Lebanon through <span className="highlight-orange">education</span>, 
-              <span className="highlight-pink"> skill-building</span>, 
-              <span className="highlight-red"> social enterprise</span>, 
-              and <span className="highlight-blue">charitable initiatives</span>.
+              EmpowEra is where passion meets purpose. We're on a mission to transform lives by turning creativity into opportunity. Through hands-on courses in handmade crafts and digital skills, we help individuals unlock their potential and earn a living doing what they love.
             </p>
             <p className="text-lg mb-6 text-empower-brown leading-relaxed text-focus-in" style={{animationDelay: '0.6s'}}>
-              We believe that access to education and opportunities is a fundamental right. By bringing 
-              together passionate educators, skilled artisans, and generous supporters, we create an 
-              ecosystem where everyone can thrive and grow together.
+              Our built-in marketplace breaks down barriers, connecting makers directly with buyers, just meaningful support. Beyond learning and selling, EmpowEra sparks connection through community events, workshops, and inspiring talks.
             </p>
             <p className="text-lg text-empower-brown leading-relaxed text-focus-in" style={{animationDelay: '0.9s'}}>
-              Join us in our mission to make a lasting positive impact in Lebanese communities and beyond.
+              EmpowEra is a movement. One that aims to uplift communities, unlock talent, and create real change. Join us and be part of something powerful.
             </p>
           </div>
 
