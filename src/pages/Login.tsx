@@ -69,13 +69,23 @@ const Login = () => {
       <div className="min-h-screen flex flex-col">
         <Navbar />
         
-        <div className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#0077B6]">
-          <div className="max-w-md w-full space-y-8">
+        <div 
+          className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')",
+            backgroundSize: "cover",
+            backgroundPosition: "center"
+          }}
+        >
+          {/* Overlay with blur effect */}
+          <div className="absolute inset-0 backdrop-blur-md bg-black/30" />
+          
+          <div className="max-w-md w-full space-y-8 relative z-10">
             <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="bg-white rounded-lg shadow-lg p-8"
+              className="bg-white rounded-lg shadow-2xl p-8"
             >
               <div className="text-center mb-6">
                 <h2 className="text-3xl font-bold text-empower-brown">
