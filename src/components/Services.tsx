@@ -5,7 +5,7 @@ import { Book, ShoppingCart, Heart, Calendar, Hammer, Users } from 'lucide-react
 const serviceCards = [
   {
     title: "Courses",
-    description: "Online & in-person learning experiences to build valuable skills",
+    description: "Learn something new today! Our expert-led courses help you build real-world skills and chase your goals.",
     icon: Book,
     color: "bg-empower-terracotta",
     textColor: "text-empower-terracotta",
@@ -14,7 +14,7 @@ const serviceCards = [
   },
   {
     title: "Shop",
-    description: "Browse handmade products crafted by local Lebanese artisans",
+    description: "Discover beautiful, handmade items crafted by local talents — every purchase helps someone grow their future.",
     icon: ShoppingCart,
     color: "bg-[#F97316]",
     textColor: "text-[#F97316]",
@@ -23,7 +23,7 @@ const serviceCards = [
   },
   {
     title: "Donations",
-    description: "Support initiatives that create lasting positive change",
+    description: "Give with heart — your support helps us educate, uplift, and empower the people who need it most.",
     icon: Heart,
     color: "bg-[#D946EF]",
     textColor: "text-[#D946EF]",
@@ -32,7 +32,7 @@ const serviceCards = [
   },
   {
     title: "Events",
-    description: "Join community gatherings and special occasions",
+    description: "Be part of something meaningful — connect, learn, and grow at inspiring community events.",
     icon: Calendar,
     color: "bg-[#ea384c]",
     textColor: "text-[#ea384c]",
@@ -41,7 +41,7 @@ const serviceCards = [
   },
   {
     title: "Workshops",
-    description: "Hands-on experiences to learn new skills directly from experts",
+    description: "Join fun, hands-on workshops that unlock your creativity and teach skills you'll actually use.",
     icon: Hammer,
     color: "bg-empower-olive",
     textColor: "text-empower-olive",
@@ -69,7 +69,7 @@ const Services: React.FC = () => {
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-[#1EAEDB] via-[#D946EF] to-[#F97316] mx-auto mb-6"></div>
           <p className="text-lg text-empower-brown max-w-3xl mx-auto text-focus-in">
-            Discover how EmpowEra connects and uplifts communities through our diverse range of offerings
+            At EmpowEra, we bring together learning, earning, and giving — offering courses, workshops, a community shop, donations, and events that empower individuals and uplift communities.
           </p>
         </div>
 
