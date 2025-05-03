@@ -18,7 +18,7 @@ const serviceCards = [
     icon: ShoppingCart,
     color: "bg-[#F97316]",
     textColor: "text-[#F97316]",
-    borderClass: "border-pulse-orange",
+    borderClass: "border-2 border-[#F97316]", // Changed from border-pulse-orange to solid border
     delay: 200
   },
   {
@@ -27,7 +27,7 @@ const serviceCards = [
     icon: Heart,
     color: "bg-[#D946EF]",
     textColor: "text-[#D946EF]",
-    borderClass: "border-pulse-pink",
+    borderClass: "border-2 border-[#D946EF]", // Changed from border-pulse-pink to solid border
     delay: 300
   },
   {
@@ -36,7 +36,7 @@ const serviceCards = [
     icon: Calendar,
     color: "bg-[#ea384c]",
     textColor: "text-[#ea384c]",
-    borderClass: "border-pulse-red",
+    borderClass: "border-2 border-[#ea384c]", // Changed from border-pulse-red to solid border
     delay: 400
   },
   {
