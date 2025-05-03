@@ -40,13 +40,13 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Content */}
-      <div className="relative h-full flex items-center justify-center">
+      <div className="relative h-full flex items-center">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center text-white">
+          <div className="max-w-3xl text-white">
             <div className="text-reveal mb-2 inline-block">
               <h1 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-bold font-poppins">
                 <span className="hero-text inline-block">
-                  EmpowEra,
+                  EmpowEra
                 </span>
               </h1>
             </div>
@@ -60,7 +60,7 @@ const Hero: React.FC = () => {
             </p>
             
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
+            <div className="flex flex-col sm:flex-row gap-4 justify-start animate-fade-in">
               <Button size="lg" className="bg-empower-terracotta hover:bg-empower-terracotta/90 hover-zoom shadow-lg">
                 <Book className="mr-2 h-5 w-5" /> Explore Courses
               </Button>
