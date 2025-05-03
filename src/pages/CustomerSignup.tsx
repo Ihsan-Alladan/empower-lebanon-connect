@@ -230,7 +230,7 @@ const CustomerSignup = () => {
                   transition={{ delay: 0.3, duration: 0.5 }}
                   className="text-3xl font-bold text-empower-brown"
                 >
-                  Join Our Empowered Community
+                  Customer Sign Up
                 </motion.h2>
                 <motion.p 
                   initial={{ opacity: 0, y: -10 }}
