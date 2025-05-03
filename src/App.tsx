@@ -16,6 +16,7 @@ import Favorites from "./pages/Favorites";
 import SellerDashboard from "./pages/SellerDashboard";
 import Donate from "./pages/Donate";
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 import { CartProvider } from "@/hooks/useCart";
 import { FavoritesProvider } from "@/hooks/useFavorites";
 
@@ -38,6 +39,7 @@ const AnimatedRoutes = () => {
         <Route path="/seller/dashboard" element={<SellerDashboard />} />
         <Route path="/donate" element={<Donate />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>

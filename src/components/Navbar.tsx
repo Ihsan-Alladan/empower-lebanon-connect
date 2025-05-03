@@ -16,6 +16,10 @@ const Navbar: React.FC = () => {
     navigate('/login');
   };
 
+  const handleSignUp = () => {
+    navigate('/signup');
+  };
+
   return (
     <nav className="bg-white shadow-sm py-4 sticky top-0 z-50">
       <div className="container mx-auto px-4 md:px-6">
@@ -40,7 +44,7 @@ const Navbar: React.FC = () => {
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-2">
             <Button variant="ghost" onClick={handleLogin} className="text-empower-brown hover:text-empower-terracotta">Login</Button>
-            <Button className="bg-empower-terracotta hover:bg-empower-terracotta/90">Sign Up</Button>
+            <Button className="bg-empower-terracotta hover:bg-empower-terracotta/90" onClick={handleSignUp}>Sign Up</Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -61,7 +65,7 @@ const Navbar: React.FC = () => {
               <Link to="/events" className="text-empower-brown hover:text-empower-terracotta transition-colors">Events</Link>
               <div className="flex space-x-2 pt-2">
                 <Button variant="ghost" onClick={handleLogin} className="text-empower-brown hover:text-empower-terracotta">Login</Button>
-                <Button className="bg-empower-terracotta hover:bg-empower-terracotta/90">Sign Up</Button>
+                <Button className="bg-empower-terracotta hover:bg-empower-terracotta/90" onClick={handleSignUp}>Sign Up</Button>
               </div>
             </div>
           </div>
