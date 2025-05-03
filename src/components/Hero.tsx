@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Book, ShoppingCart, Heart } from 'lucide-react';
@@ -8,7 +9,7 @@ const Hero: React.FC = () => {
   const slides = [
     "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop",
     "/lovable-uploads/dccc32b9-798a-4692-9816-6e03d3cfedf2.png", // Crochet workshop
-    "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=2070&auto=format&fit=crop"  // Technology workshop
+    "/lovable-uploads/88cb08a3-5df1-4252-b772-5ebb5ed8b0d5.png"  // Technology workshop/presentation
   ];
 
   useEffect(() => {
