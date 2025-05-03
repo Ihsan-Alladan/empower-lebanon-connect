@@ -50,26 +50,21 @@ const SignUp = () => {
         
         <div className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-empower-ivory to-white">
           <div className="max-w-md w-full space-y-8">
-            <motion.div 
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-center"
-            >
-              <h2 className="mt-6 text-3xl font-bold text-empower-brown">
-                Sign Up
-              </h2>
-              <p className="mt-2 text-sm text-empower-brown/80">
-                How would you like to join EmpowEra?
-              </p>
-            </motion.div>
-            
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="mt-8 bg-white rounded-lg shadow-lg p-6"
+              className="bg-white rounded-lg shadow-lg p-6"
             >
+              <div className="text-center mb-6">
+                <h2 className="text-3xl font-bold text-empower-brown">
+                  Sign Up
+                </h2>
+                <p className="mt-2 text-sm text-empower-brown/80">
+                  How would you like to join EmpowEra?
+                </p>
+              </div>
+              
               <div className="grid grid-cols-2 gap-3">
                 <RoleButton
                   role="learner"
