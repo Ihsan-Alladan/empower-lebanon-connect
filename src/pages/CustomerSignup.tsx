@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -208,13 +207,13 @@ const CustomerSignup = () => {
         <div 
           className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1551038247-3d9af20df552?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')",
+            backgroundImage: "url('https://images.unsplash.com/photo-1556740758-90de374c12ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')",
             backgroundSize: "cover",
             backgroundPosition: "center"
           }}
         >
           {/* Overlay with blur effect */}
-          <div className="absolute inset-0 backdrop-blur-md bg-empower-gold/20" />
+          <div className="absolute inset-0 backdrop-blur-md bg-blue-800/30" />
           
           <div className="max-w-md w-full space-y-8 relative z-10">
             <motion.div 
