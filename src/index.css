@@ -7,8 +7,8 @@
 
 @layer base {
   :root {
-    --background: 45 38% 94%;
-    --foreground: 222 47% 11%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -16,16 +16,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 12 78% 62%;
+    --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 157 47% 60%;
+    --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 37 83% 75%;
+    --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
@@ -45,7 +45,7 @@
   }
 
   body {
-    @apply bg-empower-ivory text-empower-brown font-quicksand;
+    @apply bg-background text-foreground font-quicksand;
     overflow-x: hidden;
   }
 
@@ -55,7 +55,7 @@
   
   .hero-text {
     overflow: hidden;
-    border-right: .15em solid #FF6B5B;
+    border-right: .15em solid currentColor;
     white-space: nowrap;
     margin: 0 auto;
     animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
@@ -63,7 +63,7 @@
 
   @keyframes blink-caret {
     from, to { border-color: transparent }
-    50% { border-color: #FF6B5B; }
+    50% { border-color: currentColor; }
   }
   
   .hover-zoom {
@@ -99,7 +99,7 @@
     position: absolute;
     inset: -2px;
     border-radius: 0.6rem;
-    background: linear-gradient(90deg, #FF6B5B, #FFCA58, #69D1A5, #C4B0FF, #7EB6FF);
+    background: linear-gradient(90deg, #222, #555, #888, #aaa, #555);
     z-index: -1;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -153,15 +153,15 @@
   
   /* Colorful section backgrounds */
   .bg-gradient-soft {
-    background: linear-gradient(135deg, #FFF9E5 0%, #FFE9DD 100%);
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   }
   
   .bg-gradient-cool {
-    background: linear-gradient(135deg, #E9FAFF 0%, #E6EEFF 100%);
+    background: linear-gradient(135deg, #f1f3f5 0%, #e9ecef 100%);
   }
   
   .bg-gradient-warm {
-    background: linear-gradient(135deg, #FFF1E6 0%, #FFE8E0 100%);
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   }
   
   /* Glowing effect */

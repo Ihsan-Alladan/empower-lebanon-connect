@@ -63,19 +63,6 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-                // EmpowEra custom colors - enhanced with more vibrant options
-                empower: {
-                    terracotta: '#FF6B5B',  // Brighter terracotta
-                    olive: '#69D1A5',       // More vibrant olive/mint
-                    ivory: '#FFF9E5',       // Warmer ivory
-                    gold: '#FFCA58',        // Brighter gold
-                    brown: '#3D405B',       // Keep the same
-                    coral: '#FF8C7E',       // New coral color
-                    mint: '#85EBC1',        // New mint color
-                    lavender: '#C4B0FF',    // New lavender color
-                    skyblue: '#7EB6FF',     // New sky blue
-                    peach: '#FFB49A',       // New peach color
-                },
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

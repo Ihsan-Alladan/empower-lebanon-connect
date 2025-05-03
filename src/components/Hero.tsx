@@ -49,12 +49,12 @@ const Hero: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className={`max-w-3xl mx-auto text-center text-white transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}>
             <h1 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-bold font-poppins">
-              <span className="hero-text inline-block bg-gradient-to-r from-white via-empower-gold/90 to-white bg-clip-text text-transparent">
+              <span className="hero-text inline-block bg-gradient-to-r from-white via-white/90 to-white bg-clip-text text-transparent">
                 Empowering Communities,
               </span>
             </h1>
             <h2 className="mb-6 text-3xl md:text-4xl lg:text-5xl font-semibold font-poppins transition-all duration-700 delay-300 animate-fade-in">
-              <span className="bg-gradient-to-r from-empower-gold via-empower-peach to-empower-gold bg-clip-text text-transparent">One Skill at a Time.</span>
+              <span className="bg-gradient-to-r from-white via-white/90 to-white bg-clip-text text-transparent">One Skill at a Time.</span>
             </h2>
             <p className="mb-10 text-lg md:text-xl animate-fade-in opacity-90 transition-all duration-700 delay-500">
               Join our mission to uplift marginalized communities in Lebanon through education, 
@@ -63,13 +63,13 @@ const Hero: React.FC = () => {
             
             {/* CTA Buttons with enhanced animations */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center stagger-in">
-              <Button size="lg" className="bg-empower-terracotta hover:bg-empower-terracotta/90 hover-zoom shadow-lg glow-on-hover">
+              <Button size="lg" className="bg-primary hover:bg-primary/90 hover-zoom shadow-lg">
                 <Book className="mr-2 h-5 w-5 animate-pulse-soft" /> Explore Courses
               </Button>
-              <Button size="lg" className="bg-empower-olive hover:bg-empower-olive/90 hover-zoom shadow-lg glow-on-hover">
+              <Button size="lg" className="bg-secondary hover:bg-secondary/90 hover-zoom shadow-lg">
                 <ShoppingCart className="mr-2 h-5 w-5 animate-pulse-soft" /> Visit Our Shop
               </Button>
-              <Button size="lg" className="bg-empower-gold hover:bg-empower-gold/90 hover-zoom shadow-lg glow-on-hover text-empower-brown">
+              <Button size="lg" className="bg-accent hover:bg-accent/90 hover-zoom shadow-lg text-accent-foreground">
                 <Heart className="mr-2 h-5 w-5 animate-pulse-soft" /> Donate Now
               </Button>
             </div>

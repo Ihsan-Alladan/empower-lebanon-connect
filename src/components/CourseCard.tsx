@@ -60,23 +60,23 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
-          <h3 className="text-xl font-bold line-clamp-2 group-hover:text-empower-terracotta transition-colors duration-300">{course.title}</h3>
+          <h3 className="text-xl font-bold line-clamp-2 group-hover:text-primary transition-colors duration-300">{course.title}</h3>
           <Button 
             variant="ghost" 
             size="icon" 
             onClick={handleLike}
-            className={`${isLiked ? 'text-empower-terracotta' : 'text-gray-400'} hover:text-empower-terracotta/80 hover:scale-110 transition-all duration-300`}
+            className={`${isLiked ? 'text-primary' : 'text-gray-400'} hover:text-primary/80 hover:scale-110 transition-all duration-300`}
           >
             <Heart 
               size={20} 
-              className={isLiked ? 'fill-empower-terracotta animate-pop-up' : ''} 
+              className={isLiked ? 'fill-primary animate-pop-up' : ''} 
             />
           </Button>
         </div>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Avatar className="h-6 w-6 ring-1 ring-empower-terracotta/20">
+          <Avatar className="h-6 w-6 ring-1 ring-primary/20">
             <AvatarImage src={course.instructor.avatar} alt={course.instructor.name} />
-            <AvatarFallback className="bg-gradient-to-br from-empower-terracotta to-empower-coral text-white">
+            <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white">
               {course.instructor.name.charAt(0)}
             </AvatarFallback>
           </Avatar>
@@ -89,13 +89,13 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
         
         <div className="flex justify-between items-center text-sm">
           <div className="flex items-center gap-1">
-            <Clock size={16} className="text-empower-skyblue" />
+            <Clock size={16} className="text-primary" />
             <span>{course.duration}</span>
           </div>
           <Badge variant="outline" className={
-            course.level === 'Beginner' ? 'bg-empower-mint/20 text-empower-olive' : 
-            course.level === 'Intermediate' ? 'bg-empower-gold/20 text-empower-gold' : 
-            'bg-empower-lavender/20 text-empower-lavender'
+            course.level.toLowerCase() === 'beginner' ? 'bg-secondary/20 text-secondary' : 
+            course.level.toLowerCase() === 'intermediate' ? 'bg-primary/20 text-primary' : 
+            'bg-accent/20 text-accent'
           }>
             {course.level}
           </Badge>
@@ -107,7 +107,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
               <Star 
                 key={i} 
                 size={16} 
-                className={i < course.rating ? "fill-empower-gold text-empower-gold" : "text-muted"}
+                className={i < course.rating ? "fill-accent text-accent" : "text-muted"}
               />
             ))}
             <span className="text-xs text-muted-foreground ml-1">({course.reviews} reviews)</span>
@@ -116,7 +116,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
             {course.price === 0 ? (
               <span className="text-green-600 bg-green-100 py-1 px-2 rounded-full text-sm">Free</span>
             ) : (
-              <span className="text-empower-terracotta">${course.price}</span>
+              <span className="text-primary">${course.price}</span>
             )}
           </div>
         </div>
@@ -125,7 +125,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       <CardFooter className="pt-0">
         <Button 
           onClick={handleEnroll} 
-          className="w-full bg-gradient-to-r from-empower-terracotta to-empower-coral hover:from-empower-coral hover:to-empower-terracotta text-white transition-all duration-500 shadow-lg hover:shadow-xl btn-hover"
+          className="w-full bg-primary hover:bg-primary/90 text-white transition-all duration-500 shadow hover:shadow-md btn-hover"
         >
           Enroll Now
         </Button>
