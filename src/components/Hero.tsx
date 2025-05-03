@@ -51,11 +51,12 @@ const Hero: React.FC = () => {
               </h1>
             </div>
             <h2 className="mb-6 text-3xl md:text-4xl lg:text-5xl font-semibold font-poppins text-shadow-pop" style={{animationDelay: '1s'}}>
-              <span className="text-empower-gold text-gradient">One Skill at a Time.</span>
+              <span className="text-gradient text-gradient-multi">One Skill at a Time.</span>
             </h2>
             <p className="mb-10 text-lg md:text-xl text-focus-in opacity-90" style={{animationDelay: '1.5s'}}>
               Join our mission to uplift marginalized communities in Lebanon through education, 
-              skill-building, social enterprise, and charitable initiatives.
+              skill-building, <span className="highlight-orange">social enterprise</span>, and 
+              <span className="highlight-pink"> charitable initiatives</span>.
             </p>
             
             {/* CTA Buttons */}
@@ -63,10 +64,10 @@ const Hero: React.FC = () => {
               <Button size="lg" className="bg-empower-terracotta hover:bg-empower-terracotta/90 hover-zoom shadow-lg">
                 <Book className="mr-2 h-5 w-5" /> Explore Courses
               </Button>
-              <Button size="lg" className="bg-empower-olive hover:bg-empower-olive/90 hover-zoom shadow-lg">
+              <Button size="lg" className="bg-[#F97316] hover:bg-[#F97316]/90 hover-zoom shadow-lg">
                 <ShoppingCart className="mr-2 h-5 w-5" /> Visit Our Shop
               </Button>
-              <Button size="lg" className="bg-empower-gold hover:bg-empower-gold/90 hover-zoom shadow-lg text-empower-brown">
+              <Button size="lg" className="bg-[#D946EF] hover:bg-[#D946EF]/90 hover-zoom shadow-lg text-white">
                 <Heart className="mr-2 h-5 w-5" /> Donate Now
               </Button>
             </div>

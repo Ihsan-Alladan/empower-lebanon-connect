@@ -78,11 +78,31 @@
     @apply transform scale-105;
   }
 
-  /* New text animation styles */
+  /* Text animation styles with multiple colors */
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-empower-terracotta to-empower-gold;
+    @apply bg-clip-text text-transparent;
     background-size: 200% auto;
     animation: gradient-shift 4s linear infinite;
+  }
+
+  .text-gradient-blue {
+    background-image: linear-gradient(90deg, #1EAEDB, #33C3F0, #87CEEB, #1EAEDB);
+  }
+
+  .text-gradient-orange {
+    background-image: linear-gradient(90deg, #F97316, #FDBA74, #F97316);
+  }
+
+  .text-gradient-pink {
+    background-image: linear-gradient(90deg, #D946EF, #F8A6FF, #D946EF);
+  }
+
+  .text-gradient-red {
+    background-image: linear-gradient(90deg, #ea384c, #FF8A9B, #ea384c);
+  }
+
+  .text-gradient-multi {
+    background-image: linear-gradient(90deg, #1EAEDB, #D946EF, #F97316, #ea384c, #1EAEDB);
   }
 
   .text-focus-in {
@@ -90,13 +110,47 @@
   }
 
   .text-shimmer {
+    animation: shimmer 3s linear infinite;
+  }
+
+  .text-shimmer-blue {
     background: linear-gradient(90deg, transparent, rgba(135, 206, 235, 0.5), transparent);
     background-size: 200% auto;
-    animation: shimmer 3s linear infinite;
+  }
+
+  .text-shimmer-orange {
+    background: linear-gradient(90deg, transparent, rgba(249, 115, 22, 0.5), transparent);
+    background-size: 200% auto;
+  }
+
+  .text-shimmer-pink {
+    background: linear-gradient(90deg, transparent, rgba(217, 70, 239, 0.5), transparent);
+    background-size: 200% auto;
+  }
+
+  .text-shimmer-red {
+    background: linear-gradient(90deg, transparent, rgba(234, 56, 76, 0.5), transparent);
+    background-size: 200% auto;
   }
 
   .text-shadow-pop {
     animation: text-shadow-pop 0.6s both;
+  }
+
+  .text-shadow-blue {
+    text-shadow: 0 0 15px rgba(30, 174, 219, 0.5);
+  }
+
+  .text-shadow-orange {
+    text-shadow: 0 0 15px rgba(249, 115, 22, 0.5);
+  }
+
+  .text-shadow-pink {
+    text-shadow: 0 0 15px rgba(217, 70, 239, 0.5);
+  }
+
+  .text-shadow-red {
+    text-shadow: 0 0 15px rgba(234, 56, 76, 0.5);
   }
 
   .text-float {
@@ -118,6 +172,45 @@
     background-color: #F0F8FF;
     transform: translateX(-100%);
     animation: text-reveal 1s ease forwards;
+  }
+
+  /* Rainbow highlight spans */
+  .highlight-orange {
+    @apply bg-[#F97316] text-white px-1 py-0.5 rounded;
+  }
+
+  .highlight-pink {
+    @apply bg-[#D946EF] text-white px-1 py-0.5 rounded;
+  }
+
+  .highlight-red {
+    @apply bg-[#ea384c] text-white px-1 py-0.5 rounded;
+  }
+
+  .highlight-blue {
+    @apply bg-[#1EAEDB] text-white px-1 py-0.5 rounded;
+  }
+
+  /* Animated border effects */
+  .border-pulse-orange {
+    @apply border-2 border-[#F97316] rounded;
+    animation: border-pulse 2s infinite;
+  }
+
+  .border-pulse-pink {
+    @apply border-2 border-[#D946EF] rounded;
+    animation: border-pulse 2s infinite;
+  }
+
+  .border-pulse-red {
+    @apply border-2 border-[#ea384c] rounded;
+    animation: border-pulse 2s infinite;
+  }
+
+  @keyframes border-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
   }
 
   @keyframes gradient-shift {

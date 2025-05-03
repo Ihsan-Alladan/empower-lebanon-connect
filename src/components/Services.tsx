@@ -9,30 +9,34 @@ const serviceCards = [
     icon: Book,
     color: "bg-empower-terracotta",
     textColor: "text-empower-terracotta",
+    borderClass: "",
     delay: 100
   },
   {
     title: "Shop",
     description: "Browse handmade products crafted by local Lebanese artisans",
     icon: ShoppingCart,
-    color: "bg-empower-olive",
-    textColor: "text-empower-olive",
+    color: "bg-[#F97316]",
+    textColor: "text-[#F97316]",
+    borderClass: "border-pulse-orange",
     delay: 200
   },
   {
     title: "Donations",
     description: "Support initiatives that create lasting positive change",
     icon: Heart,
-    color: "bg-empower-gold",
-    textColor: "text-empower-gold",
+    color: "bg-[#D946EF]",
+    textColor: "text-[#D946EF]",
+    borderClass: "border-pulse-pink",
     delay: 300
   },
   {
     title: "Events",
     description: "Join community gatherings and special occasions",
     icon: Calendar,
-    color: "bg-empower-terracotta",
-    textColor: "text-empower-terracotta",
+    color: "bg-[#ea384c]",
+    textColor: "text-[#ea384c]",
+    borderClass: "border-pulse-red",
     delay: 400
   },
   {
@@ -41,6 +45,7 @@ const serviceCards = [
     icon: Hammer,
     color: "bg-empower-olive",
     textColor: "text-empower-olive",
+    borderClass: "",
     delay: 500
   },
   {
@@ -49,6 +54,7 @@ const serviceCards = [
     icon: Users,
     color: "bg-empower-gold",
     textColor: "text-empower-gold",
+    borderClass: "",
     delay: 600
   }
 ];
@@ -58,10 +64,10 @@ const Services: React.FC = () => {
     <section className="py-20 bg-empower-ivory/70" id="services">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gradient font-poppins mb-2 text-shadow-pop">
+          <h2 className="text-3xl md:text-4xl font-bold text-gradient text-gradient-blue font-poppins mb-2 text-shadow-pop">
             Our Services
           </h2>
-          <div className="w-20 h-1 bg-empower-terracotta mx-auto mb-6"></div>
+          <div className="w-20 h-1 bg-gradient-to-r from-[#1EAEDB] via-[#D946EF] to-[#F97316] mx-auto mb-6"></div>
           <p className="text-lg text-empower-brown max-w-3xl mx-auto text-focus-in">
             Discover how EmpowEra connects and uplifts communities through our diverse range of offerings
           </p>
@@ -71,7 +77,7 @@ const Services: React.FC = () => {
           {serviceCards.map((service, index) => (
             <div 
               key={index} 
-              className="bg-white rounded-xl shadow-md overflow-hidden hover-zoom transition-all duration-300"
+              className={`bg-white rounded-xl shadow-md overflow-hidden hover-zoom transition-all duration-300 ${service.borderClass}`}
               style={{animationDelay: `${service.delay}ms`}}
             >
               <div className={`p-6 flex flex-col items-center text-center`}>

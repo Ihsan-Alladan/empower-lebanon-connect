@@ -6,10 +6,10 @@ const AboutUs: React.FC = () => {
     <section className="py-20 bg-white" id="about">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gradient font-poppins mb-2 text-shadow-pop">
+          <h2 className="text-3xl md:text-4xl font-bold text-gradient text-gradient-pink font-poppins mb-2 text-shadow-pop">
             Who We Are
           </h2>
-          <div className="w-20 h-1 bg-empower-terracotta mx-auto mb-6"></div>
+          <div className="w-20 h-1 bg-gradient-to-r from-[#D946EF] via-[#F97316] to-[#1EAEDB] mx-auto mb-6"></div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -20,8 +20,10 @@ const AboutUs: React.FC = () => {
             <p className="text-lg mb-6 text-empower-brown leading-relaxed text-focus-in" style={{animationDelay: '0.3s'}}>
               EmpowEra is a vibrant online platform fostering community development by connecting 
               learners, artisans, donors, and volunteers. Our goal is to uplift marginalized 
-              communities in Lebanon through education, skill-building, social enterprise, 
-              and charitable initiatives.
+              communities in Lebanon through <span className="highlight-orange">education</span>, 
+              <span className="highlight-pink"> skill-building</span>, 
+              <span className="highlight-red"> social enterprise</span>, 
+              and <span className="highlight-blue">charitable initiatives</span>.
             </p>
             <p className="text-lg mb-6 text-empower-brown leading-relaxed text-focus-in" style={{animationDelay: '0.6s'}}>
               We believe that access to education and opportunities is a fundamental right. By bringing 
@@ -36,14 +38,14 @@ const AboutUs: React.FC = () => {
           {/* Image collage */}
           <div className="order-1 md:order-2 grid grid-cols-2 gap-4 animate-fade-in-right" data-aos="fade-left">
             <div className="space-y-4">
-              <div className="overflow-hidden rounded-lg shadow-md">
+              <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#F97316]">
                 <img 
                   src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=1000&auto=format&fit=crop" 
                   alt="Community learning together" 
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <div className="overflow-hidden rounded-lg shadow-md">
+              <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#D946EF]">
                 <img 
                   src="https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=1000&auto=format&fit=crop" 
                   alt="Artisan craftsmanship" 
@@ -52,7 +54,7 @@ const AboutUs: React.FC = () => {
               </div>
             </div>
             <div className="mt-8">
-              <div className="overflow-hidden rounded-lg shadow-md">
+              <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#ea384c]">
                 <img 
                   src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1000&auto=format&fit=crop" 
                   alt="Digital learning" 
