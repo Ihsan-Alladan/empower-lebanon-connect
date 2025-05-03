@@ -43,6 +43,8 @@ const SignUp = () => {
       navigate("/learner-signup");
     } else if (role === "customer") {
       navigate("/customer-signup");
+    } else if (role === "seller") {
+      navigate("/seller-signup");
     } else {
       // For other roles, continue with the previous navigation
       navigate(`/signup/${role}`);

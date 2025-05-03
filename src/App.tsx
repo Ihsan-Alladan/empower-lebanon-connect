@@ -19,6 +19,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import LearnerSignup from "./pages/LearnerSignup";
 import CustomerSignup from "./pages/CustomerSignup";
+import SellerSignup from "./pages/SellerSignup";
 import { CartProvider } from "@/hooks/useCart";
 import { FavoritesProvider } from "@/hooks/useFavorites";
 
@@ -45,6 +46,7 @@ const AnimatedRoutes = () => {
         <Route path="/signup/:role" element={<SignUp />} />
         <Route path="/learner-signup" element={<LearnerSignup />} />
         <Route path="/customer-signup" element={<CustomerSignup />} />
+        <Route path="/seller-signup" element={<SellerSignup />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
