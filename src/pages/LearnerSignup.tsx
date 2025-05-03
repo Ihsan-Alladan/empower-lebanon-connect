@@ -171,6 +171,8 @@ const LearnerSignup = () => {
                             <Input 
                               placeholder="Enter your phone number" 
                               type="tel"
+                              inputMode="tel"
+                              pattern="[0-9]*"
                               {...field} 
                               className="pl-10" 
                             />
