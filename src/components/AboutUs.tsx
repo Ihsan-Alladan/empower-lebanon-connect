@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
@@ -125,8 +126,8 @@ const AboutUs: React.FC = () => {
                 whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
               >
                 <img 
-                  src="/lovable-uploads/43cdb952-f7ba-4e66-a36e-73f796864ba9.png" 
-                  alt="Colorful crocheted bag" 
+                  src="/lovable-uploads/fdb57aa4-45f1-4e8d-8cd5-c7f24268e936.png" 
+                  alt="Guide to selling handmade items online" 
                   className="w-full h-40 object-cover transition-all duration-700 hover:scale-110"
                   loading="lazy"
                 />
@@ -164,8 +165,8 @@ const AboutUs: React.FC = () => {
                 whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
               >
                 <img 
-                  src="/lovable-uploads/47bed620-a187-4c7f-aa12-2920437fa02a.png" 
-                  alt="Crochet bags workshop" 
+                  src="/lovable-uploads/c9caa428-0f2f-4648-8934-29a619641101.png" 
+                  alt="Donation box with hearts" 
                   className="w-full h-40 object-cover transition-all duration-700 hover:scale-110"
                   loading="lazy"
                 />
