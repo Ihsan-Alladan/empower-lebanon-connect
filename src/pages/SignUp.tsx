@@ -23,11 +23,11 @@ const RoleButton: React.FC<RoleButtonProps> = ({ role, icon, label, onClick }) =
   return (
     <Button
       variant="ghost"
-      className="bg-empower-terracotta hover:bg-empower-terracotta/90 text-white font-bold py-6 flex flex-col items-center justify-center gap-3 transition-all duration-300 hover:scale-105 glow-on-hover w-full h-32"
+      className="bg-empower-terracotta hover:bg-empower-terracotta/90 text-white font-bold py-4 flex flex-col items-center justify-center gap-2 transition-all duration-300 hover:scale-105 glow-on-hover w-full h-24"
       onClick={() => onClick(role)}
     >
       {icon}
-      <span>{label}</span>
+      <span className="text-lg">{label}</span>
     </Button>
   );
 };
@@ -66,51 +66,43 @@ const SignUp = () => {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative z-10 w-full max-w-3xl"
+            className="relative z-10 w-full max-w-2xl"
           >
             <Card className="bg-white shadow-xl rounded-xl overflow-hidden p-8">
-              <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
-                <div>
-                  <h1 className="text-4xl md:text-5xl font-bold text-empower-terracotta mb-4">
-                    Sign up
-                  </h1>
-                  <h2 className="text-xl italic text-empower-brown">
-                    How do you like to join us?
-                  </h2>
-                </div>
-                
-                <div className="mt-4 md:mt-0">
-                  <span className="font-poppins font-bold text-3xl">
-                    Empow<span className="text-empower-olive">Era</span>
-                  </span>
-                </div>
+              <div className="flex flex-col items-center justify-center mb-8">
+                <h1 className="text-5xl md:text-6xl font-bold text-empower-terracotta mb-4 text-center">
+                  Sign up
+                </h1>
+                <h2 className="text-2xl italic text-empower-brown text-center">
+                  How do you like to join us?
+                </h2>
               </div>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-8">
                 <RoleButton
                   role="learner"
-                  icon={<Book className="w-8 h-8" />}
+                  icon={<Book className="w-9 h-9" />}
                   label="Learner"
                   onClick={handleRoleSelection}
                 />
                 
                 <RoleButton
                   role="customer"
-                  icon={<ShoppingCart className="w-8 h-8" />}
+                  icon={<ShoppingCart className="w-9 h-9" />}
                   label="Customer"
                   onClick={handleRoleSelection}
                 />
                 
                 <RoleButton
                   role="seller"
-                  icon={<Store className="w-8 h-8" />}
+                  icon={<Store className="w-9 h-9" />}
                   label="Seller"
                   onClick={handleRoleSelection}
                 />
                 
                 <RoleButton
                   role="instructor"
-                  icon={<BookOpen className="w-8 h-8" />}
+                  icon={<BookOpen className="w-9 h-9" />}
                   label="Instructor"
                   onClick={handleRoleSelection}
                 />
