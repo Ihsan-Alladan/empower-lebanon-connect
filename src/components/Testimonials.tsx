@@ -75,7 +75,7 @@ const Testimonials: React.FC = () => {
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gradient font-poppins mb-2 text-shadow-pop">
+          <h2 className="text-3xl md:text-4xl font-bold font-poppins mb-2 text-empower-brown">
             Testimonials & Impact
           </h2>
           <div className="w-20 h-1 bg-empower-terracotta mx-auto mb-6"></div>
