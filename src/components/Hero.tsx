@@ -43,15 +43,17 @@ const Hero: React.FC = () => {
       <div className="relative h-full flex items-center justify-center">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center text-white">
-            <h1 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-bold font-poppins animate-fade-in">
-              <span className="hero-text inline-block">
-                Empowering Communities,
-              </span>
-            </h1>
-            <h2 className="mb-6 text-3xl md:text-4xl lg:text-5xl font-semibold font-poppins animate-fade-in">
-              <span className="text-empower-gold">One Skill at a Time.</span>
+            <div className="text-reveal mb-2 inline-block">
+              <h1 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-bold font-poppins">
+                <span className="hero-text inline-block">
+                  Empowering Communities,
+                </span>
+              </h1>
+            </div>
+            <h2 className="mb-6 text-3xl md:text-4xl lg:text-5xl font-semibold font-poppins text-shadow-pop" style={{animationDelay: '1s'}}>
+              <span className="text-empower-gold text-gradient">One Skill at a Time.</span>
             </h2>
-            <p className="mb-10 text-lg md:text-xl animate-fade-in opacity-90">
+            <p className="mb-10 text-lg md:text-xl text-focus-in opacity-90" style={{animationDelay: '1.5s'}}>
               Join our mission to uplift marginalized communities in Lebanon through education, 
               skill-building, social enterprise, and charitable initiatives.
             </p>

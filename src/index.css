@@ -65,6 +65,11 @@
     50% { border-color: #E07A5F; }
   }
   
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+  
   .hover-zoom {
     @apply transition-transform duration-300;
   }
@@ -72,4 +77,78 @@
   .hover-zoom:hover {
     @apply transform scale-105;
   }
+
+  /* New text animation styles */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-empower-terracotta to-empower-gold;
+    background-size: 200% auto;
+    animation: gradient-shift 4s linear infinite;
+  }
+
+  .text-focus-in {
+    animation: text-focus-in 1s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+  }
+
+  .text-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    background-size: 200% auto;
+    animation: shimmer 3s linear infinite;
+  }
+
+  .text-shadow-pop {
+    animation: text-shadow-pop 0.6s both;
+  }
+
+  .text-float {
+    animation: text-float 4s ease-in-out infinite;
+  }
+
+  .text-reveal {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .text-reveal::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #F7F3E3;
+    transform: translateX(-100%);
+    animation: text-reveal 1s ease forwards;
+  }
+
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes text-focus-in {
+    0% { filter: blur(12px); opacity: 0; }
+    100% { filter: blur(0); opacity: 1; }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  @keyframes text-shadow-pop {
+    0% { text-shadow: 0 0 transparent; }
+    100% { text-shadow: 0 0 15px rgba(224, 122, 95, 0.5); }
+  }
+
+  @keyframes text-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes text-reveal {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
 }
+

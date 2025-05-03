@@ -75,7 +75,7 @@ const Testimonials: React.FC = () => {
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-empower-brown font-poppins mb-2">
+          <h2 className="text-3xl md:text-4xl font-bold text-gradient font-poppins mb-2 text-shadow-pop">
             Testimonials & Impact
           </h2>
           <div className="w-20 h-1 bg-empower-terracotta mx-auto mb-6"></div>
@@ -87,12 +87,15 @@ const Testimonials: React.FC = () => {
             <div 
               key={index} 
               className="bg-empower-ivory/40 p-6 rounded-lg shadow-md flex flex-col hover-zoom"
+              style={{animationDelay: `${index * 200}ms`}}
             >
               <div className="flex-grow">
-                <svg className="h-8 w-8 text-empower-gold mb-4" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="h-8 w-8 text-empower-gold mb-4 text-float" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                 </svg>
-                <p className="text-empower-brown italic mb-4">{item.quote}</p>
+                <p className="text-empower-brown italic mb-4 text-focus-in" style={{animationDelay: `${index * 300 + 200}ms`}}>
+                  {item.quote}
+                </p>
               </div>
               <div className="flex items-center mt-4">
                 <img 
@@ -101,7 +104,7 @@ const Testimonials: React.FC = () => {
                   className="w-12 h-12 rounded-full object-cover mr-4"
                 />
                 <div>
-                  <h4 className="font-poppins font-medium text-empower-brown">{item.name}</h4>
+                  <h4 className="font-poppins font-medium text-empower-brown text-shimmer">{item.name}</h4>
                   <p className="text-sm text-empower-brown/70">{item.role}</p>
                 </div>
               </div>
@@ -113,7 +116,7 @@ const Testimonials: React.FC = () => {
         <div id="stats-section" className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="text-4xl lg:text-5xl font-bold font-poppins text-empower-terracotta mb-2">
+              <div className="text-4xl lg:text-5xl font-bold font-poppins text-empower-terracotta mb-2 text-shadow-pop">
                 {hasAnimated 
                   ? `${animatedStats[stat.label] || 0}${stat.number.includes('+') ? '+' : ''}` 
                   : '0'}

@@ -58,11 +58,11 @@ const Services: React.FC = () => {
     <section className="py-20 bg-empower-ivory/70" id="services">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-empower-brown font-poppins mb-2">
+          <h2 className="text-3xl md:text-4xl font-bold text-gradient font-poppins mb-2 text-shadow-pop">
             Our Services
           </h2>
           <div className="w-20 h-1 bg-empower-terracotta mx-auto mb-6"></div>
-          <p className="text-lg text-empower-brown max-w-3xl mx-auto">
+          <p className="text-lg text-empower-brown max-w-3xl mx-auto text-focus-in">
             Discover how EmpowEra connects and uplifts communities through our diverse range of offerings
           </p>
         </div>
@@ -78,7 +78,7 @@ const Services: React.FC = () => {
                 <div className={`${service.color} p-4 rounded-full mb-6`}>
                   <service.icon className="h-8 w-8 text-white" />
                 </div>
-                <h3 className={`font-poppins font-semibold text-xl mb-3 ${service.textColor}`}>
+                <h3 className={`font-poppins font-semibold text-xl mb-3 text-float ${service.textColor}`}>
                   {service.title}
                 </h3>
                 <p className="text-empower-brown">
