@@ -7,18 +7,24 @@ import Services from '@/components/Services';
 import Testimonials from '@/components/Testimonials';
 import Newsletter from '@/components/Newsletter';
 import Footer from '@/components/Footer';
+import PageTransition from '@/components/PageTransition';
+import { useLocation } from 'react-router-dom';
 
 const Index: React.FC = () => {
+  const location = useLocation();
+  
   return (
     <div className="min-h-screen">
       <Navbar />
-      <main>
-        <Hero />
-        <AboutUs />
-        <Services />
-        <Testimonials />
-        <Newsletter />
-      </main>
+      <PageTransition route={location.pathname}>
+        <main>
+          <Hero />
+          <AboutUs />
+          <Services />
+          <Testimonials />
+          <Newsletter />
+        </main>
+      </PageTransition>
       <Footer />
     </div>
   );

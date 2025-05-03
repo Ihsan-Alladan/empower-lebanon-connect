@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Book, ShoppingCart, Heart } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Hero: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -19,16 +20,33 @@ const Hero: React.FC = () => {
     return () => clearInterval(interval);
   }, [slides.length]);
 
+  // Typing animation variables
+  const [displayText, setDisplayText] = useState('');
+  const [index, setIndex] = useState(0);
+  const fullText = "EmpowEra";
+  
+  useEffect(() => {
+    if (index < fullText.length) {
+      const timeout = setTimeout(() => {
+        setDisplayText(prev => prev + fullText[index]);
+        setIndex(index + 1);
+      }, 150);
+      
+      return () => clearTimeout(timeout);
+    }
+  }, [index, fullText]);
+
   return (
     <section className="relative h-[85vh] overflow-hidden">
       {/* Image Carousel */}
       <div className="absolute inset-0 w-full h-full">
         {slides.map((slide, index) => (
-          <div
+          <motion.div
             key={index}
-            className={`absolute inset-0 w-full h-full bg-black/30 transition-opacity duration-1000 ${
-              currentSlide === index ? 'opacity-100' : 'opacity-0'
-            }`}
+            className="absolute inset-0 w-full h-full bg-black/30"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: currentSlide === index ? 1 : 0 }}
+            transition={{ duration: 1 }}
             style={{
               backgroundImage: `url(${slide})`,
               backgroundSize: 'cover',
@@ -39,38 +57,81 @@ const Hero: React.FC = () => {
         <div className="absolute inset-0 bg-black/40" /> {/* Overlay */}
       </div>
 
-      {/* Content - Moved to bottom left */}
+      {/* Content */}
       <div className="relative h-full flex items-end pb-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl text-white">
-            <div className="text-reveal mb-2 inline-block">
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="mb-2"
+            >
               <h1 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-bold font-poppins">
-                <span className="hero-text inline-block">
-                  EmpowEra
+                <span className="inline-block">
+                  {displayText}
+                  <span className="inline-block w-[2px] h-[0.9em] bg-white animate-blink ml-1 align-middle"></span>
                 </span>
               </h1>
-            </div>
-            <h2 className="mb-6 text-3xl md:text-4xl lg:text-5xl font-semibold font-poppins text-shadow-pop" style={{animationDelay: '1s'}}>
+            </motion.div>
+            
+            <motion.h2 
+              className="mb-6 text-3xl md:text-4xl lg:text-5xl font-semibold font-poppins" 
+              initial={{ x: -50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
+            >
               <span className="bg-gradient-to-r from-[#FEC6A1] via-[#FFDEE2] to-[#FDE1D3] bg-clip-text text-transparent">
                 A New Era of Learning and Giving.
               </span>
-            </h2>
-            <p className="mb-10 text-lg md:text-xl text-focus-in opacity-90" style={{animationDelay: '1.5s'}}>
+            </motion.h2>
+            
+            <motion.p 
+              className="mb-10 text-lg md:text-xl opacity-90"
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 1.5, duration: 0.8 }}
+            >
               Join our vibrant community today and unlock endless opportunities to learn, create, and give back—where passion meets purpose and every click makes a difference!
-            </p>
+            </motion.p>
             
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-start animate-fade-in">
-              <Button size="lg" className="bg-empower-terracotta hover:bg-empower-terracotta/90 hover-zoom shadow-lg">
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-4 justify-start"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.8, duration: 0.8 }}
+            >
+              <Button 
+                size="lg"
+                className="bg-empower-terracotta hover:bg-empower-terracotta/90 shadow-lg"
+                whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                whileTap={{ scale: 0.98 }}
+                as={motion.button}
+              >
                 <Book className="mr-2 h-5 w-5" /> Explore Courses
               </Button>
-              <Button size="lg" className="bg-[#F97316] hover:bg-[#F97316]/90 hover-zoom shadow-lg">
+              
+              <Button 
+                size="lg"
+                className="bg-[#F97316] hover:bg-[#F97316]/90 shadow-lg"
+                whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                whileTap={{ scale: 0.98 }}
+                as={motion.button}
+              >
                 <ShoppingCart className="mr-2 h-5 w-5" /> Visit Our Shop
               </Button>
-              <Button size="lg" className="bg-[#D946EF] hover:bg-[#D946EF]/90 hover-zoom shadow-lg text-white">
+              
+              <Button 
+                size="lg"
+                className="bg-[#D946EF] hover:bg-[#D946EF]/90 shadow-lg text-white"
+                whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                whileTap={{ scale: 0.98 }}
+                as={motion.button}
+              >
                 <Heart className="mr-2 h-5 w-5" /> Donate Now
               </Button>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -78,12 +139,18 @@ const Hero: React.FC = () => {
       {/* Carousel Indicators */}
       <div className="absolute bottom-8 left-0 right-0 flex justify-center space-x-2">
         {slides.map((_, index) => (
-          <button
+          <motion.button
             key={index}
             onClick={() => setCurrentSlide(index)}
             className={`w-3 h-3 rounded-full ${
               currentSlide === index ? 'bg-white' : 'bg-white/50'
-            } transition-all`}
+            }`}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+            animate={currentSlide === index ? 
+              { width: "24px", transition: { duration: 0.3 } } : 
+              { width: "12px", transition: { duration: 0.3 } }
+            }
           />
         ))}
       </div>
