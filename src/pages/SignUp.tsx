@@ -38,9 +38,11 @@ const SignUp = () => {
 
   const handleRoleSelection = (role: UserRole) => {
     console.log(`Selected role: ${role}`);
-    // For learner role, navigate to the dedicated LearnerSignup page
+    // Direct navigation to dedicated signup pages
     if (role === "learner") {
       navigate("/learner-signup");
+    } else if (role === "customer") {
+      navigate("/customer-signup");
     } else {
       // For other roles, continue with the previous navigation
       navigate(`/signup/${role}`);
