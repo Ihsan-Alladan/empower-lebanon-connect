@@ -63,13 +63,13 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-                // EmpowEra custom colors
+                // EmpowEra custom colors - updated to blue palette
                 empower: {
-                    terracotta: '#E07A5F',
-                    olive: '#81B29A',
-                    ivory: '#F7F3E3',
-                    gold: '#F2CC8F',
-                    brown: '#3D405B',
+                    terracotta: '#1EAEDB', // Bright blue
+                    olive: '#33C3F0',      // Sky blue  
+                    ivory: '#F0F8FF',      // Alice blue
+                    gold: '#87CEEB',       // Sky blue
+                    brown: '#0A2463',      // Dark blue
                 },
 			},
 			borderRadius: {
