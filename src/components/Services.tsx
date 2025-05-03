@@ -21,7 +21,8 @@ const serviceCards = [
     color: "bg-[#F97316]",
     textColor: "text-[#F97316]",
     borderClass: "border-2 border-[#F97316]",
-    delay: 200
+    delay: 200,
+    link: "/shop"
   },
   {
     title: "Donations",
@@ -81,8 +82,8 @@ const Services: React.FC = () => {
               key={index} 
               className={`bg-white rounded-xl shadow-md overflow-hidden hover-zoom transition-all duration-300 ${service.borderClass}`}
             >
-              {service.title === "Courses" ? (
-                <Link to="/courses" className="block h-full">
+              {service.title === "Courses" || service.title === "Shop" ? (
+                <Link to={service.link} className="block h-full">
                   <div className={`p-6 flex flex-col items-center text-center h-full`}>
                     <div className={`${service.color} p-4 rounded-full mb-6`}>
                       <service.icon className="h-8 w-8 text-white" />
