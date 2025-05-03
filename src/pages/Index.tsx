@@ -3,6 +3,7 @@ import React from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import AboutUs from '@/components/AboutUs';
+import OurMission from '@/components/OurMission';
 import Services from '@/components/Services';
 import Testimonials from '@/components/Testimonials';
 import Newsletter from '@/components/Newsletter';
@@ -20,6 +21,7 @@ const Index: React.FC = () => {
         <main>
           <Hero />
           <AboutUs />
+          <OurMission />
           <Services />
           <Testimonials />
           <Newsletter />
