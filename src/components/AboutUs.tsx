@@ -28,30 +28,55 @@ const AboutUs: React.FC = () => {
             </p>
           </div>
 
-          {/* Image collage */}
-          <div className="order-1 md:order-2 grid grid-cols-2 gap-4 animate-fade-in-right" data-aos="fade-left">
-            <div className="space-y-4">
+          {/* Enhanced Image Gallery */}
+          <div className="order-1 md:order-2 grid grid-cols-3 gap-3 animate-fade-in-right" data-aos="fade-left">
+            <div className="space-y-3">
               <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#F97316]">
                 <img 
                   src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=1000&auto=format&fit=crop" 
                   alt="Community learning together" 
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  className="w-full h-40 object-cover hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#D946EF]">
                 <img 
                   src="https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=1000&auto=format&fit=crop" 
                   alt="Artisan craftsmanship" 
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  className="w-full h-32 object-cover hover:scale-105 transition-transform duration-500"
                 />
               </div>
             </div>
-            <div className="mt-8">
-              <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#ea384c]">
+            
+            <div className="space-y-3">
+              <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#1EAEDB]">
                 <img 
                   src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1000&auto=format&fit=crop" 
                   alt="Digital learning" 
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  className="w-full h-32 object-cover hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#F97316]">
+                <img 
+                  src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1000&auto=format&fit=crop" 
+                  alt="Digital skills workshop" 
+                  className="w-full h-40 object-cover hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            </div>
+            
+            <div className="space-y-3">
+              <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#ea384c]">
+                <img 
+                  src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&auto=format&fit=crop" 
+                  alt="Tech education" 
+                  className="w-full h-40 object-cover hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#D946EF]">
+                <img 
+                  src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?q=80&w=1000&auto=format&fit=crop" 
+                  alt="Online learning" 
+                  className="w-full h-32 object-cover hover:scale-105 transition-transform duration-500"
                 />
               </div>
             </div>
