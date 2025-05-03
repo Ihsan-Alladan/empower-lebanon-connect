@@ -9,7 +9,7 @@ const serviceCards = [
     icon: Book,
     color: "bg-empower-terracotta",
     textColor: "text-empower-terracotta",
-    borderClass: "",
+    borderClass: "border-2 border-[#1EAEDB]",
     delay: 100
   },
   {
@@ -45,7 +45,7 @@ const serviceCards = [
     icon: Hammer,
     color: "bg-empower-olive",
     textColor: "text-empower-olive",
-    borderClass: "",
+    borderClass: "border-2 border-[#1EAEDB]",
     delay: 500
   },
   {
@@ -54,7 +54,7 @@ const serviceCards = [
     icon: Users,
     color: "bg-empower-gold",
     textColor: "text-empower-gold",
-    borderClass: "",
+    borderClass: "border-2 border-[#1EAEDB]",
     delay: 600
   }
 ];
@@ -78,7 +78,6 @@ const Services: React.FC = () => {
             <div 
               key={index} 
               className={`bg-white rounded-xl shadow-md overflow-hidden hover-zoom transition-all duration-300 ${service.borderClass}`}
-              style={{animationDelay: `${service.delay}ms`}}
             >
               <div className={`p-6 flex flex-col items-center text-center`}>
                 <div className={`${service.color} p-4 rounded-full mb-6`}>
