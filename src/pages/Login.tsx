@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -21,6 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import { Checkbox } from "@/components/ui/checkbox";
 import PageTransition from "@/components/PageTransition";
+import { isAdminUser, setAdminAuthenticated } from "@/utils/adminAuth";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -48,18 +49,34 @@ const Login = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Mock login - in a real app this would connect to your authentication system
     console.log(values);
     
-    toast({
-      title: "Login Successful",
-      description: "Welcome back to EmpowEra!",
-    });
-    
-    // Redirect to home page after successful login
-    setTimeout(() => {
-      navigate("/");
-    }, 1000);
+    // Check if this is an admin login
+    if (isAdminUser(values.email, values.password)) {
+      toast({
+        title: "Admin Login Successful",
+        description: "Welcome to the admin dashboard!",
+      });
+      
+      // Set admin as authenticated
+      setAdminAuthenticated(true);
+      
+      // Redirect to admin dashboard after successful login
+      setTimeout(() => {
+        navigate("/admin");
+      }, 1000);
+    } else {
+      // Regular user login logic (mock for now)
+      toast({
+        title: "Login Successful",
+        description: "Welcome back to EmpowEra!",
+      });
+      
+      // Redirect to home page after successful login
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    }
   }
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);

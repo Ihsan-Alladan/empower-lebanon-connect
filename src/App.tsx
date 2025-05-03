@@ -24,6 +24,17 @@ import InstructorSignup from "./pages/InstructorSignup";
 import { CartProvider } from "@/hooks/useCart";
 import { FavoritesProvider } from "@/hooks/useFavorites";
 
+// Import Admin components
+import AdminLayout from "./components/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import UserManagement from "./pages/admin/UserManagement";
+import ContentManagement from "./pages/admin/ContentManagement";
+import ShopManagement from "./pages/admin/ShopManagement";
+import EventsManagement from "./pages/admin/EventsManagement";
+import Analytics from "./pages/admin/Analytics";
+import Newsletter from "./pages/admin/Newsletter";
+import Settings from "./pages/admin/Settings";
+
 const queryClient = new QueryClient();
 
 // AnimatedRoutes component to handle route transitions
@@ -49,6 +60,19 @@ const AnimatedRoutes = () => {
         <Route path="/customer-signup" element={<CustomerSignup />} />
         <Route path="/seller-signup" element={<SellerSignup />} />
         <Route path="/instructor-signup" element={<InstructorSignup />} />
+        
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<UserManagement />} />
+          <Route path="content" element={<ContentManagement />} />
+          <Route path="shop" element={<ShopManagement />} />
+          <Route path="events" element={<EventsManagement />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="newsletter" element={<Newsletter />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+        
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
