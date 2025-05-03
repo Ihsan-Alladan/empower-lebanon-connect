@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Book, ShoppingCart, Heart } from 'lucide-react';
@@ -8,8 +7,8 @@ const Hero: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = [
     "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1466442929976-97f336a657be?q=80&w=2070&auto=format&fit=crop"
+    "https://images.unsplash.com/photo-1486718448742-163732cd1544?q=80&w=2070&auto=format&fit=crop", // Hand craft workshop
+    "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=2070&auto=format&fit=crop"  // Technology workshop
   ];
 
   useEffect(() => {
