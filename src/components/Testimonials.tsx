@@ -1,24 +1,24 @@
-
 import React, { useState, useEffect } from 'react';
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const testimonials = [
   {
     quote: "The courses provided by EmpowEra have completely transformed my career prospects. I've gained valuable skills that employers are actively seeking.",
     name: "Sara Khoury",
     role: "Course Graduate",
-    image: "https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?q=80&w=200&auto=format&fit=crop"
+    initial: "S"
   },
   {
     quote: "Selling my handcrafted items through EmpowEra's shop has provided me with financial independence and connected me with customers worldwide.",
     name: "Layla Bassam",
     role: "Artisan Partner",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop"
+    initial: "L"
   },
   {
     quote: "As a donor, I can see the direct impact of my contributions. The transparency and community focus make supporting EmpowEra incredibly rewarding.",
     name: "Ibrahim Bitar",
     role: "Monthly Donor",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop"
+    initial: "I"
   }
 ];
 
@@ -98,11 +98,9 @@ const Testimonials: React.FC = () => {
                 </p>
               </div>
               <div className="flex items-center mt-4">
-                <img 
-                  src={item.image} 
-                  alt={item.name} 
-                  className="w-12 h-12 rounded-full object-cover mr-4"
-                />
+                <Avatar className="h-12 w-12 mr-4 bg-empower-terracotta text-white">
+                  <AvatarFallback>{item.initial}</AvatarFallback>
+                </Avatar>
                 <div>
                   <h4 className="font-poppins font-medium text-empower-brown text-shimmer">{item.name}</h4>
                   <p className="text-sm text-empower-brown/70">{item.role}</p>
