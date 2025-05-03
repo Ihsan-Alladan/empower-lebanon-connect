@@ -51,7 +51,7 @@ const Hero: React.FC = () => {
               </h1>
             </div>
             <h2 className="mb-6 text-3xl md:text-4xl lg:text-5xl font-semibold font-poppins text-shadow-pop" style={{animationDelay: '1s'}}>
-              <span className="bg-gradient-to-r from-[#FEC6A1] via-[#FFDEE2] to-[#FDE1D3] bg-clip-text text-transparent">
+              <span className="text-[#0A2463]">
                 A New Era of Learning and Giving.
               </span>
             </h2>
