@@ -1,7 +1,47 @@
 
 import React from 'react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const AboutUs: React.FC = () => {
+  const images = [
+    {
+      src: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=1000&auto=format&fit=crop",
+      alt: "Community learning together",
+      border: "border-[#F97316]"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=1000&auto=format&fit=crop",
+      alt: "Artisan craftsmanship",
+      border: "border-[#D946EF]"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1000&auto=format&fit=crop",
+      alt: "Digital learning",
+      border: "border-[#1EAEDB]"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1000&auto=format&fit=crop",
+      alt: "Digital skills workshop",
+      border: "border-[#F97316]"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&auto=format&fit=crop",
+      alt: "Tech education",
+      border: "border-[#ea384c]"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?q=80&w=1000&auto=format&fit=crop",
+      alt: "Online learning",
+      border: "border-[#D946EF]"
+    }
+  ];
+
   return (
     <section className="py-20 bg-white" id="about">
       <div className="container mx-auto px-4">
@@ -28,58 +68,25 @@ const AboutUs: React.FC = () => {
             </p>
           </div>
 
-          {/* Enhanced Image Gallery */}
-          <div className="order-1 md:order-2 grid grid-cols-3 gap-3 animate-fade-in-right" data-aos="fade-left">
-            <div className="space-y-3">
-              <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#F97316]">
-                <img 
-                  src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=1000&auto=format&fit=crop" 
-                  alt="Community learning together" 
-                  className="w-full h-40 object-cover hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#D946EF]">
-                <img 
-                  src="https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=1000&auto=format&fit=crop" 
-                  alt="Artisan craftsmanship" 
-                  className="w-full h-32 object-cover hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-            </div>
-            
-            <div className="space-y-3">
-              <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#1EAEDB]">
-                <img 
-                  src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1000&auto=format&fit=crop" 
-                  alt="Digital learning" 
-                  className="w-full h-32 object-cover hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#F97316]">
-                <img 
-                  src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1000&auto=format&fit=crop" 
-                  alt="Digital skills workshop" 
-                  className="w-full h-40 object-cover hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-            </div>
-            
-            <div className="space-y-3">
-              <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#ea384c]">
-                <img 
-                  src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&auto=format&fit=crop" 
-                  alt="Tech education" 
-                  className="w-full h-40 object-cover hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="overflow-hidden rounded-lg shadow-md border-2 border-[#D946EF]">
-                <img 
-                  src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?q=80&w=1000&auto=format&fit=crop" 
-                  alt="Online learning" 
-                  className="w-full h-32 object-cover hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-            </div>
+          {/* Image Carousel */}
+          <div className="order-1 md:order-2 animate-fade-in-right h-full flex items-center" data-aos="fade-left">
+            <Carousel className="w-full">
+              <CarouselContent>
+                {images.map((image, index) => (
+                  <CarouselItem key={index}>
+                    <div className="overflow-hidden rounded-lg shadow-md border-2 h-full aspect-[4/3]" className={image.border}>
+                      <img 
+                        src={image.src} 
+                        alt={image.alt} 
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex" />
+              <CarouselNext className="hidden md:flex" />
+            </Carousel>
           </div>
         </div>
       </div>
