@@ -51,7 +51,9 @@ const Hero: React.FC = () => {
               </h1>
             </div>
             <h2 className="mb-6 text-3xl md:text-4xl lg:text-5xl font-semibold font-poppins text-shadow-pop" style={{animationDelay: '1s'}}>
-              <span className="text-gradient text-gradient-multi">A New Era of Learning and Giving.</span>
+              <span className="bg-gradient-to-r from-[#F97316] via-[#D946EF] to-[#ea384c] bg-clip-text text-transparent">
+                A New Era of Learning and Giving.
+              </span>
             </h2>
             <p className="mb-10 text-lg md:text-xl text-focus-in opacity-90" style={{animationDelay: '1.5s'}}>
               Join our vibrant community today and unlock endless opportunities to learn, create, and give back—where passion meets purpose and every click makes a difference!
