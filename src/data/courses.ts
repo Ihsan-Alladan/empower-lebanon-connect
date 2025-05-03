@@ -184,7 +184,7 @@ export const handmadeCourses: Course[] = [
         name: 'Ahmed R.',
         avatar: 'https://randomuser.me/api/portraits/men/55.jpg',
         rating: 5,
-        comment: 'I appreciated the cultural context and science behind the soap making. My family loves the soaps I've made from these recipes.',
+        comment: 'I appreciated the cultural context and science behind the soap making. My family loves the soaps I\'ve made from these recipes.',
         date: 'November 5, 2022'
       }
     ]
@@ -283,14 +283,14 @@ export const handmadeCourses: Course[] = [
         name: 'Julia M.',
         avatar: 'https://randomuser.me/api/portraits/women/52.jpg',
         rating: 5,
-        comment: 'This course changed my entire approach to jewelry making. The techniques are challenging but Nadia breaks everything down so well. My final piece is something I'm truly proud of.',
+        comment: 'This course changed my entire approach to jewelry making. The techniques are challenging but Nadia breaks everything down so well. My final piece is something I\'m truly proud of.',
         date: 'April 23, 2023'
       },
       {
         name: 'Robert K.',
         avatar: 'https://randomuser.me/api/portraits/men/36.jpg',
         rating: 5,
-        comment: 'Worth every penny. The level of detail in the instructions and the cultural context make this course exceptional. I've taken many jewelry courses online and this is by far the best.',
+        comment: 'Worth every penny. The level of detail in the instructions and the cultural context make this course exceptional. I\'ve taken many jewelry courses online and this is by far the best.',
         date: 'March 17, 2023'
       }
     ],
@@ -511,7 +511,7 @@ export const digitalCourses: Course[] = [
         name: 'Lina H.',
         avatar: 'https://randomuser.me/api/portraits/women/63.jpg',
         rating: 5,
-        comment: 'Amazing free resource! I've tried other coding courses before but always got stuck. The step-by-step approach here really worked for me, and I'm proud of the website I created.',
+        comment: 'Amazing free resource! I\'ve tried other coding courses before but always got stuck. The step-by-step approach here really worked for me, and I\'m proud of the website I created.',
         date: 'February 5, 2023'
       }
     ],
