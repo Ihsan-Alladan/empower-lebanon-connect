@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Star, Clock, Heart } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { Course } from '@/types/course';
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/components/ui/use-toast";
 
 interface CourseCardProps {
   course: Course;
@@ -26,11 +26,13 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     setIsLiked(!isLiked);
     
     if (!isLiked) {
-      toast.success("Added to wishlist", {
+      toast({
+        title: "Added to wishlist",
         description: `${course.title} has been added to your wishlist.`,
       });
     } else {
-      toast("Removed from wishlist", {
+      toast({
+        title: "Removed from wishlist",
         description: `${course.title} has been removed from your wishlist.`,
       });
     }
@@ -107,7 +109,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
               <Star 
                 key={i} 
                 size={16} 
-                className={i < course.rating ? "fill-accent text-accent" : "text-muted"}
+                className={i < course.rating ? "fill-primary text-primary" : "text-muted"}
               />
             ))}
             <span className="text-xs text-muted-foreground ml-1">({course.reviews} reviews)</span>

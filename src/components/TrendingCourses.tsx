@@ -13,7 +13,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { trendingCourses } from '@/data/courses';
+import { trendingCourses } from '@/data/trendingCourses';
 
 const TrendingCourses: React.FC = () => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const TrendingCourses: React.FC = () => {
   return (
     <div className="mb-12">
       <div className="flex items-center gap-2 mb-6">
-        <TrendingUp className="text-empower-terracotta" size={22} />
+        <TrendingUp className="text-primary" size={22} />
         <h2 className="text-2xl font-bold">Trending Courses</h2>
       </div>
       
@@ -68,7 +68,7 @@ const TrendingCourses: React.FC = () => {
                         <Star 
                           key={i} 
                           size={16} 
-                          className={i < course.rating ? "fill-empower-gold text-empower-gold" : "text-muted"}
+                          className={i < course.rating ? "fill-primary text-primary" : "text-muted"}
                         />
                       ))}
                       <span className="text-xs ml-1">({course.reviews})</span>
@@ -77,7 +77,7 @@ const TrendingCourses: React.FC = () => {
                     <Button 
                       size="sm" 
                       onClick={() => navigate(`/courses/${course.id}`)}
-                      className="bg-empower-terracotta hover:bg-empower-terracotta/90"
+                      className="bg-primary hover:bg-primary/90"
                     >
                       View Details
                     </Button>
