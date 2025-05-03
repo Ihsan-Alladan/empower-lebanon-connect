@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -68,7 +69,7 @@ const Login = () => {
       <div className="min-h-screen flex flex-col">
         <Navbar />
         
-        <div className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-empower-brown to-empower-brown/90">
+        <div className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#0077B6]">
           <div className="max-w-md w-full space-y-8">
             <motion.div 
               initial={{ opacity: 0 }}
