@@ -35,12 +35,12 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
-            <Link to="/" className="text-empower-brown hover:text-empower-terracotta transition-colors">Home</Link>
-            <Link to="/courses" className="text-empower-brown hover:text-empower-terracotta transition-colors">Courses</Link>
-            <Link to="/shop" className="text-empower-brown hover:text-empower-terracotta transition-colors">Shop</Link>
-            <Link to="/donate" className="text-empower-brown hover:text-empower-terracotta transition-colors">Donate</Link>
-            <Link to="/workshops" className="text-empower-brown hover:text-empower-terracotta transition-colors">Workshops</Link>
-            <Link to="/events" className="text-empower-brown hover:text-empower-terracotta transition-colors">Events</Link>
+            <Link to="/" className="text-empower-brown hover:text-empower-terracotta transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-empower-terracotta after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Home</Link>
+            <Link to="/courses" className="text-empower-brown hover:text-empower-terracotta transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-empower-terracotta after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Courses</Link>
+            <Link to="/shop" className="text-empower-brown hover:text-empower-terracotta transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-empower-terracotta after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Shop</Link>
+            <Link to="/donate" className="text-empower-brown hover:text-empower-terracotta transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-empower-terracotta after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Donate</Link>
+            <Link to="/workshops" className="text-empower-brown hover:text-empower-terracotta transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-empower-terracotta after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Workshops</Link>
+            <Link to="/events" className="text-empower-brown hover:text-empower-terracotta transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-empower-terracotta after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Events</Link>
           </div>
 
           {/* CTA Buttons */}
@@ -59,12 +59,12 @@ const Navbar: React.FC = () => {
         {isMenuOpen && (
           <div className="md:hidden mt-4 pb-4">
             <div className="flex flex-col space-y-4">
-              <Link to="/" className="text-empower-brown hover:text-empower-terracotta transition-colors">Home</Link>
-              <Link to="/courses" className="text-empower-brown hover:text-empower-terracotta transition-colors">Courses</Link>
-              <Link to="/shop" className="text-empower-brown hover:text-empower-terracotta transition-colors">Shop</Link>
-              <Link to="/donate" className="text-empower-brown hover:text-empower-terracotta transition-colors">Donate</Link>
-              <Link to="/workshops" className="text-empower-brown hover:text-empower-terracotta transition-colors">Workshops</Link>
-              <Link to="/events" className="text-empower-brown hover:text-empower-terracotta transition-colors">Events</Link>
+              <Link to="/" className="text-empower-brown hover:text-empower-terracotta transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-empower-terracotta after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Home</Link>
+              <Link to="/courses" className="text-empower-brown hover:text-empower-terracotta transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-empower-terracotta after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Courses</Link>
+              <Link to="/shop" className="text-empower-brown hover:text-empower-terracotta transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-empower-terracotta after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Shop</Link>
+              <Link to="/donate" className="text-empower-brown hover:text-empower-terracotta transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-empower-terracotta after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Donate</Link>
+              <Link to="/workshops" className="text-empower-brown hover:text-empower-terracotta transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-empower-terracotta after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Workshops</Link>
+              <Link to="/events" className="text-empower-brown hover:text-empower-terracotta transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-empower-terracotta after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Events</Link>
               <div className="flex space-x-2 pt-2">
                 <Button variant="ghost" onClick={handleLogin} className="text-empower-brown hover:text-empower-terracotta">Login</Button>
                 <Button className="bg-empower-terracotta hover:bg-empower-terracotta/90" onClick={handleSignUp}>Sign Up</Button>
