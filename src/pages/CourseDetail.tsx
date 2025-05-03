@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
@@ -15,7 +14,7 @@ import {
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { handmadeCourses, digitalCourses } from '@/data/courses';
+import { handmadeCourses, digitalCourses } from '@/data';
 
 const CourseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

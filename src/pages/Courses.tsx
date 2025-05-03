@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
@@ -12,7 +11,7 @@ import Footer from '@/components/Footer';
 import CourseCard from '@/components/CourseCard';
 import CourseFilters from '@/components/CourseFilters';
 import TrendingCourses from '@/components/TrendingCourses';
-import { handmadeCourses, digitalCourses } from '@/data/courses';
+import { handmadeCourses, digitalCourses } from '@/data';
 
 const Courses: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
