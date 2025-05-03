@@ -23,11 +23,11 @@ const RoleButton: React.FC<RoleButtonProps> = ({ role, icon, label, onClick }) =
   return (
     <Button
       variant="ghost"
-      className="bg-empower-terracotta hover:bg-empower-terracotta/90 text-white font-bold py-4 flex flex-col items-center justify-center gap-2 transition-all duration-300 hover:scale-105 w-full h-24"
+      className="bg-empower-terracotta hover:bg-empower-terracotta/90 text-white font-bold py-2 flex flex-col items-center justify-center gap-1 transition-all duration-300 hover:scale-105 w-full h-16"
       onClick={() => onClick(role)}
     >
       {icon}
-      <span className="text-lg">{label}</span>
+      <span className="text-sm">{label}</span>
     </Button>
   );
 };
@@ -68,33 +68,33 @@ const SignUp = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="mt-8 bg-white rounded-lg shadow-lg p-8"
+              className="mt-8 bg-white rounded-lg shadow-lg p-6"
             >
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <RoleButton
                   role="learner"
-                  icon={<Book className="w-8 h-8" />}
+                  icon={<Book className="w-5 h-5" />}
                   label="Learner"
                   onClick={handleRoleSelection}
                 />
                 
                 <RoleButton
                   role="customer"
-                  icon={<ShoppingCart className="w-8 h-8" />}
+                  icon={<ShoppingCart className="w-5 h-5" />}
                   label="Customer"
                   onClick={handleRoleSelection}
                 />
                 
                 <RoleButton
                   role="seller"
-                  icon={<Store className="w-8 h-8" />}
+                  icon={<Store className="w-5 h-5" />}
                   label="Seller"
                   onClick={handleRoleSelection}
                 />
                 
                 <RoleButton
                   role="instructor"
-                  icon={<BookOpen className="w-8 h-8" />}
+                  icon={<BookOpen className="w-5 h-5" />}
                   label="Instructor"
                   onClick={handleRoleSelection}
                 />
