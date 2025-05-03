@@ -74,7 +74,7 @@ const AboutUs: React.FC = () => {
               <CarouselContent>
                 {images.map((image, index) => (
                   <CarouselItem key={index}>
-                    <div className={`overflow-hidden rounded-lg shadow-md border-2 h-full aspect-[4/3] ${image.border}`}>
+                    <div className="overflow-hidden rounded-lg shadow-md border-2 h-full aspect-[4/3]" className={image.border}>
                       <img 
                         src={image.src} 
                         alt={image.alt} 
