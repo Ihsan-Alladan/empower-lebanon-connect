@@ -39,8 +39,8 @@ const Hero: React.FC = () => {
         <div className="absolute inset-0 bg-black/40" /> {/* Overlay */}
       </div>
 
-      {/* Content */}
-      <div className="relative h-full flex items-center">
+      {/* Content - Moved to bottom left */}
+      <div className="relative h-full flex items-end pb-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl text-white">
             <div className="text-reveal mb-2 inline-block">
