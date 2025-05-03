@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -69,28 +68,23 @@ const Login = () => {
       <div className="min-h-screen flex flex-col">
         <Navbar />
         
-        <div className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-empower-ivory to-white">
+        <div className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-empower-brown to-empower-brown/90">
           <div className="max-w-md w-full space-y-8">
             <motion.div 
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-center"
-            >
-              <h2 className="mt-6 text-3xl font-bold text-empower-brown">
-                Welcome Back
-              </h2>
-              <p className="mt-2 text-sm text-empower-brown/80">
-                Sign in to your account to continue your journey with EmpowEra
-              </p>
-            </motion.div>
-            
-            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="mt-8 bg-white rounded-lg shadow-lg p-8"
+              className="bg-white rounded-lg shadow-lg p-8"
             >
+              <div className="text-center mb-6">
+                <h2 className="text-3xl font-bold text-empower-brown">
+                  Welcome Back
+                </h2>
+                <p className="mt-2 text-sm text-empower-brown/80">
+                  Sign in to your account to continue your journey with EmpowEra
+                </p>
+              </div>
+              
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   <FormField
