@@ -1,4 +1,3 @@
-
 import React from "react";
 import { motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
@@ -45,6 +44,8 @@ const SignUp = () => {
       navigate("/customer-signup");
     } else if (role === "seller") {
       navigate("/seller-signup");
+    } else if (role === "instructor") {
+      navigate("/instructor-signup");
     } else {
       // For other roles, continue with the previous navigation
       navigate(`/signup/${role}`);
