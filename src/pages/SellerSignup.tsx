@@ -26,8 +26,11 @@ const formSchema = z.object({
   businessName: z.string().min(2, {
     message: "Business name must be at least 2 characters.",
   }),
-  ownerName: z.string().min(2, {
-    message: "Owner name must be at least 2 characters.",
+  firstName: z.string().min(1, {
+    message: "First name is required.",
+  }),
+  lastName: z.string().min(1, {
+    message: "Last name is required.",
   }),
   phone: z.string().min(1, {
     message: "Phone number is required.",
@@ -59,7 +62,8 @@ const SellerSignup = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       businessName: "",
-      ownerName: "",
+      firstName: "",
+      lastName: "",
       phone: "",
       email: "",
       password: "",
@@ -141,38 +145,59 @@ const SellerSignup = () => {
               
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="businessName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-empower-brown">Business Name</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input 
+                              placeholder="Enter your business name" 
+                              {...field} 
+                              className="pl-10 rounded-xl" 
+                            />
+                            <Store className="absolute left-3 top-3 h-4 w-4 text-empower-brown/60" />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
-                      name="businessName"
+                      name="firstName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-empower-brown">Business Name</FormLabel>
+                          <FormLabel className="text-empower-brown">First Name</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input 
-                                placeholder="Enter your business name" 
+                                placeholder="First name" 
                                 {...field} 
                                 className="pl-10 rounded-xl" 
                               />
-                              <Store className="absolute left-3 top-3 h-4 w-4 text-empower-brown/60" />
+                              <User className="absolute left-3 top-3 h-4 w-4 text-empower-brown/60" />
                             </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={form.control}
-                      name="ownerName"
+                      name="lastName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-empower-brown">Owner Name</FormLabel>
+                          <FormLabel className="text-empower-brown">Last Name</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input 
-                                placeholder="Enter owner's full name" 
+                                placeholder="Last name" 
                                 {...field} 
                                 className="pl-10 rounded-xl" 
                               />
