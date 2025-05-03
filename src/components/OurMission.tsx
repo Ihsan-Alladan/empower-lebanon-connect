@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   Carousel, 
@@ -10,9 +10,6 @@ import {
 } from "@/components/ui/carousel";
 
 const OurMission: React.FC = () => {
-  // Add state for current slide
-  const [currentSlide, setCurrentSlide] = useState(0);
-  
   // Animation variants for staggered text fade-in
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -48,15 +45,6 @@ const OurMission: React.FC = () => {
       alt: "Empowerment through education"
     }
   ];
-
-  // Auto-slider effect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev === missionImages.length - 1 ? 0 : prev + 1));
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [missionImages.length]);
 
   return (
     <section id="mission" className="py-16 bg-gradient-to-b from-empower-ivory to-white overflow-hidden relative">
@@ -101,7 +89,7 @@ const OurMission: React.FC = () => {
             </motion.p>
           </motion.div>
           
-          {/* Image slider/carousel with auto-sliding */}
+          {/* Image slider/carousel */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -109,42 +97,23 @@ const OurMission: React.FC = () => {
             transition={{ duration: 0.7 }}
             className="w-full"
           >
-            <div className="relative overflow-hidden rounded-lg shadow-lg">
-              {missionImages.map((image, index) => (
-                <motion.div
-                  key={index}
-                  className="absolute inset-0 w-full h-full"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: currentSlide === index ? 1 : 0 }}
-                  transition={{ duration: 1 }}
-                >
-                  <img 
-                    src={image.url} 
-                    alt={image.alt} 
-                    className="w-full h-80 object-cover rounded-lg"
-                  />
-                </motion.div>
-              ))}
-              
-              {/* Carousel Indicators */}
-              <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
-                {missionImages.map((_, index) => (
-                  <motion.button
-                    key={index}
-                    onClick={() => setCurrentSlide(index)}
-                    className={`w-3 h-3 rounded-full ${
-                      currentSlide === index ? 'bg-white' : 'bg-white/50'
-                    }`}
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.9 }}
-                    animate={currentSlide === index ? 
-                      { width: "24px", transition: { duration: 0.3 } } : 
-                      { width: "12px", transition: { duration: 0.3 } }
-                    }
-                  />
+            <Carousel className="w-full">
+              <CarouselContent>
+                {missionImages.map((image, index) => (
+                  <CarouselItem key={index}>
+                    <div className="relative overflow-hidden rounded-lg shadow-lg p-1">
+                      <img 
+                        src={image.url} 
+                        alt={image.alt} 
+                        className="w-full h-80 object-cover rounded-lg"
+                      />
+                    </div>
+                  </CarouselItem>
                 ))}
-              </div>
-            </div>
+              </CarouselContent>
+              <CarouselPrevious className="left-2 bg-empower-terracotta text-white border-none hover:bg-empower-brown" />
+              <CarouselNext className="right-2 bg-empower-terracotta text-white border-none hover:bg-empower-brown" />
+            </Carousel>
           </motion.div>
         </div>
       </div>
