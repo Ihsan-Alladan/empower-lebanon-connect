@@ -2,7 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
-import { Book, ShoppingCart, Store, ChalkboardTeacher } from "lucide-react";
+import { Book, ShoppingCart, Store, BookOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import { Card } from "@/components/ui/card";
@@ -110,7 +110,7 @@ const SignUp = () => {
                 
                 <RoleButton
                   role="instructor"
-                  icon={<ChalkboardTeacher className="w-8 h-8" />}
+                  icon={<BookOpen className="w-8 h-8" />}
                   label="Instructor"
                   onClick={handleRoleSelection}
                 />
