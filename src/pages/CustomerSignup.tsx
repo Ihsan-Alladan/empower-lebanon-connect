@@ -208,13 +208,13 @@ const CustomerSignup = () => {
         <div 
           className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')",
+            backgroundImage: "url('https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')",
             backgroundSize: "cover",
             backgroundPosition: "center"
           }}
         >
           {/* Overlay with blur effect */}
-          <div className="absolute inset-0 backdrop-blur-md bg-black/30" />
+          <div className="absolute inset-0 backdrop-blur-md bg-empower-terracotta/10" />
           
           <div className="max-w-md w-full space-y-8 relative z-10">
             <motion.div 
