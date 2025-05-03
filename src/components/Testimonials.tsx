@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
@@ -98,7 +99,7 @@ const Testimonials: React.FC = () => {
                 </p>
               </div>
               <div className="flex items-center mt-4">
-                <Avatar className="h-12 w-12 mr-4 bg-empower-terracotta text-white">
+                <Avatar className="h-12 w-12 mr-4 bg-[#0A2463] text-white">
                   <AvatarFallback>{item.initial}</AvatarFallback>
                 </Avatar>
                 <div>
