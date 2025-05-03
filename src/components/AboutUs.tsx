@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
@@ -179,8 +180,8 @@ const AboutUs: React.FC = () => {
                 whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
               >
                 <img 
-                  src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&auto=format&fit=crop" 
-                  alt="Tech education" 
+                  src="/lovable-uploads/c9caa428-0f2f-4648-8934-29a619641101.png" 
+                  alt="Donation box with hearts" 
                   className="w-full h-40 object-cover transition-all duration-700 hover:scale-110"
                   loading="lazy"
                 />
