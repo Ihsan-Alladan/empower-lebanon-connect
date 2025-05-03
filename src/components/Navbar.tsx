@@ -24,11 +24,13 @@ const Navbar: React.FC = () => {
     <nav className="bg-white shadow-sm py-4 sticky top-0 z-50">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex justify-between items-center">
-          {/* Logo */}
+          {/* Logo - replaced text with image */}
           <Link to="/" className="flex items-center">
-            <span className="font-poppins font-bold text-2xl text-empower-terracotta">
-              Empow<span className="text-empower-olive">Era</span>
-            </span>
+            <img 
+              src="/lovable-uploads/22a31812-0de9-4dde-9442-b766171923c5.png" 
+              alt="EmpowEra Logo" 
+              className="h-10 md:h-12"
+            />
           </Link>
 
           {/* Desktop Navigation */}
