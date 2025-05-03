@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import PageTransition from "@/components/PageTransition";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 const formSchema = z.object({
   firstName: z.string().min(2, {
@@ -28,8 +29,8 @@ const formSchema = z.object({
   lastName: z.string().min(2, {
     message: "Last name must be at least 2 characters.",
   }),
-  phone: z.string().min(10, {
-    message: "Phone number must be at least 10 characters.",
+  phone: z.string().min(1, {
+    message: "Phone number is required.",
   }),
   email: z.string().email({
     message: "Please enter a valid email address.",
@@ -48,6 +49,8 @@ const formSchema = z.object({
 const LearnerSignup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [phoneValid, setPhoneValid] = useState(false);
+  const [fullPhoneNumber, setFullPhoneNumber] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
@@ -65,8 +68,24 @@ const LearnerSignup = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    // Only submit if phone is valid
+    if (!phoneValid) {
+      toast({
+        title: "Invalid phone number",
+        description: "Please enter a valid phone number",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Include the full phone number (with country code)
+    const submitData = {
+      ...values,
+      phone: fullPhoneNumber,
+    };
+    
     // Mock signup - in a real app this would connect to your authentication system
-    console.log(values);
+    console.log(submitData);
     
     toast({
       title: "Account Created Successfully",
@@ -81,6 +100,12 @@ const LearnerSignup = () => {
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
+  
+  const handlePhoneChange = (value: string, isValid: boolean, fullNumber: string) => {
+    form.setValue("phone", value);
+    setPhoneValid(isValid);
+    setFullPhoneNumber(fullNumber);
+  };
 
   return (
     <PageTransition route={location.pathname}>
@@ -128,7 +153,7 @@ const LearnerSignup = () => {
                               <Input 
                                 placeholder="Enter your first name" 
                                 {...field} 
-                                className="pl-10" 
+                                className="pl-10 rounded-xl" 
                               />
                               <User className="absolute left-3 top-3 h-4 w-4 text-empower-brown/60" />
                             </div>
@@ -149,7 +174,7 @@ const LearnerSignup = () => {
                               <Input 
                                 placeholder="Enter your last name" 
                                 {...field} 
-                                className="pl-10" 
+                                className="pl-10 rounded-xl" 
                               />
                               <User className="absolute left-3 top-3 h-4 w-4 text-empower-brown/60" />
                             </div>
@@ -167,17 +192,10 @@ const LearnerSignup = () => {
                       <FormItem>
                         <FormLabel className="text-empower-brown">Phone</FormLabel>
                         <FormControl>
-                          <div className="relative">
-                            <Input 
-                              placeholder="Enter your phone number" 
-                              type="tel"
-                              inputMode="tel"
-                              pattern="[0-9]*"
-                              {...field} 
-                              className="pl-10" 
-                            />
-                            <Phone className="absolute left-3 top-3 h-4 w-4 text-empower-brown/60" />
-                          </div>
+                          <PhoneInput 
+                            value={field.value}
+                            onChange={handlePhoneChange}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -196,7 +214,7 @@ const LearnerSignup = () => {
                               placeholder="Enter your email" 
                               type="email"
                               {...field} 
-                              className="pl-10" 
+                              className="pl-10 rounded-xl" 
                             />
                             <Mail className="absolute left-3 top-3 h-4 w-4 text-empower-brown/60" />
                           </div>
@@ -218,7 +236,7 @@ const LearnerSignup = () => {
                               type={showPassword ? "text" : "password"} 
                               placeholder="Enter your password" 
                               {...field} 
-                              className="pl-10" 
+                              className="pl-10 rounded-xl" 
                             />
                             <Lock className="absolute left-3 top-3 h-4 w-4 text-empower-brown/60" />
                             <button 
@@ -251,7 +269,7 @@ const LearnerSignup = () => {
                               type={showConfirmPassword ? "text" : "password"} 
                               placeholder="Confirm your password" 
                               {...field} 
-                              className="pl-10" 
+                              className="pl-10 rounded-xl" 
                             />
                             <Lock className="absolute left-3 top-3 h-4 w-4 text-empower-brown/60" />
                             <button 
@@ -274,7 +292,7 @@ const LearnerSignup = () => {
                   
                   <Button 
                     type="submit" 
-                    className="w-full bg-empower-terracotta hover:bg-empower-terracotta/90 flex items-center justify-center gap-2 mt-6"
+                    className="w-full bg-empower-terracotta hover:bg-empower-terracotta/90 flex items-center justify-center gap-2 mt-6 rounded-xl py-6"
                   >
                     Create Account
                   </Button>
