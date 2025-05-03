@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Book, ShoppingCart, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const Hero: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -109,8 +110,11 @@ const Hero: React.FC = () => {
                 <Button 
                   size="lg"
                   className="bg-empower-terracotta hover:bg-empower-terracotta/90 shadow-lg"
+                  asChild
                 >
-                  <Book className="mr-2 h-5 w-5" /> Explore Courses
+                  <Link to="/courses">
+                    <Book className="mr-2 h-5 w-5" /> Explore Courses
+                  </Link>
                 </Button>
               </motion.div>
               
@@ -121,8 +125,11 @@ const Hero: React.FC = () => {
                 <Button 
                   size="lg"
                   className="bg-[#F97316] hover:bg-[#F97316]/90 shadow-lg"
+                  asChild
                 >
-                  <ShoppingCart className="mr-2 h-5 w-5" /> Visit Our Shop
+                  <Link to="/shop">
+                    <ShoppingCart className="mr-2 h-5 w-5" /> Visit Our Shop
+                  </Link>
                 </Button>
               </motion.div>
               
@@ -133,8 +140,11 @@ const Hero: React.FC = () => {
                 <Button 
                   size="lg"
                   className="bg-[#D946EF] hover:bg-[#D946EF]/90 shadow-lg text-white"
+                  asChild
                 >
-                  <Heart className="mr-2 h-5 w-5" /> Donate Now
+                  <Link to="/donate">
+                    <Heart className="mr-2 h-5 w-5" /> Donate Now
+                  </Link>
                 </Button>
               </motion.div>
             </motion.div>
