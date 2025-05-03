@@ -126,8 +126,8 @@ const AboutUs: React.FC = () => {
                 whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
               >
                 <img 
-                  src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=1000&auto=format&fit=crop" 
-                  alt="Community learning together" 
+                  src="/lovable-uploads/43cdb952-f7ba-4e66-a36e-73f796864ba9.png" 
+                  alt="Colorful crocheted bag" 
                   className="w-full h-40 object-cover transition-all duration-700 hover:scale-110"
                   loading="lazy"
                 />
