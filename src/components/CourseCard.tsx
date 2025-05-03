@@ -38,18 +38,28 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     }
   };
   
+  // Generate a pastel background color based on course category
+  const getBgClass = () => {
+    if (course.category === 'handmade') {
+      return 'pastel-bg-pink';
+    } else {
+      return 'pastel-bg-blue';
+    }
+  };
+  
   return (
-    <Card className="overflow-hidden card-hover gradient-border">
+    <Card className={`overflow-hidden card-hover gradient-border`}>
       <div className="relative h-48 overflow-hidden group">
         <img 
           src={course.thumbnail} 
           alt={course.title} 
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-700 image-zoom"
         />
         <div className="absolute top-2 right-2">
           <Badge 
             variant={course.category === 'handmade' ? 'default' : 'secondary'}
-            className={`${course.isTrending ? 'animate-bounce-light' : ''}`}
+            className={`${course.isTrending ? 'animate-bounce-light' : ''} 
+              ${course.category === 'handmade' ? 'bg-gradient-to-r from-pink-400 to-rose-400 border-0' : 'bg-gradient-to-r from-blue-400 to-indigo-500 border-0'} text-white`}
           >
             {course.category === 'handmade' ? 'Handmade & Crafts' : 'Digital Skills'}
           </Badge>
@@ -62,23 +72,23 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
-          <h3 className="text-xl font-bold line-clamp-2 group-hover:text-primary transition-colors duration-300">{course.title}</h3>
+          <h3 className="text-xl font-bold line-clamp-2 card-title">{course.title}</h3>
           <Button 
             variant="ghost" 
             size="icon" 
             onClick={handleLike}
-            className={`${isLiked ? 'text-primary' : 'text-gray-400'} hover:text-primary/80 hover:scale-110 transition-all duration-300`}
+            className={`${isLiked ? 'text-rose-500' : 'text-gray-400'} hover:text-rose-400 hover:scale-110 transition-all duration-300 button-pop`}
           >
             <Heart 
               size={20} 
-              className={isLiked ? 'fill-primary animate-pop-up' : ''} 
+              className={isLiked ? 'fill-rose-500 animate-pop-up' : ''} 
             />
           </Button>
         </div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Avatar className="h-6 w-6 ring-1 ring-primary/20">
+        <div className="flex items-center gap-2 text-sm text-indigo-600">
+          <Avatar className="h-6 w-6 ring-1 ring-indigo-300">
             <AvatarImage src={course.instructor.avatar} alt={course.instructor.name} />
-            <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white">
+            <AvatarFallback className="bg-gradient-to-br from-blue-400 to-indigo-500 text-white">
               {course.instructor.name.charAt(0)}
             </AvatarFallback>
           </Avatar>
@@ -87,17 +97,17 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       </CardHeader>
       
       <CardContent className="pb-4">
-        <p className="text-muted-foreground line-clamp-2 mb-3">{course.description}</p>
+        <p className="text-slate-600 line-clamp-2 mb-3">{course.description}</p>
         
         <div className="flex justify-between items-center text-sm">
-          <div className="flex items-center gap-1">
-            <Clock size={16} className="text-primary" />
+          <div className="flex items-center gap-1 text-blue-600">
+            <Clock size={16} className="text-blue-500" />
             <span>{course.duration}</span>
           </div>
           <Badge variant="outline" className={
-            course.level.toLowerCase() === 'beginner' ? 'bg-secondary/20 text-secondary' : 
-            course.level.toLowerCase() === 'intermediate' ? 'bg-primary/20 text-primary' : 
-            'bg-accent/20 text-accent'
+            course.level.toLowerCase() === 'beginner' ? 'bg-green-100 text-green-600 border-green-200' : 
+            course.level.toLowerCase() === 'intermediate' ? 'bg-blue-100 text-blue-600 border-blue-200' : 
+            'bg-purple-100 text-purple-600 border-purple-200'
           }>
             {course.level}
           </Badge>
@@ -109,10 +119,10 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
               <Star 
                 key={i} 
                 size={16} 
-                className={i < course.rating ? "fill-primary text-primary" : "text-muted"}
+                className={i < course.rating ? "fill-amber-400 text-amber-400" : "text-muted"}
               />
             ))}
-            <span className="text-xs text-muted-foreground ml-1">({course.reviews} reviews)</span>
+            <span className="text-xs text-slate-500 ml-1">({course.reviews} reviews)</span>
           </div>
           <div className="font-semibold">
             {course.price === 0 ? (
@@ -127,7 +137,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       <CardFooter className="pt-0">
         <Button 
           onClick={handleEnroll} 
-          className="w-full bg-primary hover:bg-primary/90 text-white transition-all duration-500 shadow hover:shadow-md btn-hover"
+          className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white transition-all duration-300 shadow hover:shadow-md button-pop border-0"
         >
           Enroll Now
         </Button>
