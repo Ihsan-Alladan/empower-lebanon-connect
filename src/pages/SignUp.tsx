@@ -38,9 +38,13 @@ const SignUp = () => {
 
   const handleRoleSelection = (role: UserRole) => {
     console.log(`Selected role: ${role}`);
-    // In a real app, this would store the role and proceed to next step
-    // For now, we'll just show a console message
-    navigate(`/signup/${role}`);
+    // For learner role, navigate to the dedicated LearnerSignup page
+    if (role === "learner") {
+      navigate("/learner-signup");
+    } else {
+      // For other roles, continue with the previous navigation
+      navigate(`/signup/${role}`);
+    }
   };
 
   return (
