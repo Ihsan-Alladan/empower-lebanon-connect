@@ -13,7 +13,7 @@ import {
   PlayCircle, 
   Hammer, 
   BookOpen, 
-  Mix, 
+  Shuffle, // Replacing Mix with Shuffle
   Award, 
   UserCircle, 
   BarChart,
