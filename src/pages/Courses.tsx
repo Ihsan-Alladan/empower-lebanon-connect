@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,6 +29,7 @@ const Courses: React.FC = () => {
   const [questionnaireOpen, setQuestionnaireOpen] = useState(false);
   const [recommendedCourses, setRecommendedCourses] = useState<any[]>([]);
   const [showRecommendations, setShowRecommendations] = useState(false);
+  const coursesListRef = useRef<HTMLDivElement>(null);
 
   const slides = [
     "/lovable-uploads/dccc32b9-798a-4692-9816-6e03d3cfedf2.png", // Crochet workshop
@@ -44,8 +45,8 @@ const Courses: React.FC = () => {
     return () => clearInterval(interval);
   }, [slides.length]);
 
-  const scrollToTrending = () => {
-    trendingRef?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToCourses = () => {
+    coursesListRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const openQuestionnaire = () => {
@@ -162,7 +163,7 @@ const Courses: React.FC = () => {
                 <Button 
                   size="lg"
                   className="bg-empower-terracotta hover:bg-empower-terracotta/90 text-white shadow-lg"
-                  onClick={scrollToTrending}
+                  onClick={scrollToCourses}
                 >
                   Get Started <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -254,64 +255,66 @@ const Courses: React.FC = () => {
           <TrendingCourses />
         </div>
 
-        {!showRecommendations && (
-          <Tabs 
-            defaultValue="all" 
-            value={selectedTab}
-            onValueChange={setSelectedTab}
-            className="w-full"
-          >
-            <div className="flex justify-center mb-8">
-              <TabsList className="bg-empower-ivory/50">
-                <TabsTrigger 
-                  value="all" 
-                  className="data-[state=active]:bg-empower-gold data-[state=active]:text-empower-brown"
-                >
-                  <GraduationCap className="mr-2" size={18} />
-                  All Courses
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="handmade" 
-                  className="data-[state=active]:bg-empower-gold data-[state=active]:text-empower-brown"
-                >
-                  <Brush className="mr-2" size={18} />
-                  Handmade & Crafts
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="digital" 
-                  className="data-[state=active]:bg-empower-gold data-[state=active]:text-empower-brown"
-                >
-                  <Code className="mr-2" size={18} />
-                  Technology & Digital Skills
-                </TabsTrigger>
-              </TabsList>
-            </div>
-
-            <TabsContent value="all" className="animate-fade-in">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[...filteredHandmadeCourses, ...filteredDigitalCourses].map((course) => (
-                  <CourseCard key={course.id} course={course} />
-                ))}
+        <div ref={coursesListRef}>
+          {!showRecommendations && (
+            <Tabs 
+              defaultValue="all" 
+              value={selectedTab}
+              onValueChange={setSelectedTab}
+              className="w-full"
+            >
+              <div className="flex justify-center mb-8">
+                <TabsList className="bg-empower-ivory/50">
+                  <TabsTrigger 
+                    value="all" 
+                    className="data-[state=active]:bg-empower-gold data-[state=active]:text-empower-brown"
+                  >
+                    <GraduationCap className="mr-2" size={18} />
+                    All Courses
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="handmade" 
+                    className="data-[state=active]:bg-empower-gold data-[state=active]:text-empower-brown"
+                  >
+                    <Brush className="mr-2" size={18} />
+                    Handmade & Crafts
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="digital" 
+                    className="data-[state=active]:bg-empower-gold data-[state=active]:text-empower-brown"
+                  >
+                    <Code className="mr-2" size={18} />
+                    Technology & Digital Skills
+                  </TabsTrigger>
+                </TabsList>
               </div>
-            </TabsContent>
 
-            <TabsContent value="handmade" className="animate-fade-in">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredHandmadeCourses.map((course) => (
-                  <CourseCard key={course.id} course={course} />
-                ))}
-              </div>
-            </TabsContent>
+              <TabsContent value="all" className="animate-fade-in">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {[...filteredHandmadeCourses, ...filteredDigitalCourses].map((course) => (
+                    <CourseCard key={course.id} course={course} />
+                  ))}
+                </div>
+              </TabsContent>
 
-            <TabsContent value="digital" className="animate-fade-in">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredDigitalCourses.map((course) => (
-                  <CourseCard key={course.id} course={course} />
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
-        )}
+              <TabsContent value="handmade" className="animate-fade-in">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredHandmadeCourses.map((course) => (
+                    <CourseCard key={course.id} course={course} />
+                  ))}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="digital" className="animate-fade-in">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredDigitalCourses.map((course) => (
+                    <CourseCard key={course.id} course={course} />
+                  ))}
+                </div>
+              </TabsContent>
+            </Tabs>
+          )}
+        </div>
 
         {/* Questionnaire Modal */}
         <QuestionnaireModal 
