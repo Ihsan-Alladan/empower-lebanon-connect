@@ -8,8 +8,8 @@ interface ColorfulConfettiProps {
 }
 
 const ColorfulConfetti: React.FC<ColorfulConfettiProps> = ({
-  duration = 3000,
-  particleCount = 150,
+  duration = 5000, // Increased duration from 3000ms to 5000ms
+  particleCount = 200, // Increased particle count from 150 to 200
 }) => {
   const confettiRef = useRef<HTMLCanvasElement>(null);
 

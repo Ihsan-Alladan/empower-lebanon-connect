@@ -31,10 +31,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import ColorfulConfetti from './ColorfulConfetti';
+import { handmadeCourses, digitalCourses } from '@/data';
 
 interface QuestionnaireModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onRecommendCourses?: (courses: any[]) => void;
 }
 
 const formSchema = z.object({
@@ -83,11 +85,12 @@ const steps = [
   },
 ];
 
-const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({ open, onOpenChange }) => {
+const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({ open, onOpenChange, onRecommendCourses }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [recommendedCourses, setRecommendedCourses] = useState<any[]>([]);
   const { toast } = useToast();
   
   const form = useForm<FormValues>({
@@ -128,6 +131,48 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({ open, onOpenCha
       setCurrentStep(currentStep - 1);
     }
   };
+  
+  const getRecommendedCourses = (formData: FormValues) => {
+    // Default matching criteria
+    let matchCriteria = {
+      category: formData.interest === 'handmade' || formData.interest === 'design' ? 'handmade' : 'digital',
+      level: formData.experience === 'beginner' ? 'beginner' : 
+             formData.experience === 'intermediate' ? 'intermediate' : 'advanced',
+      hasCertification: formData.certification === 'yes',
+    };
+    
+    // Combine all courses for filtering
+    const allCourses = [...handmadeCourses, ...digitalCourses];
+    
+    // Filter courses based on user preferences
+    let filteredCourses = allCourses.filter(course => {
+      // Match by general category
+      if (formData.interest === 'handmade' || formData.interest === 'design') {
+        if (course.category !== 'handmade') return false;
+      } else if (formData.interest === 'technology' || formData.interest === 'marketing') {
+        if (course.category !== 'digital') return false;
+      }
+      
+      // Match by experience level
+      if (formData.experience === 'beginner' && course.level !== 'beginner') return false;
+      if (formData.experience === 'intermediate' && course.level !== 'intermediate') return false;
+      if (formData.experience === 'advanced' && course.level !== 'advanced') return false;
+      
+      // Match by certification if required
+      if (formData.certification === 'yes' && !course.hasCertification) return false;
+      
+      // Match by time commitment
+      const courseDurationHours = course.duration / 60; // assuming duration is in minutes
+      if (formData.hours === 'less-than-2' && courseDurationHours > 2) return false;
+      if (formData.hours === '2-to-5' && (courseDurationHours < 2 || courseDurationHours > 5)) return false;
+      if (formData.hours === 'more-than-5' && courseDurationHours < 5) return false;
+      
+      return true;
+    });
+    
+    // Return top 6 courses or all if less than 6
+    return filteredCourses.slice(0, 6);
+  };
 
   const handleSubmit = () => {
     setIsSubmitting(true);
@@ -137,13 +182,17 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({ open, onOpenCha
       const formData = form.getValues();
       console.log("Form submitted with data:", formData);
       
+      // Find courses that match user preferences
+      const matchedCourses = getRecommendedCourses(formData);
+      setRecommendedCourses(matchedCourses);
+      
       setIsSubmitting(false);
       setIsCompleted(true);
       setShowConfetti(true);
       
       toast({
         title: "Preferences saved!",
-        description: "We've recorded your preferences and will use them to recommend courses for you.",
+        description: "We've found " + matchedCourses.length + " courses based on your preferences!",
       });
       
       // Hide confetti after a few seconds
@@ -153,10 +202,18 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({ open, onOpenCha
     }, 1500);
   };
 
+  const handleViewRecommendations = () => {
+    if (onRecommendCourses) {
+      onRecommendCourses(recommendedCourses);
+    }
+    onOpenChange(false);
+  };
+
   const resetForm = () => {
     form.reset();
     setCurrentStep(0);
     setIsCompleted(false);
+    setRecommendedCourses([]);
   };
 
   // Animation variants
@@ -202,11 +259,11 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({ open, onOpenCha
                   </motion.div>
                   <h2 className="text-2xl font-bold mb-2 text-gray-800">Perfect Match Found!</h2>
                   <p className="text-lg mb-6 text-gray-600 max-w-md">
-                    Based on your preferences, we've found courses that match your learning style and goals.
+                    Based on your preferences, we've found {recommendedCourses.length} courses that match your learning style and goals.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Button 
-                      onClick={() => onOpenChange(false)} 
+                      onClick={handleViewRecommendations} 
                       className="bg-empower-terracotta hover:bg-empower-terracotta/90 text-white"
                     >
                       View Recommendations
