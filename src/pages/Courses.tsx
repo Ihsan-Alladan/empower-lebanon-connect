@@ -16,6 +16,7 @@ import CourseFilters from '@/components/CourseFilters';
 import TrendingCourses from '@/components/TrendingCourses';
 import { handmadeCourses, digitalCourses } from '@/data';
 import { Slider } from "@/components/ui/slider";
+import QuestionnaireModal from '@/components/QuestionnaireModal';
 
 const Courses: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -25,6 +26,7 @@ const Courses: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('all');
   const [currentSlide, setCurrentSlide] = useState(0);
   const [trendingRef, setTrendingRef] = useState<HTMLDivElement | null>(null);
+  const [questionnaireOpen, setQuestionnaireOpen] = useState(false);
 
   const slides = [
     "/lovable-uploads/dccc32b9-798a-4692-9816-6e03d3cfedf2.png", // Crochet workshop
@@ -42,6 +44,10 @@ const Courses: React.FC = () => {
 
   const scrollToTrending = () => {
     trendingRef?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const openQuestionnaire = () => {
+    setQuestionnaireOpen(true);
   };
 
   const filteredHandmadeCourses = handmadeCourses.filter(course => {
@@ -143,13 +149,19 @@ const Courses: React.FC = () => {
                   Get Started <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
                 
-                <Button 
-                  size="lg"
-                  variant="outline"
-                  className="bg-[#D946EF] border-[#D946EF] text-white hover:bg-[#D946EF]/90 hover:text-white hover:border-[#D946EF]/90 shadow-lg"
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  Confused!! Click Here <HelpCircle className="ml-2 h-5 w-5" />
-                </Button>
+                  <Button 
+                    size="lg"
+                    variant="outline"
+                    className="bg-[#D946EF] border-[#D946EF] text-white hover:bg-[#D946EF]/90 hover:text-white hover:border-[#D946EF]/90 shadow-lg"
+                    onClick={openQuestionnaire}
+                  >
+                    Confused!! Click Here <HelpCircle className="ml-2 h-5 w-5" />
+                  </Button>
+                </motion.div>
               </motion.div>
             </div>
           </div>
@@ -247,6 +259,12 @@ const Courses: React.FC = () => {
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Questionnaire Modal */}
+        <QuestionnaireModal 
+          open={questionnaireOpen} 
+          onOpenChange={setQuestionnaireOpen} 
+        />
       </main>
       
       <Footer />
