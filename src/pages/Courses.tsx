@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
@@ -70,8 +71,6 @@ const Courses: React.FC = () => {
           </p>
         </div>
         
-        <TrendingCourses />
-
         <div className="mb-8">
           <CourseFilters 
             searchQuery={searchQuery}
@@ -84,6 +83,8 @@ const Courses: React.FC = () => {
             setSelectedTab={setSelectedTab}
           />
         </div>
+        
+        <TrendingCourses />
 
         <Tabs 
           defaultValue="all" 
