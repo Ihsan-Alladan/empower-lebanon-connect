@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useForm } from 'react-hook-form';
 import { BookOpen, Search, PlusCircle, Edit, Trash2, Users, FileText, Upload, Film } from 'lucide-react';
@@ -335,7 +337,7 @@ const ContentManagement: React.FC = () => {
 
       {/* Add Course Dialog */}
       <Dialog open={isAddCourseOpen} onOpenChange={setIsAddCourseOpen}>
-        <DialogContent className="sm:max-w-[600px] p-0">
+        <DialogContent className="sm:max-w-[600px] p-0" scrollable={true}>
           <DialogHeader className="p-6 pb-2 bg-gradient-to-r from-blue-50 to-white border-b">
             <DialogTitle className="text-2xl font-bold text-empower-brown flex items-center">
               <PlusCircle className="mr-2 h-5 w-5 text-empower-terracotta" />
@@ -525,7 +527,7 @@ const ContentManagement: React.FC = () => {
 
       {/* Edit Course Dialog */}
       <Dialog open={isEditCourseOpen} onOpenChange={setIsEditCourseOpen}>
-        <DialogContent className="sm:max-w-[600px] p-0">
+        <DialogContent className="sm:max-w-[600px] p-0" scrollable={true}>
           <DialogHeader className="p-6 pb-2 bg-gradient-to-r from-blue-50 to-white border-b">
             <DialogTitle className="text-2xl font-bold text-empower-brown flex items-center">
               <Edit className="mr-2 h-5 w-5 text-empower-terracotta" />
