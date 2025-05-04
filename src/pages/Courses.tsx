@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { 
-  Search, Filter, GraduationCap, Brush, Code, ArrowRight, HelpCircle, CheckCircle
+  Search, Filter, GraduationCap, Brush, Code, ArrowRight, HelpCircle, CheckCircle, TrendingUp
 } from "lucide-react";
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
@@ -13,8 +13,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CourseCard from '@/components/CourseCard';
 import CourseFilters from '@/components/CourseFilters';
-import TrendingCourses from '@/components/TrendingCourses';
-import { handmadeCourses, digitalCourses } from '@/data';
+import { handmadeCourses, digitalCourses, trendingCourses } from '@/data';
 import { Slider } from "@/components/ui/slider";
 import QuestionnaireModal from '@/components/QuestionnaireModal';
 
@@ -25,7 +24,6 @@ const Courses: React.FC = () => {
   const [selectedPrice, setSelectedPrice] = useState('all');
   const [selectedTab, setSelectedTab] = useState('all');
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [trendingRef, setTrendingRef] = useState<HTMLDivElement | null>(null);
   const [questionnaireOpen, setQuestionnaireOpen] = useState(false);
   const [recommendedCourses, setRecommendedCourses] = useState<any[]>([]);
   const [showRecommendations, setShowRecommendations] = useState(false);
@@ -88,6 +86,24 @@ const Courses: React.FC = () => {
   });
 
   const filteredDigitalCourses = digitalCourses.filter(course => {
+    if (searchQuery && !course.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
+    if (selectedLevel !== 'all' && course.level !== selectedLevel) {
+      return false;
+    }
+    if (selectedPrice !== 'all') {
+      if (selectedPrice === 'free' && course.price !== 0) {
+        return false;
+      }
+      if (selectedPrice === 'paid' && course.price === 0) {
+        return false;
+      }
+    }
+    return true;
+  });
+
+  const filteredTrendingCourses = trendingCourses.filter(course => {
     if (searchQuery && !course.title.toLowerCase().includes(searchQuery.toLowerCase())) {
       return false;
     }
@@ -250,10 +266,6 @@ const Courses: React.FC = () => {
             </div>
           </div>
         )}
-        
-        <div ref={setTrendingRef}>
-          <TrendingCourses />
-        </div>
 
         <div ref={coursesListRef}>
           {!showRecommendations && (
@@ -286,6 +298,13 @@ const Courses: React.FC = () => {
                     <Code className="mr-2" size={18} />
                     Technology & Digital Skills
                   </TabsTrigger>
+                  <TabsTrigger 
+                    value="trending" 
+                    className="data-[state=active]:bg-empower-gold data-[state=active]:text-empower-brown"
+                  >
+                    <TrendingUp className="mr-2" size={18} />
+                    Trending Courses
+                  </TabsTrigger>
                 </TabsList>
               </div>
 
@@ -308,6 +327,14 @@ const Courses: React.FC = () => {
               <TabsContent value="digital" className="animate-fade-in">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filteredDigitalCourses.map((course) => (
+                    <CourseCard key={course.id} course={course} />
+                  ))}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="trending" className="animate-fade-in">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredTrendingCourses.map((course) => (
                     <CourseCard key={course.id} course={course} />
                   ))}
                 </div>
