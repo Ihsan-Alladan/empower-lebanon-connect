@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -21,6 +21,7 @@ const Shop: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedPrice, setSelectedPrice] = useState('all');
+  const [currentSlide, setCurrentSlide] = useState(0);
   
   const categories = ['Home Decor', 'Home Textiles', 'Kitchen & Dining'];
   
@@ -55,6 +56,15 @@ const Shop: React.FC = () => {
     "https://images.unsplash.com/photo-1635982990938-856392a399b3?q=80&w=2574&auto=format&fit=crop"
   ];
 
+  // Automatic slider
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev === sliderImages.length - 1 ? 0 : prev + 1));
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [sliderImages.length]);
+
   return (
     <div className="min-h-screen flex flex-col bg-empower-ivory">
       <Navbar />
@@ -65,7 +75,7 @@ const Shop: React.FC = () => {
           <Carousel className="w-full">
             <CarouselContent>
               {sliderImages.map((image, index) => (
-                <CarouselItem key={index}>
+                <CarouselItem key={index} className={currentSlide === index ? "block" : "hidden"}>
                   <div className="relative h-[60vh] w-full">
                     <div 
                       className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -88,19 +98,31 @@ const Shop: React.FC = () => {
             </CarouselContent>
             <div className="absolute inset-x-0 bottom-4 flex justify-center gap-2">
               {sliderImages.map((_, index) => (
-                <div
+                <button
                   key={index}
-                  className={`h-2 w-2 rounded-full bg-white/50`}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`h-3 w-3 rounded-full transition-all ${
+                    currentSlide === index ? "bg-white w-6" : "bg-white/50"
+                  }`}
                 />
               ))}
             </div>
-            <CarouselPrevious className="left-4" />
-            <CarouselNext className="right-4" />
+            <CarouselPrevious 
+              className="left-4" 
+              onClick={() => setCurrentSlide(prev => (prev === 0 ? sliderImages.length - 1 : prev - 1))}
+            />
+            <CarouselNext 
+              className="right-4" 
+              onClick={() => setCurrentSlide(prev => (prev === sliderImages.length - 1 ? 0 : prev + 1))}
+            />
           </Carousel>
         </section>
         
-        {/* Search and Filters - Moved directly below the slider */}
-        <div className="container mx-auto px-4 -mt-6 relative z-10">
+        {/* Space before filters */}
+        <div className="h-8"></div>
+        
+        {/* Search and Filters - Moved down a bit */}
+        <div className="container mx-auto px-4 mt-4 relative z-10">
           <ShopFilters 
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
