@@ -8,7 +8,8 @@ import {
   Trash2, 
   CheckCircle, 
   XCircle,
-  UserCheck
+  UserCheck,
+  Undo
 } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -98,6 +99,7 @@ const UserManagement: React.FC = () => {
   const [users, setUsers] = useState<User[]>(initialUsers);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("all");
+  const [recentlyRejected, setRecentlyRejected] = useState<User | null>(null);
   const { toast } = useToast();
 
   // Filter users based on search term and role
@@ -128,11 +130,49 @@ const UserManagement: React.FC = () => {
   };
   
   const handleRejectUser = (id: number) => {
+    // Find the user being rejected
+    const rejectedUser = users.find(user => user.id === id);
+    
+    // Store the rejected user for potential undo
+    if (rejectedUser) {
+      setRecentlyRejected(rejectedUser);
+    }
+    
+    // Remove the user from the list
     setUsers(users.filter(user => user.id !== id));
+    
+    // Show toast with undo button
     toast({
       title: "User Rejected",
       description: "User has been rejected and removed from the system.",
+      action: (
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={() => handleUndoReject(rejectedUser)}
+          className="gap-1"
+        >
+          <Undo size={16} />
+          Undo
+        </Button>
+      ),
     });
+  };
+  
+  const handleUndoReject = (user: User | null | undefined) => {
+    if (user) {
+      // Add the user back to the list
+      setUsers(prevUsers => [...prevUsers, user]);
+      
+      // Clear the recently rejected user
+      setRecentlyRejected(null);
+      
+      // Show confirmation toast
+      toast({
+        title: "Rejection Undone",
+        description: `${user.name} has been added back to the system.`,
+      });
+    }
   };
 
   return (
