@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -100,6 +99,7 @@ const UserManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("all");
   const [recentlyRejected, setRecentlyRejected] = useState<User | null>(null);
+  const [recentlyDeleted, setRecentlyDeleted] = useState<User | null>(null);
   const { toast } = useToast();
 
   // Filter users based on search term and role
@@ -122,11 +122,49 @@ const UserManagement: React.FC = () => {
   });
   
   const handleDeleteUser = (id: number) => {
+    // Find the user being deleted
+    const deletedUser = users.find(user => user.id === id);
+    
+    // Store the deleted user for potential undo
+    if (deletedUser) {
+      setRecentlyDeleted(deletedUser);
+    }
+    
+    // Remove the user from the list
     setUsers(users.filter(user => user.id !== id));
+    
+    // Show toast with undo button
     toast({
       title: "User Deleted",
       description: "User has been successfully removed.",
+      action: (
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={() => handleUndoDelete(deletedUser)}
+          className="gap-1"
+        >
+          <Undo size={16} />
+          Undo
+        </Button>
+      ),
     });
+  };
+  
+  const handleUndoDelete = (user: User | null | undefined) => {
+    if (user) {
+      // Add the user back to the list
+      setUsers(prevUsers => [...prevUsers, user]);
+      
+      // Clear the recently deleted user
+      setRecentlyDeleted(null);
+      
+      // Show confirmation toast
+      toast({
+        title: "Deletion Undone",
+        description: `${user.name} has been added back to the system.`,
+      });
+    }
   };
   
   const handleApproveUser = (id: number) => {
