@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -16,9 +17,9 @@ import { getAdminAuthenticated } from '@/utils/adminAuth';
 
 // Sample data for demonstrations
 const sampleCourses = [
-  { id: 1, title: "Introduction to Handmade Crafts", category: "Handmade", instructor: "Jane Smith", difficulty: "Beginner", price: 29.99, image: "craft_intro.jpg" },
-  { id: 2, title: "Advanced Web Development", category: "Technology", instructor: "John Doe", difficulty: "Advanced", price: 49.99, image: "webdev_advanced.jpg" },
-  { id: 3, title: "Leadership Fundamentals", category: "Soft Skills", instructor: "Emily Johnson", difficulty: "Intermediate", price: 0, image: "leadership_basics.jpg" },
+  { id: 1, title: "Introduction to Handmade Crafts", category: "Handmade", instructor: "Jane Smith", difficulty: "Beginner", price: 29.99, image: "craft_intro.jpg", seqNb: 1, capacity: 25, date: "2025-05-10" },
+  { id: 2, title: "Advanced Web Development", category: "Technology", instructor: "John Doe", difficulty: "Advanced", price: 49.99, image: "webdev_advanced.jpg", seqNb: 2, capacity: 35, date: "2025-05-15" },
+  { id: 3, title: "Leadership Fundamentals", category: "Soft Skills", instructor: "Emily Johnson", difficulty: "Intermediate", price: 0, image: "leadership_basics.jpg", seqNb: 3, capacity: 30, date: "2025-05-20" },
 ];
 
 const sampleInstructors = [
@@ -58,6 +59,7 @@ const ContentManagement: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentCourse, setCurrentCourse] = useState<any>(null);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [courses, setCourses] = useState(sampleCourses);
   const { toast } = useToast();
   const navigate = useNavigate();
   
@@ -69,7 +71,7 @@ const ContentManagement: React.FC = () => {
   }, [navigate]);
 
   // Filter courses based on search
-  const filteredCourses = sampleCourses.filter(course => 
+  const filteredCourses = courses.filter(course => 
     course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     course.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
     course.instructor.toLowerCase().includes(searchQuery.toLowerCase())
@@ -85,6 +87,10 @@ const ContentManagement: React.FC = () => {
       duration: "",
       difficulty: "",
       price: "",
+      seqNb: "",
+      capacity: "",
+      date: "",
+      instructorId: "",
     }
   });
 
@@ -102,6 +108,10 @@ const ContentManagement: React.FC = () => {
         duration: currentCourse.duration || "",
         difficulty: currentCourse.difficulty,
         price: currentCourse.price,
+        seqNb: currentCourse.seqNb || "",
+        capacity: currentCourse.capacity || "",
+        date: currentCourse.date || "",
+        instructorId: currentCourse.instructorId || "",
       });
     }
   }, [currentCourse, isEditCourseOpen, editCourseForm]);
@@ -117,7 +127,26 @@ const ContentManagement: React.FC = () => {
 
   const handleAddCourse = (data: any) => {
     console.log("Adding course:", data);
-    // Implementation would add this to the database
+    // Create a new course object
+    const newCourse = {
+      id: courses.length + 1,
+      title: data.title,
+      category: data.category,
+      instructor: sampleInstructors.find(i => i.id.toString() === data.instructorId)?.name || data.instructor,
+      description: data.description,
+      duration: data.duration,
+      difficulty: data.difficulty,
+      price: parseFloat(data.price) || 0,
+      image: "placeholder.svg",
+      seqNb: parseInt(data.seqNb) || courses.length + 1,
+      capacity: parseInt(data.capacity) || 30,
+      date: data.date,
+      instructorId: data.instructorId,
+    };
+    
+    // Add the new course to the list
+    setCourses([...courses, newCourse]);
+    
     toast({
       title: "Course Added",
       description: `Successfully added ${data.title}`,
@@ -258,7 +287,8 @@ const ContentManagement: React.FC = () => {
                   </div>
                   <div className="p-4">
                     <h3 className="font-semibold text-lg mb-1 line-clamp-1">{course.title}</h3>
-                    <div className="text-sm text-gray-500 mb-2">Instructor: {course.instructor}</div>
+                    <div className="text-sm text-gray-500 mb-1">Instructor: {course.instructor}</div>
+                    <div className="text-sm text-gray-500 mb-2">Seq#: {course.seqNb} | Capacity: {course.capacity}</div>
                     <div className="flex justify-between items-center">
                       <div>
                         <span className={`
@@ -353,6 +383,20 @@ const ContentManagement: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={addCourseForm.control}
+                  name="seqNb"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-medium">Sequence Number *</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="Enter sequence number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={addCourseForm.control}
                   name="title"
                   render={({ field }) => (
                     <FormItem>
@@ -392,10 +436,10 @@ const ContentManagement: React.FC = () => {
                 
                 <FormField
                   control={addCourseForm.control}
-                  name="instructor"
+                  name="instructorId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-medium">Instructor *</FormLabel>
+                      <FormLabel className="font-medium">Instructor ID *</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
@@ -404,8 +448,8 @@ const ContentManagement: React.FC = () => {
                         </FormControl>
                         <SelectContent>
                           {sampleInstructors.map(instructor => (
-                            <SelectItem key={instructor.id} value={instructor.name}>
-                              {instructor.name}
+                            <SelectItem key={instructor.id} value={instructor.id.toString()}>
+                              {instructor.id} - {instructor.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -462,6 +506,34 @@ const ContentManagement: React.FC = () => {
                         <Input type="number" min="0" step="0.01" placeholder="Enter price (0 for free)" {...field} />
                       </FormControl>
                       <FormDescription>Enter 0 for free courses</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={addCourseForm.control}
+                  name="capacity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-medium">Student Capacity *</FormLabel>
+                      <FormControl>
+                        <Input type="number" min="1" placeholder="Enter maximum students" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={addCourseForm.control}
+                  name="date"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-medium">Start Date *</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -544,6 +616,20 @@ const ContentManagement: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={editCourseForm.control}
+                  name="seqNb"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-medium">Sequence Number *</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="Enter sequence number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={editCourseForm.control}
                   name="title"
                   render={({ field }) => (
                     <FormItem>
@@ -583,10 +669,10 @@ const ContentManagement: React.FC = () => {
                 
                 <FormField
                   control={editCourseForm.control}
-                  name="instructor"
+                  name="instructorId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-medium">Instructor *</FormLabel>
+                      <FormLabel className="font-medium">Instructor ID *</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
@@ -595,8 +681,8 @@ const ContentManagement: React.FC = () => {
                         </FormControl>
                         <SelectContent>
                           {sampleInstructors.map(instructor => (
-                            <SelectItem key={instructor.id} value={instructor.name}>
-                              {instructor.name}
+                            <SelectItem key={instructor.id} value={instructor.id.toString()}>
+                              {instructor.id} - {instructor.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -653,6 +739,34 @@ const ContentManagement: React.FC = () => {
                         <Input type="number" min="0" step="0.01" placeholder="Enter price (0 for free)" {...field} />
                       </FormControl>
                       <FormDescription>Enter 0 for free courses</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={editCourseForm.control}
+                  name="capacity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-medium">Student Capacity *</FormLabel>
+                      <FormControl>
+                        <Input type="number" min="1" placeholder="Enter maximum students" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={editCourseForm.control}
+                  name="date"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-medium">Start Date *</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -778,7 +892,7 @@ const ContentManagement: React.FC = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {sampleCourses.map(course => (
+                        {courses.map(course => (
                           <SelectItem key={course.id} value={course.id.toString()}>
                             {course.title}
                           </SelectItem>
