@@ -146,7 +146,7 @@ const Courses: React.FC = () => {
                 <Button 
                   size="lg"
                   variant="outline"
-                  className="bg-[#D6BCFA] border-[#D6BCFA] text-white hover:bg-[#D6BCFA]/90 hover:text-white hover:border-[#D6BCFA]/90 shadow-lg"
+                  className="bg-[#D946EF] border-[#D946EF] text-white hover:bg-[#D946EF]/90 hover:text-white hover:border-[#D946EF]/90 shadow-lg"
                 >
                   Confused!! Click Here <HelpCircle className="ml-2 h-5 w-5" />
                 </Button>
