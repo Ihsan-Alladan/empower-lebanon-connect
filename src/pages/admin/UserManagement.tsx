@@ -8,7 +8,8 @@ import {
   CheckCircle, 
   XCircle,
   UserCheck,
-  Undo
+  Undo,
+  Send
 } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,6 +24,14 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
+import { 
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter
+} from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
 
 // Mock data for users
 const initialUsers = [
@@ -101,6 +110,11 @@ const UserManagement: React.FC = () => {
   const [recentlyRejected, setRecentlyRejected] = useState<User | null>(null);
   const [recentlyDeleted, setRecentlyDeleted] = useState<User | null>(null);
   const { toast } = useToast();
+  
+  // New state for the message dialog
+  const [messageDialogOpen, setMessageDialogOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [userMessage, setUserMessage] = useState("");
 
   // Filter users based on search term and role
   const filteredUsers = users.filter(user => {
@@ -223,6 +237,41 @@ const UserManagement: React.FC = () => {
     }
   };
 
+  // New function to handle opening the edit dialog
+  const handleEditClick = (id: number) => {
+    setSelectedUserId(id);
+    setUserMessage("");
+    setMessageDialogOpen(true);
+  };
+  
+  // Function to handle sending the message and changing status to pending
+  const handleSendMessage = () => {
+    if (selectedUserId && userMessage.trim()) {
+      // Update user status to pending
+      setUsers(users.map(user => 
+        user.id === selectedUserId ? { ...user, status: 'pending' } : user
+      ));
+      
+      // Show success message
+      toast({
+        title: "Status Updated & Message Sent",
+        description: `User status changed to pending and message sent.`,
+      });
+      
+      // Close the dialog and reset state
+      setMessageDialogOpen(false);
+      setSelectedUserId(null);
+      setUserMessage("");
+    } else {
+      // Show error if message is empty
+      toast({
+        title: "Message Required",
+        description: "Please enter a message before sending.",
+        variant: "destructive"
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -305,6 +354,7 @@ const UserManagement: React.FC = () => {
                                 size="icon"
                                 onClick={() => handleApproveUser(user.id)}
                                 className="text-green-600 hover:text-green-800 hover:bg-green-100"
+                                title="Approve User"
                               >
                                 <CheckCircle size={16} />
                               </Button>
@@ -313,6 +363,7 @@ const UserManagement: React.FC = () => {
                                 size="icon"
                                 onClick={() => handleRejectUser(user.id)}
                                 className="text-red-600 hover:text-red-800 hover:bg-red-100"
+                                title="Reject User"
                               >
                                 <XCircle size={16} />
                               </Button>
@@ -321,8 +372,9 @@ const UserManagement: React.FC = () => {
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => {}}
+                            onClick={() => handleEditClick(user.id)}
                             className="text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+                            title="Edit User & Send Message"
                           >
                             <Edit size={16} />
                           </Button>
@@ -331,6 +383,7 @@ const UserManagement: React.FC = () => {
                             size="icon"
                             onClick={() => handleDeleteUser(user.id)}
                             className="text-red-600 hover:text-red-800 hover:bg-red-100"
+                            title="Delete User"
                           >
                             <Trash2 size={16} />
                           </Button>
@@ -350,6 +403,35 @@ const UserManagement: React.FC = () => {
           </div>
         </CardContent>
       </Card>
+      
+      {/* Message Dialog */}
+      <Dialog open={messageDialogOpen} onOpenChange={setMessageDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Send Message to User</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <p className="text-sm text-muted-foreground">
+              This will change the user's status to "pending" and send them a message.
+            </p>
+            <Textarea 
+              placeholder="Write your message here..." 
+              value={userMessage}
+              onChange={(e) => setUserMessage(e.target.value)}
+              className="min-h-[120px]"
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setMessageDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSendMessage} className="gap-2">
+              <Send size={16} />
+              Send Message
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
