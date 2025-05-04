@@ -107,11 +107,14 @@ const UserManagement: React.FC = () => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
       user.email.toLowerCase().includes(searchTerm.toLowerCase());
     
-    // Updated filtering logic to treat donor as part of customer
+    // Updated filtering logic to consider donors as customers
+    // Every donor is a customer, but not every customer is a donor
     let roleMatches = filterRole === "all";
     if (filterRole === "customer") {
+      // When filtering for customer, include both customers and donors
       roleMatches = user.role === "customer" || user.role === "donor";
     } else {
+      // For all other filter options, match the exact role
       roleMatches = user.role === filterRole;
     }
     
