@@ -106,9 +106,16 @@ const UserManagement: React.FC = () => {
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
       user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = filterRole === "all" || user.role === filterRole;
     
-    return matchesSearch && matchesRole;
+    // Updated filtering logic to treat donor as part of customer
+    let roleMatches = filterRole === "all";
+    if (filterRole === "customer") {
+      roleMatches = user.role === "customer" || user.role === "donor";
+    } else {
+      roleMatches = user.role === filterRole;
+    }
+    
+    return matchesSearch && roleMatches;
   });
   
   const handleDeleteUser = (id: number) => {
@@ -197,9 +204,10 @@ const UserManagement: React.FC = () => {
             onChange={(e) => setFilterRole(e.target.value)}
           >
             <option value="all">All Roles</option>
-            <option value="customer">Customers</option>
+            <option value="customer">Customers & Donors</option>
             <option value="instructor">Instructors</option>
-            <option value="donor">Donors</option>
+            <option value="seller">Sellers</option>
+            <option value="learner">Learners</option>
           </select>
         </div>
       </div>
