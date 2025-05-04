@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -138,7 +137,7 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({ open, onOpenCha
       category: formData.interest === 'handmade' || formData.interest === 'design' ? 'handmade' : 'digital',
       level: formData.experience === 'beginner' ? 'beginner' : 
              formData.experience === 'intermediate' ? 'intermediate' : 'advanced',
-      hasCertification: formData.certification === 'yes',
+      prefersCertification: formData.certification === 'yes',
     };
     
     // Combine all courses for filtering
@@ -158,11 +157,27 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({ open, onOpenCha
       if (formData.experience === 'intermediate' && course.level !== 'intermediate') return false;
       if (formData.experience === 'advanced' && course.level !== 'advanced') return false;
       
-      // Match by certification if required
-      if (formData.certification === 'yes' && !course.hasCertification) return false;
+      // Skip certification check since we don't have this property in the Course type
       
-      // Match by time commitment
-      const courseDurationHours = course.duration / 60; // assuming duration is in minutes
+      // Match by time commitment - convert string duration to a numeric value for comparison
+      let courseDurationHours = 0;
+      if (course.duration) {
+        const durationParts = course.duration.split(' ');
+        if (durationParts.length >= 2) {
+          const value = parseInt(durationParts[0], 10);
+          const unit = durationParts[1];
+          
+          if (!isNaN(value)) {
+            if (unit.includes('week')) {
+              // Assuming ~5 hours per week
+              courseDurationHours = value * 5;
+            } else if (unit.includes('hour')) {
+              courseDurationHours = value;
+            }
+          }
+        }
+      }
+      
       if (formData.hours === 'less-than-2' && courseDurationHours > 2) return false;
       if (formData.hours === '2-to-5' && (courseDurationHours < 2 || courseDurationHours > 5)) return false;
       if (formData.hours === 'more-than-5' && courseDurationHours < 5) return false;

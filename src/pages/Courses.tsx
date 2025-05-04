@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { 
-  Search, Filter, GraduationCap, Brush, Code, ArrowRight, HelpCircle
+  Search, Filter, GraduationCap, Brush, Code, ArrowRight, HelpCircle, CheckCircle
 } from "lucide-react";
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
