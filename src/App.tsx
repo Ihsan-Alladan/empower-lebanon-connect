@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { CartProvider } from '@/hooks/useCart';
+import { FavoritesProvider } from '@/hooks/useFavorites';
 import Index from '@/pages/Index';
 import Shop from '@/pages/Shop';
 import ProductDetail from '@/pages/ProductDetail';
@@ -53,53 +54,55 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            
-            {/* Shop Routes */}
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/shop/product/:id" element={<ProductDetail />} />
-            <Route path="/shop/seller/:id" element={<SellerShop />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/favorites" element={<Favorites />} />
-            
-            {/* Seller Routes */}
-            <Route path="/seller-login" element={<SellerLogin />} />
-            <Route path="/seller-signup" element={<SellerSignup />} />
-            <Route 
-              path="/seller-dashboard/*" 
-              element={
-                <ProtectedRoute element={<SellerDashboard />} role="seller" />
-              } 
-            />
-            
-            {/* Course Routes */}
-            <Route path="/courses" element={<Courses />} />
-            <Route path="/courses/:id" element={<CourseDetail />} />
-            
-            {/* Authentication Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/signup/learner" element={<LearnerSignup />} />
-            <Route path="/signup/instructor" element={<InstructorSignup />} />
-            <Route path="/signup/customer" element={<CustomerSignup />} />
-            
-            {/* Admin Routes */}
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/content" element={<ContentManagement />} />
-            <Route path="/admin/users" element={<UserManagement />} />
-            <Route path="/admin/shop" element={<ShopManagement />} />
-            <Route path="/admin/events" element={<EventsManagement />} />
-            <Route path="/admin/newsletter" element={<Newsletter />} />
-            <Route path="/admin/analytics" element={<Analytics />} />
-            <Route path="/admin/settings" element={<Settings />} />
-            
-            {/* Other Routes */}
-            <Route path="/donate" element={<Donate />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <FavoritesProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              
+              {/* Shop Routes */}
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/shop/product/:id" element={<ProductDetail />} />
+              <Route path="/shop/seller/:id" element={<SellerShop />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/favorites" element={<Favorites />} />
+              
+              {/* Seller Routes */}
+              <Route path="/seller-login" element={<SellerLogin />} />
+              <Route path="/seller-signup" element={<SellerSignup />} />
+              <Route 
+                path="/seller-dashboard/*" 
+                element={
+                  <ProtectedRoute element={<SellerDashboard />} role="seller" />
+                } 
+              />
+              
+              {/* Course Routes */}
+              <Route path="/courses" element={<Courses />} />
+              <Route path="/courses/:id" element={<CourseDetail />} />
+              
+              {/* Authentication Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/signup/learner" element={<LearnerSignup />} />
+              <Route path="/signup/instructor" element={<InstructorSignup />} />
+              <Route path="/signup/customer" element={<CustomerSignup />} />
+              
+              {/* Admin Routes */}
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/content" element={<ContentManagement />} />
+              <Route path="/admin/users" element={<UserManagement />} />
+              <Route path="/admin/shop" element={<ShopManagement />} />
+              <Route path="/admin/events" element={<EventsManagement />} />
+              <Route path="/admin/newsletter" element={<Newsletter />} />
+              <Route path="/admin/analytics" element={<Analytics />} />
+              <Route path="/admin/settings" element={<Settings />} />
+              
+              {/* Other Routes */}
+              <Route path="/donate" element={<Donate />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </FavoritesProvider>
       </CartProvider>
     </AuthProvider>
   );
