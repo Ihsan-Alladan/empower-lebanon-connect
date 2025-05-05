@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -49,17 +48,15 @@ const SellerLogin: React.FC = () => {
     setLoading(true);
     
     try {
-      // Check specifically for seller credentials to ensure proper redirection
+      // For simplicity, directly authenticate with the hardcoded seller credentials
       if (data.email === 'seller@seller.com' && data.password === 'seller321') {
-        const success = await login(data.email, data.password);
-        if (success) {
-          toast.success('Login successful!');
+        await login(data.email, data.password);
+        toast.success('Seller login successful!');
+        
+        // Add a small delay to ensure the localStorage is updated
+        setTimeout(() => {
           navigate('/seller-dashboard');
-        } else {
-          toast.error('Login failed', {
-            description: 'Invalid email or password'
-          });
-        }
+        }, 100);
       } else {
         toast.error('Login failed', {
           description: 'Invalid seller credentials'

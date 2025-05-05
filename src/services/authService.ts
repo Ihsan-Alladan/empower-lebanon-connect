@@ -38,7 +38,7 @@ export const authService = {
         } else {
           resolve(null);
         }
-      }, 500);
+      }, 300);
     });
   },
   

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -36,8 +37,10 @@ const ProtectedRoute: React.FC<{ element: React.ReactNode; role?: string }> = ({
   element, 
   role
 }) => {
-  const isAuthenticated = localStorage.getItem('user') !== null;
-  const userRole = isAuthenticated ? JSON.parse(localStorage.getItem('user') || '{}').role : null;
+  // Get user from localStorage directly to avoid issues with context not being ready
+  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : null;
+  const isAuthenticated = user !== null;
+  const userRole = user?.role;
   
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
