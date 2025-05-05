@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -117,11 +118,11 @@ const Shop: React.FC = () => {
           </Carousel>
         </section>
         
-        {/* Space before filters */}
-        <div className="h-8"></div>
+        {/* Reduced space before filters - moved up */}
+        <div className="h-4"></div>
         
-        {/* Search and Filters - Moved down a bit */}
-        <div className="container mx-auto px-4 mt-4 relative z-10">
+        {/* Search and Filters */}
+        <div className="container mx-auto px-4 mt-2 relative z-10">
           <ShopFilters 
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -133,10 +134,10 @@ const Shop: React.FC = () => {
           />
         </div>
         
-        <div className="container mx-auto px-4 py-8">
-          {/* All Products */}
-          <section className="mt-12">
-            <h2 className="text-2xl font-semibold mb-6 text-empower-brown">All Products</h2>
+        <div className="container mx-auto px-4 py-4">
+          {/* All Products - pushed up by reducing py value */}
+          <section className="mt-6">
+            <h2 className="text-2xl font-semibold mb-4 text-empower-brown">All Products</h2>
             <Tabs defaultValue="all" className="w-full">
               <TabsList className="bg-empower-ivory/50 mb-6">
                 <TabsTrigger 

@@ -49,13 +49,20 @@ const SellerLogin: React.FC = () => {
     setLoading(true);
     
     try {
-      const success = await login(data.email, data.password);
-      if (success) {
-        toast.success('Login successful!');
-        navigate('/seller-dashboard');
+      // Check specifically for seller credentials to ensure proper redirection
+      if (data.email === 'seller@seller.com' && data.password === 'seller321') {
+        const success = await login(data.email, data.password);
+        if (success) {
+          toast.success('Login successful!');
+          navigate('/seller-dashboard');
+        } else {
+          toast.error('Login failed', {
+            description: 'Invalid email or password'
+          });
+        }
       } else {
         toast.error('Login failed', {
-          description: 'Invalid email or password'
+          description: 'Invalid seller credentials'
         });
       }
     } catch (error) {
