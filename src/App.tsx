@@ -1,99 +1,105 @@
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from '@/contexts/AuthContext';
+import Index from '@/pages/Index';
+import Shop from '@/pages/Shop';
+import ProductDetail from '@/pages/ProductDetail';
+import SellerShop from '@/pages/SellerShop';
+import SellerDashboard from '@/pages/SellerDashboard';
+import SellerLogin from '@/pages/SellerLogin';
+import Cart from '@/pages/Cart';
+import Favorites from '@/pages/Favorites';
+import Courses from '@/pages/Courses';
+import CourseDetail from '@/pages/CourseDetail';
+import Login from '@/pages/Login';
+import SignUp from '@/pages/SignUp';
+import SellerSignup from '@/pages/SellerSignup';
+import LearnerSignup from '@/pages/LearnerSignup';
+import InstructorSignup from '@/pages/InstructorSignup';
+import CustomerSignup from '@/pages/CustomerSignup';
+import AdminDashboard from '@/pages/admin/AdminDashboard';
+import ContentManagement from '@/pages/admin/ContentManagement';
+import UserManagement from '@/pages/admin/UserManagement';
+import ShopManagement from '@/pages/admin/ShopManagement';
+import EventsManagement from '@/pages/admin/EventsManagement';
+import Newsletter from '@/pages/admin/Newsletter';
+import Analytics from '@/pages/admin/Analytics';
+import Settings from '@/pages/admin/Settings';
+import NotFound from '@/pages/NotFound';
+import Donate from '@/pages/Donate';
+import './App.css';
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
-import Index from "./pages/Index";
-import Courses from "./pages/Courses";
-import CourseDetail from "./pages/CourseDetail";
-import NotFound from "./pages/NotFound";
-import Shop from "./pages/Shop";
-import ProductDetail from "./pages/ProductDetail";
-import Cart from "./pages/Cart";
-import Favorites from "./pages/Favorites";
-import SellerDashboard from "./pages/SellerDashboard";
-import Donate from "./pages/Donate";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import LearnerSignup from "./pages/LearnerSignup";
-import CustomerSignup from "./pages/CustomerSignup";
-import SellerSignup from "./pages/SellerSignup";
-import InstructorSignup from "./pages/InstructorSignup";
-import { CartProvider } from "@/hooks/useCart";
-import { FavoritesProvider } from "@/hooks/useFavorites";
-
-// Import Admin components
-import AdminLayout from "./components/admin/AdminLayout";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import UserManagement from "./pages/admin/UserManagement";
-import ContentManagement from "./pages/admin/ContentManagement";
-import ShopManagement from "./pages/admin/ShopManagement";
-import EventsManagement from "./pages/admin/EventsManagement";
-import Analytics from "./pages/admin/Analytics";
-import Newsletter from "./pages/admin/Newsletter";
-import Settings from "./pages/admin/Settings";
-
-const queryClient = new QueryClient();
-
-// AnimatedRoutes component to handle route transitions
-const AnimatedRoutes = () => {
-  const location = useLocation();
+// Protected route component
+const ProtectedRoute: React.FC<{ element: React.ReactNode; role?: string }> = ({ 
+  element, 
+  role
+}) => {
+  const isAuthenticated = localStorage.getItem('user') !== null;
+  const userRole = isAuthenticated ? JSON.parse(localStorage.getItem('user') || '{}').role : null;
   
-  return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<Index />} />
-        <Route path="/courses" element={<Courses />} />
-        <Route path="/courses/:id" element={<CourseDetail />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/shop/product/:id" element={<ProductDetail />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/favorites" element={<Favorites />} />
-        <Route path="/seller/dashboard" element={<SellerDashboard />} />
-        <Route path="/donate" element={<Donate />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/signup/:role" element={<SignUp />} />
-        <Route path="/learner-signup" element={<LearnerSignup />} />
-        <Route path="/customer-signup" element={<CustomerSignup />} />
-        <Route path="/seller-signup" element={<SellerSignup />} />
-        <Route path="/instructor-signup" element={<InstructorSignup />} />
-        
-        {/* Admin Routes */}
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="users" element={<UserManagement />} />
-          <Route path="content" element={<ContentManagement />} />
-          <Route path="shop" element={<ShopManagement />} />
-          <Route path="events" element={<EventsManagement />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="newsletter" element={<Newsletter />} />
-          <Route path="settings" element={<Settings />} />
-        </Route>
-        
-        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </AnimatePresence>
-  );
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+  
+  if (role && userRole !== role) {
+    return <Navigate to="/" />;
+  }
+  
+  return <>{element}</>;
 };
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <CartProvider>
-        <FavoritesProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AnimatedRoutes />
-          </BrowserRouter>
-        </FavoritesProvider>
-      </CartProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          
+          {/* Shop Routes */}
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/shop/product/:id" element={<ProductDetail />} />
+          <Route path="/shop/seller/:id" element={<SellerShop />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/favorites" element={<Favorites />} />
+          
+          {/* Seller Routes */}
+          <Route path="/seller-login" element={<SellerLogin />} />
+          <Route path="/seller-signup" element={<SellerSignup />} />
+          <Route 
+            path="/seller-dashboard/*" 
+            element={
+              <ProtectedRoute element={<SellerDashboard />} role="seller" />
+            } 
+          />
+          
+          {/* Course Routes */}
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/courses/:id" element={<CourseDetail />} />
+          
+          {/* Authentication Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup/learner" element={<LearnerSignup />} />
+          <Route path="/signup/instructor" element={<InstructorSignup />} />
+          <Route path="/signup/customer" element={<CustomerSignup />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/content" element={<ContentManagement />} />
+          <Route path="/admin/users" element={<UserManagement />} />
+          <Route path="/admin/shop" element={<ShopManagement />} />
+          <Route path="/admin/events" element={<EventsManagement />} />
+          <Route path="/admin/newsletter" element={<Newsletter />} />
+          <Route path="/admin/analytics" element={<Analytics />} />
+          <Route path="/admin/settings" element={<Settings />} />
+          
+          {/* Other Routes */}
+          <Route path="/donate" element={<Donate />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
+}
 
 export default App;

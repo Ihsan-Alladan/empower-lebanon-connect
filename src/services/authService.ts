@@ -1,0 +1,63 @@
+
+import { toast } from "@/components/ui/sonner";
+
+// Mock user data - in a real application, this would come from a database
+const users = [
+  {
+    id: "seller1",
+    email: "seller@seller.com",
+    password: "seller321", // In a real app, passwords would be hashed
+    name: "Artisanal Creations",
+    role: "seller",
+    avatar: "https://images.unsplash.com/photo-1472396961693-142e6e269027"
+  }
+];
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  avatar?: string;
+}
+
+export const authService = {
+  login: (email: string, password: string): Promise<User | null> => {
+    return new Promise((resolve) => {
+      // Simulate API call delay
+      setTimeout(() => {
+        const user = users.find(
+          (u) => u.email === email && u.password === password
+        );
+        
+        if (user) {
+          const { password, ...userWithoutPassword } = user;
+          // Store user in local storage
+          localStorage.setItem("user", JSON.stringify(userWithoutPassword));
+          resolve(userWithoutPassword);
+        } else {
+          resolve(null);
+        }
+      }, 500);
+    });
+  },
+  
+  logout: (): void => {
+    localStorage.removeItem("user");
+    toast.success("Logged out successfully");
+  },
+  
+  getCurrentUser: (): User | null => {
+    const user = localStorage.getItem("user");
+    return user ? JSON.parse(user) : null;
+  },
+  
+  isAuthenticated: (): boolean => {
+    return localStorage.getItem("user") !== null;
+  },
+  
+  isSeller: (): boolean => {
+    const user = authService.getCurrentUser();
+    return user?.role === "seller";
+  }
+};

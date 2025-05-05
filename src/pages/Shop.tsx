@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -135,16 +134,6 @@ const Shop: React.FC = () => {
         </div>
         
         <div className="container mx-auto px-4 py-8">
-          {/* Featured Products */}
-          <section className="mb-16">
-            <h2 className="text-2xl font-semibold mb-6 text-empower-brown text-focus-in">Featured Treasures</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {products.filter(p => p.featured).map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          </section>
-          
           {/* All Products */}
           <section className="mt-12">
             <h2 className="text-2xl font-semibold mb-6 text-empower-brown">All Products</h2>

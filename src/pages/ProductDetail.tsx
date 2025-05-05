@@ -13,7 +13,8 @@ import {
   Check, 
   ChevronLeft, 
   Share, 
-  MessageCircle 
+  MessageCircle,
+  Store 
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -308,7 +309,7 @@ const ProductDetail: React.FC = () => {
                 </div>
               </div>
               
-              {/* Seller info */}
+              {/* Seller info - Enhanced with visit shop button */}
               <div className="bg-empower-ivory/50 p-4 rounded-lg mt-6">
                 <div className="flex items-center">
                   <img src={product.seller.avatar} alt={product.seller.name} className="w-12 h-12 rounded-full object-cover mr-3" />
@@ -319,9 +320,12 @@ const ProductDetail: React.FC = () => {
                       <span>{product.seller.rating} Seller Rating</span>
                     </div>
                   </div>
-                  <Button variant="link" className="ml-auto text-empower-terracotta">
-                    Visit Shop
-                  </Button>
+                  <Link to={`/shop/seller/${product.seller.id}`} className="ml-auto">
+                    <Button className="bg-[#B56E4D] hover:bg-[#B56E4D]/80 text-white">
+                      <Store size={16} className="mr-2" />
+                      Visit Shop
+                    </Button>
+                  </Link>
                 </div>
               </div>
               

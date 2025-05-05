@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, ShoppingCart, Star } from 'lucide-react';
+import { Heart, ShoppingCart, Star, Store } from 'lucide-react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/sonner';
@@ -42,7 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const favoriteActive = isFavorite(product.id);
   
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-white">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-white animate-fade-in">
       <div 
         className="relative overflow-hidden" 
         onMouseEnter={() => setIsHovering(true)}
@@ -52,7 +52,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <img 
             src={product.images[0].url} 
             alt={product.images[0].alt} 
-            className="w-full h-64 object-cover transition-transform duration-300 hover-zoom"
+            className="w-full h-64 object-cover transition-transform duration-300 hover:scale-105"
           />
         </Link>
         
@@ -134,17 +134,40 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               'Out of stock'}
           </div>
         </div>
+        
+        {/* Seller information */}
+        <Link 
+          to={`/shop/seller/${product.seller.id}`} 
+          className="mt-2 flex items-center gap-1 text-sm text-empower-brown hover:text-empower-terracotta transition-colors"
+        >
+          <img 
+            src={product.seller.avatar} 
+            alt={product.seller.name} 
+            className="w-5 h-5 rounded-full object-cover"
+          />
+          <span>By {product.seller.name}</span>
+        </Link>
       </CardContent>
       
-      <CardFooter className="pt-0">
+      <CardFooter className="pt-0 grid grid-cols-2 gap-2">
         <Button 
           onClick={handleAddToCart} 
-          className="w-full bg-empower-terracotta hover:bg-empower-terracotta/80 text-white"
+          className="bg-empower-terracotta hover:bg-empower-terracotta/80 text-white"
           disabled={product.stock === 0}
         >
           <ShoppingCart size={16} className="mr-2" />
           {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
         </Button>
+        
+        <Link to={`/shop/seller/${product.seller.id}`}>
+          <Button 
+            variant="outline" 
+            className="w-full border-empower-brown text-empower-brown hover:bg-empower-brown hover:text-white transition-colors"
+          >
+            <Store size={16} className="mr-2" /> 
+            Visit Shop
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   );
