@@ -136,8 +136,10 @@ const SellerLogin: React.FC = () => {
                 </div>
               </form>
               
-              <div className="text-sm text-center mt-4 text-gray-500">
-                Test Account: seller@seller.com / seller321
+              <div className="text-sm text-center mt-4 space-y-1 text-gray-500">
+                <p>Test Accounts:</p>
+                <p>seller@seller.com / seller321</p>
+                <p>seller22@gmail.com / seller1234</p>
               </div>
             </CardContent>
             
