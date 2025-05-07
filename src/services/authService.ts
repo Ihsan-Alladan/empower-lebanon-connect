@@ -1,4 +1,3 @@
-
 import { toast } from "@/components/ui/sonner";
 
 // Mock user data - in a real application, this would come from a database
@@ -31,8 +30,11 @@ export const authService = {
         );
         
         if (user) {
-          const { password, ...userWithoutPassword } = user;
-          // Store user in local storage
+          // We need to ensure we're not including the password but keeping all other properties
+          const { password: _, ...userWithoutPassword } = user;
+          
+          // Store user in local storage - make sure role is included
+          console.log("Storing user in localStorage:", userWithoutPassword);
           localStorage.setItem("user", JSON.stringify(userWithoutPassword));
           resolve(userWithoutPassword);
         } else {
