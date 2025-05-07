@@ -49,16 +49,26 @@ const SellerLogin: React.FC = () => {
     setLoading(true);
     
     try {
-      const success = await login(data.email, data.password);
-      if (success) {
-        toast.success('Login successful!');
-        navigate('/seller-dashboard');
+      console.log("Attempting seller login with:", data.email);
+      
+      // Attempt login using auth context
+      const user = await login(data.email, data.password);
+      
+      if (user) {
+        console.log("Login successful, user:", user);
+        toast.success('Seller login successful!');
+        
+        // Add a small delay to ensure the localStorage is updated
+        setTimeout(() => {
+          navigate('/seller-dashboard');
+        }, 200);
       } else {
         toast.error('Login failed', {
-          description: 'Invalid email or password'
+          description: 'Invalid seller credentials'
         });
       }
     } catch (error) {
+      console.error("Login error:", error);
       toast.error('An error occurred', {
         description: 'Please try again later'
       });
