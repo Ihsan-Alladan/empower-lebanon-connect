@@ -1,4 +1,3 @@
-
 import { toast } from "@/components/ui/sonner";
 
 // Mock user data - in a real application, this would come from a database
@@ -10,14 +9,6 @@ const users = [
     name: "Artisanal Creations",
     role: "seller",
     avatar: "https://images.unsplash.com/photo-1472396961693-142e6e269027"
-  },
-  {
-    id: "seller2",
-    email: "seller22@gmail.com",
-    password: "seller1234",
-    name: "Handmade Treasures",
-    role: "seller",
-    avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04"
   }
 ];
 
