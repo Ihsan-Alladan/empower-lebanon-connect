@@ -1,11 +1,10 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authService, User } from '@/services/authService';
-import { toast } from '@/components/ui/sonner';
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<User | null>;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
   isSeller: boolean;
@@ -22,26 +21,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Check if user is already logged in
     const storedUser = authService.getCurrentUser();
     if (storedUser) {
-      console.log("AuthContext: Found stored user", storedUser);
       setUser(storedUser);
     }
     setLoading(false);
   }, []);
   
-  const login = async (email: string, password: string): Promise<User | null> => {
-    const loggedInUser = await authService.login(email, password);
-    if (loggedInUser) {
-      console.log("AuthContext: Login successful", loggedInUser);
-      setUser(loggedInUser);
-      return loggedInUser;
+  const login = async (email: string, password: string): Promise<boolean> => {
+    const user = await authService.login(email, password);
+    if (user) {
+      setUser(user);
+      return true;
     }
-    return null;
+    return false;
   };
   
   const logout = () => {
     authService.logout();
     setUser(null);
-    toast.success("Logged out successfully");
   };
   
   const value = {
