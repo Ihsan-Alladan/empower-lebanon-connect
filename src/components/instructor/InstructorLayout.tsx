@@ -10,7 +10,8 @@ import {
   Calendar, 
   Settings, 
   LogOut, 
-  Home 
+  Home,
+  Users
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -42,6 +43,11 @@ const InstructorLayout: React.FC = () => {
       path: '/instructor-dashboard', 
       name: 'My Courses', 
       icon: BookOpen 
+    },
+    { 
+      path: '/instructor-dashboard/classrooms', 
+      name: 'Manage Classrooms', 
+      icon: Users 
     },
     { 
       path: '/instructor-dashboard/assignments', 
