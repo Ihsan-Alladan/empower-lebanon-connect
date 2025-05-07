@@ -1,3 +1,4 @@
+
 import { toast } from "@/components/ui/sonner";
 
 // Mock user data - in a real application, this would come from a database
@@ -9,6 +10,14 @@ const users = [
     name: "Artisanal Creations",
     role: "seller",
     avatar: "https://images.unsplash.com/photo-1472396961693-142e6e269027"
+  },
+  {
+    id: "admin1",
+    email: "admin@admin.com",
+    password: "admin321",
+    name: "Admin User",
+    role: "admin",
+    avatar: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79"
   }
 ];
 
@@ -61,5 +70,10 @@ export const authService = {
   isSeller: (): boolean => {
     const user = authService.getCurrentUser();
     return user?.role === "seller";
+  },
+
+  isAdmin: (): boolean => {
+    const user = authService.getCurrentUser();
+    return user?.role === "admin";
   }
 };

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -70,7 +69,6 @@ function App() {
               <Route path="/favorites" element={<Favorites />} />
               
               {/* Seller Routes */}
-              <Route path="/seller-login" element={<SellerLogin />} />
               <Route path="/seller-signup" element={<SellerSignup />} />
               <Route 
                 path="/seller-dashboard/*" 

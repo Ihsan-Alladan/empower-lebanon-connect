@@ -1,10 +1,10 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Eye, EyeOff, Lock, LogIn, User } from "lucide-react";
+import { Eye, EyeOff, Lock, LogIn, User, Store } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
@@ -17,27 +17,28 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/components/ui/sonner";
 import Navbar from "@/components/Navbar";
 import { Checkbox } from "@/components/ui/checkbox";
 import PageTransition from "@/components/PageTransition";
+import { useAuth } from "@/contexts/AuthContext";
 import { isAdminUser, setAdminAuthenticated } from "@/utils/adminAuth";
 
 const formSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
+  password: z.string().min(6, {
+    message: "Password must be at least 6 characters.",
   }),
   rememberMe: z.boolean().default(false),
 });
 
 const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
-  const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
+  const { login } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,8 +49,8 @@ const Login = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("Login attempt with:", values);
     
     // Check if this is an admin login
     if (isAdminUser(values.email, values.password)) {
@@ -65,21 +66,55 @@ const Login = () => {
       setTimeout(() => {
         navigate("/admin");
       }, 1000);
-    } else {
-      // Regular user login logic (mock for now)
+      
+      return;
+    }
+    
+    // Regular or seller login
+    const user = await login(values.email, values.password);
+    
+    if (user) {
       toast({
         title: "Login Successful",
-        description: "Welcome back to EmpowEra!",
+        description: `Welcome back, ${user.name}!`,
       });
       
-      // Redirect to home page after successful login
-      setTimeout(() => {
+      // Redirect based on user role
+      if (user.role === "seller") {
+        navigate("/seller-dashboard");
+      } else {
         navigate("/");
-      }, 1000);
+      }
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: "Invalid email or password. Please try again."
+      });
     }
   }
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  
+  // Demo credentials
+  const loginAsDemo = (type: "customer" | "seller" | "admin") => {
+    let email = "";
+    let password = "";
+    
+    if (type === "seller") {
+      email = "seller@seller.com";
+      password = "seller321";
+    } else if (type === "admin") {
+      email = "admin@admin.com";
+      password = "admin321";
+    } else {
+      // Demo customer credentials would go here
+      return;
+    }
+    
+    form.setValue("email", email);
+    form.setValue("password", password);
+  };
 
   return (
     <PageTransition route={location.pathname}>
@@ -204,6 +239,35 @@ const Login = () => {
                     <LogIn className="h-4 w-4" />
                     Sign in
                   </Button>
+                  
+                  {/* Quick login buttons */}
+                  <div className="grid grid-cols-2 gap-3 mt-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="flex items-center gap-2"
+                      onClick={() => loginAsDemo("seller")}
+                    >
+                      <Store className="h-4 w-4" />
+                      <span className="text-xs">Login as Seller</span>
+                    </Button>
+                    
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="flex items-center gap-2"
+                      onClick={() => loginAsDemo("admin")}
+                    >
+                      <User className="h-4 w-4" />
+                      <span className="text-xs">Login as Admin</span>
+                    </Button>
+                  </div>
+                  
+                  {/* Test credentials info */}
+                  <div className="text-xs text-center mt-4 text-gray-500 space-y-1">
+                    <p>Seller: seller@seller.com / seller321</p>
+                    <p>Admin: admin@admin.com / admin321</p>
+                  </div>
                   
                   <div className="text-center mt-4">
                     <p className="text-sm text-empower-brown/80">

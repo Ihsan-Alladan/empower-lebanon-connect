@@ -64,7 +64,7 @@ const SellerDashboard: React.FC = () => {
   useEffect(() => {
     const currentUser = localStorage.getItem('user');
     if (!currentUser) {
-      navigate('/seller-login');
+      navigate('/login');
       return;
     }
     
@@ -207,6 +207,14 @@ const SellerDashboard: React.FC = () => {
               View My Shop
             </a>
             
+            <NavLink 
+              to="/" 
+              className="flex items-center px-4 py-3 text-sm font-medium rounded-md text-gray-600 hover:bg-[#B56E4D]/5 hover:text-[#B56E4D] transition-colors"
+            >
+              <Home size={18} className="mr-3" />
+              Go to Home
+            </NavLink>
+            
             <button
               onClick={handleLogout}
               className="flex items-center w-full px-4 py-3 text-sm font-medium rounded-md text-gray-600 hover:bg-red-50 hover:text-red-500 transition-colors"
@@ -271,7 +279,8 @@ const SellerDashboard: React.FC = () => {
                 { label: 'Customers', icon: Users, href: '/seller-dashboard/customers' },
                 { label: 'Finance', icon: CreditCard, href: '/seller-dashboard/finance' },
                 { label: 'Feedback', icon: Star, href: '/seller-dashboard/feedback' },
-                { label: 'Settings', icon: Settings, href: '/seller-dashboard/settings' }
+                { label: 'Settings', icon: Settings, href: '/seller-dashboard/settings' },
+                { label: 'Home', icon: Home, href: '/' }
               ].map((action, i) => (
                 <NavLink key={i} to={action.href} className="no-underline">
                   <Button variant="outline" className="flex flex-col h-24 w-24 items-center justify-center gap-2">
