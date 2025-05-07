@@ -26,6 +26,14 @@ const users = [
     name: "Handmade Treasures",
     role: "seller",
     avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04"
+  },
+  {
+    id: "instructor1",
+    email: "instructor@instructor.com",
+    password: "instructor321",
+    name: "Jane Smith",
+    role: "instructor",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330"
   }
 ];
 
@@ -83,5 +91,10 @@ export const authService = {
   isAdmin: (): boolean => {
     const user = authService.getCurrentUser();
     return user?.role === "admin";
+  },
+  
+  isInstructor: (): boolean => {
+    const user = authService.getCurrentUser();
+    return user?.role === "instructor";
   }
 };

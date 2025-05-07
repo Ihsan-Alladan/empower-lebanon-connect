@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -19,6 +20,8 @@ import SellerSignup from '@/pages/SellerSignup';
 import LearnerSignup from '@/pages/LearnerSignup';
 import InstructorSignup from '@/pages/InstructorSignup';
 import CustomerSignup from '@/pages/CustomerSignup';
+import InstructorLayout from '@/components/instructor/InstructorLayout';
+import InstructorDashboard from '@/pages/instructor/InstructorDashboard';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
 import ContentManagement from '@/pages/admin/ContentManagement';
 import UserManagement from '@/pages/admin/UserManagement';
@@ -76,6 +79,21 @@ function App() {
                   <ProtectedRoute element={<SellerDashboard />} role="seller" />
                 } 
               />
+              
+              {/* Instructor Routes */}
+              <Route 
+                path="/instructor-dashboard" 
+                element={
+                  <ProtectedRoute element={<InstructorLayout />} role="instructor" />
+                }
+              >
+                <Route index element={<InstructorDashboard />} />
+                <Route path="assignments" element={<div>Assignments</div>} />
+                <Route path="progress" element={<div>Student Progress</div>} />
+                <Route path="feedback" element={<div>Feedback</div>} />
+                <Route path="schedule" element={<div>Schedule</div>} />
+                <Route path="settings" element={<div>Account Settings</div>} />
+              </Route>
               
               {/* Course Routes */}
               <Route path="/courses" element={<Courses />} />
