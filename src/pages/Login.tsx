@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import Navbar from "@/components/Navbar";
 import { Checkbox } from "@/components/ui/checkbox";
 import PageTransition from "@/components/PageTransition";
@@ -53,7 +54,8 @@ const Login = () => {
     
     // Check if this is an admin login
     if (isAdminUser(values.email, values.password)) {
-      toast.success("Admin Login Successful", {
+      toast({
+        title: "Admin Login Successful",
         description: "Welcome to the admin dashboard!",
       });
       
@@ -72,8 +74,9 @@ const Login = () => {
     const user = await login(values.email, values.password);
     
     if (user) {
-      toast.success(`Welcome back, ${user.name}!`, {
-        description: "Login Successful",
+      toast({
+        title: "Login Successful",
+        description: `Welcome back, ${user.name}!`,
       });
       
       // Redirect based on user role
@@ -83,7 +86,9 @@ const Login = () => {
         navigate("/");
       }
     } else {
-      toast.error("Login Failed", {
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
         description: "Invalid email or password. Please try again."
       });
     }
