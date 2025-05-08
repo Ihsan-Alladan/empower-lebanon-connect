@@ -9,7 +9,6 @@ import Shop from '@/pages/Shop';
 import ProductDetail from '@/pages/ProductDetail';
 import SellerShop from '@/pages/SellerShop';
 import SellerDashboard from '@/pages/SellerDashboard';
-import SellerLogin from '@/pages/SellerLogin';
 import Cart from '@/pages/Cart';
 import Favorites from '@/pages/Favorites';
 import Courses from '@/pages/Courses';
@@ -22,6 +21,7 @@ import InstructorSignup from '@/pages/InstructorSignup';
 import CustomerSignup from '@/pages/CustomerSignup';
 import InstructorLayout from '@/components/instructor/InstructorLayout';
 import InstructorDashboard from '@/pages/instructor/InstructorDashboard';
+import ClassroomManagement from '@/pages/instructor/ClassroomManagement';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
 import ContentManagement from '@/pages/admin/ContentManagement';
 import UserManagement from '@/pages/admin/UserManagement';
@@ -32,6 +32,7 @@ import Analytics from '@/pages/admin/Analytics';
 import Settings from '@/pages/admin/Settings';
 import NotFound from '@/pages/NotFound';
 import Donate from '@/pages/Donate';
+import StudentClassroom from '@/components/classroom/StudentClassroom';
 import './App.css';
 
 // Protected route component
@@ -88,12 +89,16 @@ function App() {
                 }
               >
                 <Route index element={<InstructorDashboard />} />
+                <Route path="classrooms" element={<ClassroomManagement />} />
                 <Route path="assignments" element={<div>Assignments</div>} />
                 <Route path="progress" element={<div>Student Progress</div>} />
                 <Route path="feedback" element={<div>Feedback</div>} />
                 <Route path="schedule" element={<div>Schedule</div>} />
                 <Route path="settings" element={<div>Account Settings</div>} />
               </Route>
+              
+              {/* Student Classroom Routes */}
+              <Route path="/classroom/:id" element={<ProtectedRoute element={<StudentClassroom />} />} />
               
               {/* Course Routes */}
               <Route path="/courses" element={<Courses />} />
