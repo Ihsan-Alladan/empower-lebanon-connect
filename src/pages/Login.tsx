@@ -1,10 +1,9 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Eye, EyeOff, Lock, LogIn, User, Store, BookOpen } from "lucide-react";
+import { Eye, EyeOff, Lock, LogIn, User, Store } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
@@ -69,7 +68,7 @@ const Login = () => {
       return;
     }
     
-    // Regular, seller, or instructor login
+    // Regular or seller login
     const user = await login(values.email, values.password);
     
     if (user) {
@@ -80,8 +79,6 @@ const Login = () => {
       // Redirect based on user role
       if (user.role === "seller") {
         navigate("/seller-dashboard");
-      } else if (user.role === "instructor") {
-        navigate("/instructor-dashboard");
       } else {
         navigate("/");
       }
@@ -95,7 +92,7 @@ const Login = () => {
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   
   // Demo credentials
-  const loginAsDemo = (type: "seller" | "admin" | "instructor") => {
+  const loginAsDemo = (type: "customer" | "seller" | "admin") => {
     let email = "";
     let password = "";
     
@@ -105,9 +102,9 @@ const Login = () => {
     } else if (type === "admin") {
       email = "admin@admin.com";
       password = "admin321";
-    } else if (type === "instructor") {
-      email = "instructor@instructor.com";
-      password = "instructor321";
+    } else {
+      // Demo customer credentials would go here
+      return;
     }
     
     form.setValue("email", email);
@@ -239,42 +236,31 @@ const Login = () => {
                   </Button>
                   
                   {/* Quick login buttons */}
-                  <div className="grid grid-cols-3 gap-3 mt-4">
+                  <div className="grid grid-cols-2 gap-3 mt-4">
                     <Button
                       type="button"
                       variant="outline"
-                      className="flex items-center gap-1 py-1"
+                      className="flex items-center gap-2"
                       onClick={() => loginAsDemo("seller")}
                     >
-                      <Store className="h-3 w-3" />
-                      <span className="text-xs">Seller</span>
+                      <Store className="h-4 w-4" />
+                      <span className="text-xs">Login as Seller</span>
                     </Button>
                     
                     <Button
                       type="button"
                       variant="outline"
-                      className="flex items-center gap-1 py-1"
-                      onClick={() => loginAsDemo("instructor")}
-                    >
-                      <BookOpen className="h-3 w-3" />
-                      <span className="text-xs">Instructor</span>
-                    </Button>
-                    
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="flex items-center gap-1 py-1"
+                      className="flex items-center gap-2"
                       onClick={() => loginAsDemo("admin")}
                     >
-                      <User className="h-3 w-3" />
-                      <span className="text-xs">Admin</span>
+                      <User className="h-4 w-4" />
+                      <span className="text-xs">Login as Admin</span>
                     </Button>
                   </div>
                   
                   {/* Test credentials info */}
                   <div className="text-xs text-center mt-4 text-gray-500 space-y-1">
                     <p>Seller: seller@seller.com / seller321</p>
-                    <p>Instructor: instructor@instructor.com / instructor321</p>
                     <p>Admin: admin@admin.com / admin321</p>
                   </div>
                   
