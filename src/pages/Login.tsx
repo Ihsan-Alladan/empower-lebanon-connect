@@ -1,10 +1,10 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Eye, EyeOff, Lock, LogIn, User, Store } from "lucide-react";
+import { Eye, EyeOff, Lock, LogIn, User } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
@@ -54,9 +54,8 @@ const Login = () => {
     
     // Check if this is an admin login
     if (isAdminUser(values.email, values.password)) {
-      toast({
-        title: "Admin Login Successful",
-        description: "Welcome to the admin dashboard!",
+      toast.success("Admin Login Successful", {
+        description: "Welcome to the admin dashboard!"
       });
       
       // Set admin as authenticated
@@ -74,9 +73,8 @@ const Login = () => {
     const user = await login(values.email, values.password);
     
     if (user) {
-      toast({
-        title: "Login Successful",
-        description: `Welcome back, ${user.name}!`,
+      toast.success("Login Successful", {
+        description: `Welcome back, ${user.name}!`
       });
       
       // Redirect based on user role
@@ -86,35 +84,13 @@ const Login = () => {
         navigate("/");
       }
     } else {
-      toast({
-        variant: "destructive",
-        title: "Login Failed",
+      toast.error("Login Failed", {
         description: "Invalid email or password. Please try again."
       });
     }
   }
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
-  
-  // Demo credentials
-  const loginAsDemo = (type: "customer" | "seller" | "admin") => {
-    let email = "";
-    let password = "";
-    
-    if (type === "seller") {
-      email = "seller@seller.com";
-      password = "seller321";
-    } else if (type === "admin") {
-      email = "admin@admin.com";
-      password = "admin321";
-    } else {
-      // Demo customer credentials would go here
-      return;
-    }
-    
-    form.setValue("email", email);
-    form.setValue("password", password);
-  };
 
   return (
     <PageTransition route={location.pathname}>
@@ -239,35 +215,6 @@ const Login = () => {
                     <LogIn className="h-4 w-4" />
                     Sign in
                   </Button>
-                  
-                  {/* Quick login buttons */}
-                  <div className="grid grid-cols-2 gap-3 mt-4">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="flex items-center gap-2"
-                      onClick={() => loginAsDemo("seller")}
-                    >
-                      <Store className="h-4 w-4" />
-                      <span className="text-xs">Login as Seller</span>
-                    </Button>
-                    
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="flex items-center gap-2"
-                      onClick={() => loginAsDemo("admin")}
-                    >
-                      <User className="h-4 w-4" />
-                      <span className="text-xs">Login as Admin</span>
-                    </Button>
-                  </div>
-                  
-                  {/* Test credentials info */}
-                  <div className="text-xs text-center mt-4 text-gray-500 space-y-1">
-                    <p>Seller: seller@seller.com / seller321</p>
-                    <p>Admin: admin@admin.com / admin321</p>
-                  </div>
                   
                   <div className="text-center mt-4">
                     <p className="text-sm text-empower-brown/80">

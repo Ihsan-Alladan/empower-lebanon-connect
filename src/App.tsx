@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -30,6 +31,7 @@ import Settings from '@/pages/admin/Settings';
 import NotFound from '@/pages/NotFound';
 import Donate from '@/pages/Donate';
 import './App.css';
+import { supabase } from '@/integrations/supabase/client';
 
 // Protected route component
 const ProtectedRoute: React.FC<{ element: React.ReactNode; role?: string }> = ({ 
@@ -69,6 +71,7 @@ function App() {
               <Route path="/favorites" element={<Favorites />} />
               
               {/* Seller Routes */}
+              <Route path="/seller-login" element={<SellerLogin />} />
               <Route path="/seller-signup" element={<SellerSignup />} />
               <Route 
                 path="/seller-dashboard/*" 

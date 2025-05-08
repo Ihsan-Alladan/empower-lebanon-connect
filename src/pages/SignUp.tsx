@@ -1,13 +1,13 @@
+
 import React from "react";
 import { motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import { Book, ShoppingCart, Store, BookOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import PageTransition from "@/components/PageTransition";
+import { Button } from "@/components/ui/button";
 
 type UserRole = "learner" | "customer" | "seller" | "instructor";
 
@@ -37,18 +37,23 @@ const SignUp = () => {
 
   const handleRoleSelection = (role: UserRole) => {
     console.log(`Selected role: ${role}`);
+    
     // Direct navigation to dedicated signup pages
-    if (role === "learner") {
-      navigate("/learner-signup");
-    } else if (role === "customer") {
-      navigate("/customer-signup");
-    } else if (role === "seller") {
-      navigate("/seller-signup");
-    } else if (role === "instructor") {
-      navigate("/instructor-signup");
-    } else {
-      // For other roles, continue with the previous navigation
-      navigate(`/signup/${role}`);
+    switch(role) {
+      case "customer":
+        navigate("/signup/customer");
+        break;
+      case "seller":
+        navigate("/seller-signup");
+        break;
+      case "learner":
+        navigate("/signup/learner");
+        break;
+      case "instructor":
+        navigate("/signup/instructor");
+        break;
+      default:
+        navigate(`/signup/${role}`);
     }
   };
 
