@@ -20,6 +20,7 @@ import SellerSignup from '@/pages/SellerSignup';
 import LearnerSignup from '@/pages/LearnerSignup';
 import InstructorSignup from '@/pages/InstructorSignup';
 import CustomerSignup from '@/pages/CustomerSignup';
+import LearnerClassroom from '@/pages/LearnerClassroom';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
 import ContentManagement from '@/pages/admin/ContentManagement';
 import UserManagement from '@/pages/admin/UserManagement';
@@ -83,6 +84,14 @@ function App() {
               {/* Course Routes */}
               <Route path="/courses" element={<Courses />} />
               <Route path="/courses/:id" element={<CourseDetail />} />
+              
+              {/* Learner Routes */}
+              <Route 
+                path="/learner-classroom" 
+                element={
+                  <ProtectedRoute element={<LearnerClassroom />} role="learner" />
+                }
+              />
               
               {/* Authentication Routes */}
               <Route path="/login" element={<Login />} />

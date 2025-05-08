@@ -69,7 +69,7 @@ const Login = () => {
       return;
     }
     
-    // Regular or seller login
+    // Regular login
     const user = await login(values.email, values.password);
     
     if (user) {
@@ -80,6 +80,8 @@ const Login = () => {
       // Redirect based on user role
       if (user.role === "seller") {
         navigate("/seller-dashboard");
+      } else if (user.role === "learner") {
+        navigate("/learner-classroom");
       } else {
         navigate("/");
       }

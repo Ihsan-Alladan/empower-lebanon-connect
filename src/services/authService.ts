@@ -18,6 +18,14 @@ const users = [
     name: "Admin User",
     role: "admin",
     avatar: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79"
+  },
+  {
+    id: "learner1",
+    email: "learner@learner.com",
+    password: "learner321",
+    name: "Emma Johnson",
+    role: "learner",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330"
   }
 ];
 
@@ -75,5 +83,10 @@ export const authService = {
   isAdmin: (): boolean => {
     const user = authService.getCurrentUser();
     return user?.role === "admin";
+  },
+  
+  isLearner: (): boolean => {
+    const user = authService.getCurrentUser();
+    return user?.role === "learner";
   }
 };
