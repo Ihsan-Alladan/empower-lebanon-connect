@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authService, User } from '@/services/authService';
 import { toast } from 'sonner';
+import { supabase } from '@/lib/supabase';
 
 interface AuthContextType {
   user: User | null;
@@ -28,6 +29,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(storedUser);
     }
     setLoading(false);
+
+    // Set up Supabase auth listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Supabase Auth Event:", event);
+      if (session && session.user) {
+        // Handle actual Supabase auth when we implement it
+        console.log("Supabase user logged in:", session.user);
+      } else if (event === 'SIGNED_OUT') {
+        console.log("Supabase user signed out");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
   
   const login = async (email: string, password: string): Promise<User | null> => {
