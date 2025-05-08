@@ -1,173 +1,301 @@
 
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAuth } from '@/contexts/AuthContext';
-import { motion } from 'framer-motion';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Eye, EyeOff, Lock, LogIn, User, Store, BookOpen } from "lucide-react";
+import { motion } from "framer-motion";
+
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
+import Navbar from "@/components/Navbar";
+import { Checkbox } from "@/components/ui/checkbox";
+import PageTransition from "@/components/PageTransition";
+import { useAuth } from "@/contexts/AuthContext";
+import { isAdminUser, setAdminAuthenticated } from "@/utils/adminAuth";
+
+const formSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+  password: z.string().min(6, {
+    message: "Password must be at least 6 characters.",
+  }),
+  rememberMe: z.boolean().default(false),
+});
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('customer');
+  const [showPassword, setShowPassword] = React.useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      rememberMe: false,
+    },
+  });
 
-    try {
-      const user = await login(email, password);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("Login attempt with:", values);
+    
+    // Check if this is an admin login
+    if (isAdminUser(values.email, values.password)) {
+      toast.success("Admin Login Successful", {
+        description: "Welcome to the admin dashboard!",
+      });
       
-      if (user) {
-        toast.success(`Welcome back, ${user.name}!`);
-        
-        // Redirect based on user role
-        if (user.role === 'admin') {
-          navigate('/admin');
-        } else if (user.role === 'seller') {
-          navigate('/seller-dashboard');
-        } else if (user.role === 'instructor') {
-          navigate('/instructor-dashboard');
-        } else {
-          navigate('/');
-        }
+      // Set admin as authenticated
+      setAdminAuthenticated(true);
+      
+      // Redirect to admin dashboard after successful login
+      setTimeout(() => {
+        navigate("/admin");
+      }, 1000);
+      
+      return;
+    }
+    
+    // Regular, seller, or instructor login
+    const user = await login(values.email, values.password);
+    
+    if (user) {
+      toast.success(`Welcome back, ${user.name}!`, {
+        description: "Login Successful",
+      });
+      
+      // Redirect based on user role
+      if (user.role === "seller") {
+        navigate("/seller-dashboard");
+      } else if (user.role === "instructor") {
+        navigate("/instructor-dashboard");
       } else {
-        toast.error("Invalid email or password");
+        navigate("/");
       }
-    } catch (error) {
-      toast.error("An error occurred while logging in");
-    } finally {
-      setLoading(false);
+    } else {
+      toast.error("Login Failed", {
+        description: "Invalid email or password. Please try again."
+      });
     }
-  };
+  }
 
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
-    // Reset form fields when tab changes
-    setEmail('');
-    setPassword('');
-
-    // Pre-fill email for demo accounts
-    if (value === 'seller') {
-      setEmail('seller@seller.com');
-    } else if (value === 'instructor') {
-      setEmail('instructor@instructor.com');
-    } else if (value === 'admin') {
-      setEmail('admin@admin.com');
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  
+  // Demo credentials
+  const loginAsDemo = (type: "seller" | "admin" | "instructor") => {
+    let email = "";
+    let password = "";
+    
+    if (type === "seller") {
+      email = "seller@seller.com";
+      password = "seller321";
+    } else if (type === "admin") {
+      email = "admin@admin.com";
+      password = "admin321";
+    } else if (type === "instructor") {
+      email = "instructor@instructor.com";
+      password = "instructor321";
     }
+    
+    form.setValue("email", email);
+    form.setValue("password", password);
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
-      >
-        <div className="mb-8 flex flex-col items-center text-center">
-          <Link to="/">
-            <img 
-              src="/lovable-uploads/22a31812-0de9-4dde-9442-b766171923c5.png" 
-              alt="EmpowEra Logo" 
-              className="h-16 w-auto mb-6"
-            />
-          </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
-          <p className="mt-2 text-gray-600">Sign in to your account to continue</p>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Login</CardTitle>
-            <CardDescription>Choose your account type</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="customer" value={activeTab} onValueChange={handleTabChange} className="w-full">
-              <TabsList className="grid grid-cols-4 mb-6">
-                <TabsTrigger value="customer">Customer</TabsTrigger>
-                <TabsTrigger value="seller">Seller</TabsTrigger>
-                <TabsTrigger value="instructor">Instructor</TabsTrigger>
-                <TabsTrigger value="admin">Admin</TabsTrigger>
-              </TabsList>
+    <PageTransition route={location.pathname}>
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        
+        <div 
+          className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')",
+            backgroundSize: "cover",
+            backgroundPosition: "center"
+          }}
+        >
+          {/* Overlay with blur effect */}
+          <div className="absolute inset-0 backdrop-blur-md bg-black/30" />
+          
+          <div className="max-w-md w-full space-y-8 relative z-10">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="bg-white rounded-lg shadow-2xl p-8"
+            >
+              <div className="text-center mb-6">
+                <h2 className="text-3xl font-bold text-empower-brown">
+                  Welcome Back
+                </h2>
+                <p className="mt-2 text-sm text-empower-brown/80">
+                  Sign in to your account to continue your journey with EmpowEra
+                </p>
+              </div>
               
-              <TabsContent value="customer">
-                <p className="text-sm text-gray-500 mb-4">Login as a customer to shop for products and enroll in courses.</p>
-              </TabsContent>
-              
-              <TabsContent value="seller">
-                <p className="text-sm text-gray-500 mb-4">Login as a seller to manage your products and orders.</p>
-              </TabsContent>
-              
-              <TabsContent value="instructor">
-                <p className="text-sm text-gray-500 mb-4">Login as an instructor to manage your courses and classrooms.</p>
-                <div className="text-xs text-gray-500 p-2 bg-blue-50 rounded mb-4 flex flex-col">
-                  <span>Demo Instructor Credentials:</span>
-                  <span>Email: instructor@instructor.com</span>
-                  <span>Password: instructor321</span>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="admin">
-                <p className="text-sm text-gray-500 mb-4">Login as an administrator to manage the platform.</p>
-              </TabsContent>
-              
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input 
-                    id="email"
-                    type="email" 
-                    placeholder="Enter your email" 
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-empower-brown">Email</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input 
+                              placeholder="your@email.com" 
+                              {...field} 
+                              className="pl-10" 
+                            />
+                            <User className="absolute left-3 top-3 h-4 w-4 text-empower-brown/60" />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-                <div className="space-y-2">
+                  
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-empower-brown">Password</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input 
+                              type={showPassword ? "text" : "password"} 
+                              placeholder="••••••••" 
+                              {...field} 
+                              className="pl-10" 
+                            />
+                            <Lock className="absolute left-3 top-3 h-4 w-4 text-empower-brown/60" />
+                            <button 
+                              type="button"
+                              onClick={togglePasswordVisibility}
+                              className="absolute right-3 top-3"
+                            >
+                              {showPassword ? (
+                                <EyeOff className="h-4 w-4 text-empower-brown/60" />
+                              ) : (
+                                <Eye className="h-4 w-4 text-empower-brown/60" />
+                              )}
+                            </button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Password</Label>
-                    <Link to="/forgot-password" className="text-xs text-empower-terracotta hover:underline">
+                    <FormField
+                      control={form.control}
+                      name="rememberMe"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                          <FormControl>
+                            <Checkbox 
+                              checked={field.value} 
+                              onCheckedChange={field.onChange} 
+                              className="text-empower-terracotta" 
+                            />
+                          </FormControl>
+                          <FormLabel className="text-sm cursor-pointer text-empower-brown/80">
+                            Remember me
+                          </FormLabel>
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <a 
+                      href="#" 
+                      className="text-sm font-medium text-empower-terracotta hover:text-empower-brown transition-colors"
+                    >
                       Forgot password?
-                    </Link>
+                    </a>
                   </div>
-                  <Input 
-                    id="password" 
-                    type="password" 
-                    placeholder="Enter your password" 
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <Button 
-                  type="submit" 
-                  className="w-full bg-empower-terracotta hover:bg-empower-terracotta/90"
-                  disabled={loading}
-                >
-                  {loading ? 'Signing in...' : 'Sign In'}
-                </Button>
-              </form>
-            </Tabs>
-          </CardContent>
-          <CardFooter className="flex-col items-center">
-            <div className="text-center text-sm text-gray-500">
-              Don't have an account?{' '}
-              <Link to="/signup" className="font-medium text-empower-terracotta hover:underline">
-                Sign up
-              </Link>
-            </div>
-          </CardFooter>
-        </Card>
-      </motion.div>
-    </div>
+                  
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-empower-terracotta hover:bg-empower-terracotta/90 flex items-center justify-center gap-2"
+                  >
+                    <LogIn className="h-4 w-4" />
+                    Sign in
+                  </Button>
+                  
+                  {/* Quick login buttons */}
+                  <div className="grid grid-cols-3 gap-3 mt-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="flex items-center gap-1 py-1"
+                      onClick={() => loginAsDemo("seller")}
+                    >
+                      <Store className="h-3 w-3" />
+                      <span className="text-xs">Seller</span>
+                    </Button>
+                    
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="flex items-center gap-1 py-1"
+                      onClick={() => loginAsDemo("instructor")}
+                    >
+                      <BookOpen className="h-3 w-3" />
+                      <span className="text-xs">Instructor</span>
+                    </Button>
+                    
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="flex items-center gap-1 py-1"
+                      onClick={() => loginAsDemo("admin")}
+                    >
+                      <User className="h-3 w-3" />
+                      <span className="text-xs">Admin</span>
+                    </Button>
+                  </div>
+                  
+                  {/* Test credentials info */}
+                  <div className="text-xs text-center mt-4 text-gray-500 space-y-1">
+                    <p>Seller: seller@seller.com / seller321</p>
+                    <p>Instructor: instructor@instructor.com / instructor321</p>
+                    <p>Admin: admin@admin.com / admin321</p>
+                  </div>
+                  
+                  <div className="text-center mt-4">
+                    <p className="text-sm text-empower-brown/80">
+                      Don't have an account?{" "}
+                      <a 
+                        href="/signup" 
+                        className="font-medium text-empower-terracotta hover:text-empower-brown transition-colors"
+                      >
+                        Sign up
+                      </a>
+                    </p>
+                  </div>
+                </form>
+              </Form>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    </PageTransition>
   );
 };
 
