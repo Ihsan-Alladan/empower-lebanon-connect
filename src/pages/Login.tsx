@@ -23,6 +23,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import PageTransition from "@/components/PageTransition";
 import { useAuth } from "@/contexts/AuthContext";
 import { isAdminUser, setAdminAuthenticated } from "@/utils/adminAuth";
+import Footer from "@/components/Footer";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -39,6 +40,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,45 +52,57 @@ const Login = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     console.log("Login attempt with:", values);
     
-    // Check if this is an admin login
-    if (isAdminUser(values.email, values.password)) {
-      toast.success("Admin Login Successful", {
-        description: "Welcome to the admin dashboard!"
-      });
-      
-      // Set admin as authenticated
-      setAdminAuthenticated(true);
-      
-      // Redirect to admin dashboard after successful login
-      setTimeout(() => {
-        navigate("/admin");
-      }, 1000);
-      
-      return;
-    }
-    
-    // Regular login
-    const user = await login(values.email, values.password);
-    
-    if (user) {
-      toast.success("Login Successful", {
-        description: `Welcome back, ${user.name}!`
-      });
-      
-      // Redirect based on user role
-      if (user.role === "seller") {
-        navigate("/seller-dashboard");
-      } else if (user.role === "learner") {
-        navigate("/learner-classroom");
-      } else {
-        navigate("/");
+    try {
+      // Check if this is an admin login
+      if (isAdminUser(values.email, values.password)) {
+        toast.success("Admin Login Successful", {
+          description: "Welcome to the admin dashboard!"
+        });
+        
+        // Set admin as authenticated
+        setAdminAuthenticated(true);
+        
+        // Redirect to admin dashboard after successful login
+        setTimeout(() => {
+          navigate("/admin");
+        }, 1000);
+        
+        return;
       }
-    } else {
-      toast.error("Login Failed", {
-        description: "Invalid email or password. Please try again."
+      
+      // Regular login
+      const user = await login(values.email, values.password);
+      
+      if (user) {
+        toast.success("Login Successful", {
+          description: `Welcome back, ${user.name}!`
+        });
+        
+        // Redirect based on user role
+        if (user.role === "seller") {
+          navigate("/seller-dashboard");
+        } else if (user.role === "learner") {
+          navigate("/learner-classroom");
+        } else if (user.role === "instructor") {
+          navigate("/instructor-dashboard");
+        } else {
+          navigate("/");
+        }
+      } else {
+        toast.error("Login Failed", {
+          description: "Invalid email or password. Please try again."
+        });
+      }
+    } catch (error) {
+      toast.error("An error occurred", {
+        description: "Please try again later"
       });
+      console.error("Login error:", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -213,9 +227,16 @@ const Login = () => {
                   <Button 
                     type="submit" 
                     className="w-full bg-empower-terracotta hover:bg-empower-terracotta/90 flex items-center justify-center gap-2"
+                    disabled={isLoading}
                   >
-                    <LogIn className="h-4 w-4" />
-                    Sign in
+                    {isLoading ? (
+                      "Signing in..."
+                    ) : (
+                      <>
+                        <LogIn className="h-4 w-4" />
+                        Sign in
+                      </>
+                    )}
                   </Button>
                   
                   <div className="text-center mt-4">
@@ -229,11 +250,24 @@ const Login = () => {
                       </a>
                     </p>
                   </div>
+                  
+                  <div className="pt-2 text-center">
+                    <p className="text-xs text-gray-500">
+                      Test Accounts:
+                    </p>
+                    <div className="grid grid-cols-3 gap-2 text-xs text-gray-500 mt-1">
+                      <div>Admin: admin@admin.com / admin321</div>
+                      <div>Seller: seller@seller.com / seller321</div>
+                      <div>Learner: learner@learner.com / learner321</div>
+                    </div>
+                  </div>
                 </form>
               </Form>
             </motion.div>
           </div>
         </div>
+        
+        <Footer />
       </div>
     </PageTransition>
   );

@@ -2,27 +2,25 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu } from 'lucide-react';
+import InstructorSidebar from './InstructorSidebar';
+import InstructorHeader from './InstructorHeader';
+import InstructorFooter from './InstructorFooter';
+import { useAuth } from '@/contexts/AuthContext';
 
-import AdminSidebar from './AdminSidebar';
-import AdminHeader from './AdminHeader';
-import AdminFooter from './AdminFooter';
-import { getAdminAuthenticated } from '@/utils/adminAuth';
-import { Button } from '@/components/ui/button';
-
-interface AdminLayoutProps {
+interface InstructorLayoutProps {
   children: React.ReactNode;
 }
 
-const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
+const InstructorLayout: React.FC<InstructorLayoutProps> = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
+  const { user } = useAuth();
   const navigate = useNavigate();
   
   useEffect(() => {
-    // Check if admin is authenticated, if not redirect to login
-    if (!getAdminAuthenticated()) {
+    // Check if user is authenticated and is an instructor
+    if (!user || user.role !== 'instructor') {
       navigate('/login');
     }
     
@@ -39,7 +37,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [navigate]);
+  }, [navigate, user]);
   
   const toggleSidebar = () => {
     if (isMobile) {
@@ -60,7 +58,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       )}
       
       {/* Header */}
-      <AdminHeader toggleSidebar={toggleSidebar} />
+      <InstructorHeader toggleSidebar={toggleSidebar} />
       
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
@@ -71,7 +69,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           transition={{ duration: 0.3 }}
         >
           {sidebarOpen && (
-            <AdminSidebar 
+            <InstructorSidebar 
               collapsed={collapsed} 
               toggleCollapsed={toggleSidebar} 
             />
@@ -93,11 +91,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           </main>
           
           {/* Footer */}
-          <AdminFooter />
+          <InstructorFooter />
         </div>
       </div>
     </div>
   );
 };
 
-export default AdminLayout;
+export default InstructorLayout;

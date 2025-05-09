@@ -9,7 +9,6 @@ import Shop from '@/pages/Shop';
 import ProductDetail from '@/pages/ProductDetail';
 import SellerShop from '@/pages/SellerShop';
 import SellerDashboard from '@/pages/SellerDashboard';
-import SellerLogin from '@/pages/SellerLogin';
 import Cart from '@/pages/Cart';
 import Favorites from '@/pages/Favorites';
 import Courses from '@/pages/Courses';
@@ -19,6 +18,7 @@ import SignUp from '@/pages/SignUp';
 import SellerSignup from '@/pages/SellerSignup';
 import LearnerSignup from '@/pages/LearnerSignup';
 import InstructorSignup from '@/pages/InstructorSignup';
+import InstructorDashboard from '@/pages/InstructorDashboard';
 import CustomerSignup from '@/pages/CustomerSignup';
 import LearnerClassroom from '@/pages/LearnerClassroom';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
@@ -74,12 +74,19 @@ function App() {
               <Route path="/favorites" element={<Favorites />} />
               
               {/* Seller Routes */}
-              <Route path="/seller-login" element={<SellerLogin />} />
               <Route path="/seller-signup" element={<SellerSignup />} />
               <Route 
                 path="/seller-dashboard/*" 
                 element={
                   <ProtectedRoute element={<SellerDashboard />} role="seller" />
+                } 
+              />
+              
+              {/* Instructor Routes */}
+              <Route 
+                path="/instructor-dashboard/*" 
+                element={
+                  <ProtectedRoute element={<InstructorDashboard />} role="instructor" />
                 } 
               />
               
@@ -107,7 +114,7 @@ function App() {
               <Route path="/signup/customer" element={<CustomerSignup />} />
               
               {/* Admin Routes */}
-              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/*" element={<AdminDashboard />} />
               <Route path="/admin/content" element={<ContentManagement />} />
               <Route path="/admin/users" element={<UserManagement />} />
               <Route path="/admin/shop" element={<ShopManagement />} />
