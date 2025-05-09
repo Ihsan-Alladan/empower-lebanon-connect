@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Clock, Plus, Users, Video } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, Plus, Users, Video } from 'lucide-react';
 
 const InstructorSchedule: React.FC = () => {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
@@ -156,7 +156,7 @@ const InstructorSchedule: React.FC = () => {
               </div>
             ) : (
               <div className="py-8 text-center">
-                <Calendar size={48} className="mx-auto text-gray-300 mb-3" />
+                <CalendarIcon className="mx-auto text-gray-300 mb-3" size={48} />
                 <h3 className="text-lg font-medium text-empower-brown mb-1">No Classes Scheduled</h3>
                 <p className="text-gray-500 max-w-md mx-auto mb-4">
                   There are no classes scheduled for this date. Would you like to schedule a new class?
