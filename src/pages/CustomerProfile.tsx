@@ -107,10 +107,7 @@ const CustomerProfile: React.FC = () => {
 
   const handleDeleteAccount = () => {
     // In a real application, this would delete the user's account from the database
-    toast({
-      title: "Account deleted",
-      description: "Your account has been permanently deleted.",
-    });
+    toast.success("Account deleted");
     logout();
     navigate('/');
   };
