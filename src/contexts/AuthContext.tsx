@@ -9,6 +9,7 @@ interface AuthContextType {
   logout: () => void;
   isAuthenticated: boolean;
   isSeller: boolean;
+  isCustomer: boolean;
   loading: boolean;
 }
 
@@ -50,6 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     logout,
     isAuthenticated: !!user,
     isSeller: user?.role === 'seller',
+    isCustomer: user?.role === 'customer',
     loading
   };
   

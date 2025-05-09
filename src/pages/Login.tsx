@@ -88,6 +88,8 @@ const Login = () => {
           navigate("/learner-classroom");
         } else if (user.role === "instructor") {
           navigate("/instructor-dashboard");
+        } else if (user.role === "customer") {
+          navigate("/profile");
         } else {
           navigate("/");
         }
@@ -258,7 +260,7 @@ const Login = () => {
                     <div className="grid grid-cols-3 gap-2 text-xs text-gray-500 mt-1">
                       <div>Admin: admin@admin.com / admin321</div>
                       <div>Seller: seller@seller.com / seller321</div>
-                      <div>Learner: learner@learner.com / learner321</div>
+                      <div>Customer: customer@customer.com / customer321</div>
                     </div>
                   </div>
                 </form>
