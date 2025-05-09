@@ -31,6 +31,7 @@ import Analytics from '@/pages/admin/Analytics';
 import Settings from '@/pages/admin/Settings';
 import NotFound from '@/pages/NotFound';
 import Donate from '@/pages/Donate';
+import Workshops from '@/pages/Workshops';
 import './App.css';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -92,6 +93,9 @@ function App() {
                   <ProtectedRoute element={<LearnerClassroom />} role="learner" />
                 }
               />
+              
+              {/* Workshop Routes */}
+              <Route path="/workshops" element={<Workshops />} />
               
               {/* Authentication Routes */}
               <Route path="/login" element={<Login />} />
