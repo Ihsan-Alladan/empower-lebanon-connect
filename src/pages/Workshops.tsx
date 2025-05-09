@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Calendar, MapPin } from 'lucide-react';
-import { useMediaQuery } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 import WorkshopCard from '@/components/workshops/WorkshopCard';
 import WorkshopFilters from '@/components/workshops/WorkshopFilters';
 import RegistrationModal from '@/components/workshops/RegistrationModal';
@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const Workshops = () => {
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useIsMobile();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<WorkshopCategory | 'all'>('all');
   const [selectedDate, setSelectedDate] = useState<'upcoming' | 'past' | 'all'>('upcoming');
@@ -47,7 +47,7 @@ const Workshops = () => {
   const pastCount = workshops.length - upcomingCount;
 
   return (
-    <PageTransition>
+    <PageTransition route="/workshops">
       <div className="min-h-screen bg-gradient-to-b from-empower-ivory to-white">
         {/* Banner Section */}
         <div className="relative h-64 md:h-80 w-full overflow-hidden">

@@ -4,10 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface PageTransitionProps {
   children: React.ReactNode;
-  route: string;
+  route?: string;
 }
 
-const PageTransition: React.FC<PageTransitionProps> = ({ children, route }) => {
+const PageTransition: React.FC<PageTransitionProps> = ({ children, route = window.location.pathname }) => {
   return (
     <AnimatePresence mode="wait">
       <motion.div
