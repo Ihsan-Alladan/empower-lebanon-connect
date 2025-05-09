@@ -32,6 +32,7 @@ import Settings from '@/pages/admin/Settings';
 import NotFound from '@/pages/NotFound';
 import Donate from '@/pages/Donate';
 import Workshops from '@/pages/Workshops';
+import Events from '@/pages/Events';
 import './App.css';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -94,8 +95,9 @@ function App() {
                 }
               />
               
-              {/* Workshop Routes */}
+              {/* Workshop & Event Routes */}
               <Route path="/workshops" element={<Workshops />} />
+              <Route path="/events" element={<Events />} />
               
               {/* Authentication Routes */}
               <Route path="/login" element={<Login />} />
