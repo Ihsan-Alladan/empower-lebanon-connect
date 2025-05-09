@@ -75,14 +75,21 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Newsletter */}
+          {/* Stay Connected */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 font-poppins">Contact Us</h3>
-            <address className="not-italic text-white/80 space-y-2">
-              <p>Beirut, Lebanon</p>
-              <p>Email: info@empowera.org</p>
-              <p>Phone: +961 1 234 567</p>
-            </address>
+            <h3 className="text-lg font-semibold mb-4 font-poppins">Stay Connected</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/newsletter" className="text-white/80 hover:text-empower-gold transition-colors">Newsletter</Link>
+              </li>
+              <li>
+                <address className="not-italic text-white/80">
+                  <p>Beirut, Lebanon</p>
+                  <p>Email: info@empowera.org</p>
+                  <p>Phone: +961 1 234 567</p>
+                </address>
+              </li>
+            </ul>
           </div>
         </div>
 

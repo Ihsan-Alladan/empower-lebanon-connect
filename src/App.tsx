@@ -34,6 +34,7 @@ import NotFound from '@/pages/NotFound';
 import Donate from '@/pages/Donate';
 import Workshops from '@/pages/Workshops';
 import Events from '@/pages/Events';
+import NewsletterPage from '@/pages/Newsletter';
 import './App.css';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -114,6 +115,7 @@ function App() {
               {/* Workshop & Event Routes */}
               <Route path="/workshops" element={<Workshops />} />
               <Route path="/events" element={<Events />} />
+              <Route path="/newsletter" element={<NewsletterPage />} />
               
               {/* Authentication Routes */}
               <Route path="/login" element={<Login />} />
