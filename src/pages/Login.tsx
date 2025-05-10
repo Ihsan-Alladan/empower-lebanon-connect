@@ -85,7 +85,8 @@ const Login = () => {
         if (user.role === "seller") {
           navigate("/seller-dashboard");
         } else if (user.role === "learner") {
-          navigate("/learner-classroom");
+          // Changed redirection for learners to courses page instead of directly to classroom
+          navigate("/courses");
         } else if (user.role === "instructor") {
           navigate("/instructor-dashboard");
         } else if (user.role === "customer") {

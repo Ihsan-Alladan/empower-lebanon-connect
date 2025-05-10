@@ -1,342 +1,284 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
-  Tabs, TabsContent, TabsList, TabsTrigger 
-} from "@/components/ui/tabs";
+  Calendar, Clock, GraduationCap, Users, Star, ChevronRight, 
+  ShieldCheck, Award, Video, CheckCircle, Heart, Bookmark
+} from 'lucide-react';
+import { motion } from 'framer-motion';
+
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { 
-  Star, Clock, Calendar, Users, Share2, Heart,
-  CheckCircle, Play, MessageSquare
-} from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { handmadeCourses, digitalCourses } from '@/data';
+import PageTransition from '@/components/PageTransition';
 
-const CourseDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+import { handmadeCourses, digitalCourses } from '@/data';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from '@/components/ui/sonner';
+
+const CourseDetail = () => {
+  const { id } = useParams();
+  const [course, setCourse] = useState<any>(null);
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
   
-  const allCourses = [...handmadeCourses, ...digitalCourses];
-  const course = allCourses.find(course => course.id === id);
-  
-  const [isWishlisted, setIsWishlisted] = useState(false);
-  const [activeModule, setActiveModule] = useState<string | null>(null);
-  
-  if (!course) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center">
-        <h2 className="text-2xl font-bold mb-4">Course not found</h2>
-        <Button onClick={() => navigate('/courses')}>
-          Back to Courses
-        </Button>
-      </div>
-    );
-  }
-  
-  const toggleWishlist = () => {
-    setIsWishlisted(prev => !prev);
-  };
-  
-  const handleEnroll = () => {
-    // Enrollment logic would go here
-    console.log(`Enrolled in course: ${course.title}`);
-  };
-  
-  const toggleModule = (moduleId: string) => {
-    if (activeModule === moduleId) {
-      setActiveModule(null);
-    } else {
-      setActiveModule(moduleId);
-    }
-  };
-  
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
+  useEffect(() => {
+    // Find the course from either handmade or digital courses
+    const foundCourse = 
+      [...handmadeCourses, ...digitalCourses].find(c => c.id === id);
+    
+    if (foundCourse) {
+      setCourse(foundCourse);
       
-      <main className="flex-1">
-        {/* Course Banner */}
-        <div className="bg-gradient-to-r from-empower-ivory to-empower-gold/30 relative">
-          <div className="container mx-auto px-4 py-12">
-            <div className="flex flex-col md:flex-row gap-8 items-center">
-              <div className="md:w-1/2">
-                <Badge variant={course.category === 'handmade' ? 'default' : 'secondary'} className="mb-4">
-                  {course.category === 'handmade' ? 'Handmade & Crafts' : 'Technology & Digital Skills'}
-                </Badge>
-                <h1 className="text-3xl md:text-4xl font-bold mb-4">{course.title}</h1>
-                
-                <div className="flex items-center gap-4 mb-4">
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage src={course.instructor.avatar} alt={course.instructor.name} />
-                    <AvatarFallback>{course.instructor.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="font-medium">Instructor: {course.instructor.name}</p>
-                    <p className="text-sm text-muted-foreground">{course.instructor.title}</p>
-                  </div>
-                </div>
-                
-                <div className="flex flex-wrap gap-4 mb-6">
-                  <div className="flex items-center gap-1">
-                    <Clock size={18} className="text-muted-foreground" />
-                    <span>{course.duration}</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-1">
-                    <Calendar size={18} className="text-muted-foreground" />
-                    <span>Last updated {course.updatedAt}</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-1">
-                    <Users size={18} className="text-muted-foreground" />
-                    <span>{course.studentsEnrolled} students</span>
-                  </div>
-                  
-                  <Badge variant="outline">{course.level}</Badge>
-                </div>
-                
-                <div className="flex items-center gap-2 mb-6">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <Star 
-                        key={i} 
-                        size={20} 
-                        className={i < course.rating ? "fill-empower-gold text-empower-gold" : "text-muted"}
-                      />
-                    ))}
-                  </div>
-                  <span className="font-medium">{course.rating.toFixed(1)}</span>
-                  <span className="text-muted-foreground">({course.reviews} reviews)</span>
-                </div>
-                
-                <div className="flex flex-wrap gap-3">
-                  <Button onClick={handleEnroll} size="lg" className="bg-empower-terracotta hover:bg-empower-terracotta/90">
-                    Enroll Now {course.price === 0 ? '(Free)' : `($${course.price})`}
-                  </Button>
-                  
-                  <Button 
-                    variant="outline" 
-                    size="icon" 
-                    className={isWishlisted ? "text-red-500 border-red-500" : ""} 
-                    onClick={toggleWishlist}
-                  >
-                    <Heart className={isWishlisted ? "fill-current" : ""} />
-                  </Button>
-                  
-                  <Button variant="outline" size="icon">
-                    <Share2 />
-                  </Button>
-                </div>
+      // Check if user is enrolled (simplistic implementation for demo)
+      // In a real app, this would check against user data in a database
+      setIsEnrolled(localStorage.getItem(`enrolled-${id}`) === 'true');
+    }
+  }, [id]);
+
+  if (!course) {
+    return <div className="h-screen flex items-center justify-center">Loading...</div>
+  }
+
+  const handleEnroll = () => {
+    if (!isAuthenticated) {
+      toast.error("Please log in to enroll", {
+        description: "You need an account to access this course"
+      });
+      navigate('/login');
+      return;
+    }
+
+    if (user?.role !== 'learner') {
+      toast.error("Invalid account type", {
+        description: "You need a learner account to enroll in courses"
+      });
+      return;
+    }
+
+    // Simple enrollment simulation
+    localStorage.setItem(`enrolled-${id}`, 'true');
+    setIsEnrolled(true);
+    
+    toast.success("Successfully enrolled!", {
+      description: "You now have access to all course materials"
+    });
+
+    // Redirect learners to the classroom after enrolling
+    setTimeout(() => {
+      navigate('/learner-classroom', { state: { courseId: id } });
+    }, 1000);
+  };
+
+  const handleAccessCourse = () => {
+    // Redirect to learner classroom with this course selected
+    navigate('/learner-classroom', { state: { courseId: id } });
+  };
+
+  return (
+    <PageTransition>
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        
+        <main className="flex-1 container mx-auto px-4 py-8">
+          {/* Course Hero Section */}
+          <section className="mb-8">
+            <div className="relative rounded-xl overflow-hidden shadow-lg">
+              <img 
+                src={course.image} 
+                alt={course.title} 
+                className="w-full h-64 object-cover object-center" 
+              />
+              <div className="absolute inset-0 bg-black/40" />
+              <div className="absolute bottom-0 left-0 p-6 w-full">
+                <motion.h1 
+                  className="text-3xl font-bold text-white mb-2"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {course.title}
+                </motion.h1>
+                <motion.p 
+                  className="text-lg text-white/80"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                  {course.description}
+                </motion.p>
               </div>
-              
-              <div className="md:w-1/2">
-                <div className="rounded-lg overflow-hidden shadow-lg">
+            </div>
+          </section>
+
+          {/* Course Info */}
+          <section className="mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h2 className="text-2xl font-semibold mb-4">Course Details</h2>
+                <ul>
+                  <li className="flex items-center gap-2 mb-2">
+                    <Calendar className="h-5 w-5 text-empower-terracotta" />
+                    <span className="font-medium">Start Date:</span> {course.startDate}
+                  </li>
+                  <li className="flex items-center gap-2 mb-2">
+                    <Clock className="h-5 w-5 text-empower-terracotta" />
+                    <span className="font-medium">Duration:</span> {course.duration}
+                  </li>
+                  <li className="flex items-center gap-2 mb-2">
+                    <GraduationCap className="h-5 w-5 text-empower-terracotta" />
+                    <span className="font-medium">Level:</span> {course.level}
+                  </li>
+                  <li className="flex items-center gap-2 mb-2">
+                    <Users className="h-5 w-5 text-empower-terracotta" />
+                    <span className="font-medium">Participants:</span> {course.participants}
+                  </li>
+                  <li className="flex items-center gap-2 mb-2">
+                    <Star className="h-5 w-5 text-empower-terracotta" />
+                    <span className="font-medium">Rating:</span> {course.rating} ({course.reviews} reviews)
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-semibold mb-4">Instructor</h2>
+                <div className="flex items-center gap-4">
                   <img 
-                    src={course.thumbnail} 
-                    alt={course.title} 
-                    className="w-full h-64 md:h-80 object-cover"
+                    src={course.instructorAvatar} 
+                    alt={course.instructorName} 
+                    className="w-16 h-16 rounded-full object-cover" 
                   />
-                  <div className="bg-empower-brown/80 p-4 flex justify-center">
-                    <Button className="flex items-center gap-2 bg-empower-terracotta hover:bg-empower-terracotta/90">
-                      <Play fill="white" size={18} />
-                      Watch Introduction
-                    </Button>
+                  <div>
+                    <h3 className="font-semibold text-lg">{course.instructorName}</h3>
+                    <p className="text-gray-600">{course.instructorTitle}</p>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        
-        {/* Course Content */}
-        <div className="container mx-auto px-4 py-12">
-          <Tabs defaultValue="overview">
-            <TabsList className="mb-8">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
-              <TabsTrigger value="instructor">Instructor</TabsTrigger>
-              <TabsTrigger value="reviews">Reviews</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="overview" className="animate-fade-in">
-              <div className="prose max-w-none">
-                <h2>About This Course</h2>
-                <p className="text-lg">{course.description}</p>
+          </section>
+
+          {/* Course Content Tabs */}
+          <section>
+            <Tabs defaultValue="overview" className="w-full">
+              <TabsList className="bg-empower-ivory/50">
+                <TabsTrigger value="overview" className="data-[state=active]:bg-empower-gold data-[state=active]:text-empower-brown">Overview</TabsTrigger>
+                <TabsTrigger value="curriculum" className="data-[state=active]:bg-empower-gold data-[state=active]:text-empower-brown">Curriculum</TabsTrigger>
+                <TabsTrigger value="reviews" className="data-[state=active]:bg-empower-gold data-[state=active]:text-empower-brown">Reviews</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="overview" className="mt-6 animate-fade-in">
+                <h3 className="text-xl font-semibold mb-3">About this course</h3>
+                <p className="text-gray-700 mb-4">{course.overview}</p>
                 
-                <h3 className="mt-6 mb-4">What You'll Learn</h3>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <h3 className="text-xl font-semibold mb-3">What you'll learn</h3>
+                <ul className="list-disc list-inside text-gray-700 mb-4">
                   {course.learningObjectives.map((objective, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <CheckCircle className="text-empower-olive mt-1 flex-shrink-0" size={18} />
-                      <span>{objective}</span>
+                    <li key={index}>{objective}</li>
+                  ))}
+                </ul>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="text-green-500 h-5 w-5" />
+                    <p className="font-medium">Quality Guaranteed</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Award className="text-yellow-500 h-5 w-5" />
+                    <p className="font-medium">Certificate of Completion</p>
+                  </div>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="curriculum" className="mt-6 animate-fade-in">
+                <h3 className="text-xl font-semibold mb-3">Course Curriculum</h3>
+                <ul className="space-y-4">
+                  {course.curriculum.map((module, index) => (
+                    <li key={index} className="bg-white rounded-lg shadow-md p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Video className="h-5 w-5 text-empower-terracotta" />
+                          <h4 className="font-semibold">{module.title}</h4>
+                        </div>
+                        <span className="text-gray-600">{module.duration}</span>
+                      </div>
+                      <p className="text-gray-700 mt-2">{module.description}</p>
+                      <ul className="mt-2 space-y-2">
+                        {module.lessons.map((lesson, index) => (
+                          <li key={index} className="flex items-center gap-2">
+                            <ChevronRight className="h-4 w-4 text-gray-500" />
+                            {lesson}
+                          </li>
+                        ))}
+                      </ul>
                     </li>
                   ))}
                 </ul>
-                
-                <h3 className="mt-8 mb-4">Requirements</h3>
-                <ul className="list-disc pl-5 space-y-2">
-                  {course.requirements.map((req, index) => (
-                    <li key={index}>{req}</li>
-                  ))}
-                </ul>
-                
-                <h3 className="mt-8 mb-4">Who This Course is For</h3>
-                <p>{course.targetAudience}</p>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="curriculum" className="animate-fade-in">
-              <h2 className="text-2xl font-bold mb-6">Course Curriculum</h2>
-              <p className="mb-4">{course.modules.length} modules • {course.totalLessons} lessons • Total length: {course.duration}</p>
+              </TabsContent>
               
-              <div className="space-y-4">
-                {course.modules.map((module) => (
-                  <Collapsible
-                    key={module.id}
-                    open={activeModule === module.id}
-                    onOpenChange={() => toggleModule(module.id)}
-                    className="border rounded-md overflow-hidden"
-                  >
-                    <CollapsibleTrigger className="flex justify-between items-center w-full p-4 hover:bg-muted/50">
-                      <div className="flex items-start">
-                        <h3 className="font-medium text-left">{module.title}</h3>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-muted-foreground">{module.lessons.length} lessons</span>
-                        <span className="text-sm text-muted-foreground">{module.duration}</span>
-                      </div>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <div className="border-t">
-                        {module.lessons.map((lesson, index) => (
-                          <div 
-                            key={index} 
-                            className="flex justify-between items-center p-4 hover:bg-muted/20"
-                          >
-                            <div className="flex items-center gap-3">
-                              {lesson.type === 'video' ? (
-                                <Play size={16} className="text-empower-terracotta" />
-                              ) : (
-                                <MessageSquare size={16} className="text-empower-olive" />
-                              )}
-                              <span>{lesson.title}</span>
-                            </div>
-                            <span className="text-sm text-muted-foreground">{lesson.duration}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </CollapsibleContent>
-                  </Collapsible>
-                ))}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="instructor" className="animate-fade-in">
-              <div className="flex flex-col md:flex-row gap-8">
-                <div className="md:w-1/4">
-                  <Avatar className="h-32 w-32 mx-auto">
-                    <AvatarImage src={course.instructor.avatar} alt={course.instructor.name} />
-                    <AvatarFallback className="text-4xl">
-                      {course.instructor.name.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                </div>
-                
-                <div className="md:w-3/4">
-                  <h2 className="text-2xl font-bold mb-2">{course.instructor.name}</h2>
-                  <p className="text-muted-foreground mb-4">{course.instructor.title}</p>
-                  
-                  <div className="flex gap-4 mb-6">
-                    <div>
-                      <p className="font-bold text-lg">{course.instructor.coursesCount}</p>
-                      <p className="text-sm text-muted-foreground">Courses</p>
-                    </div>
-                    <div>
-                      <p className="font-bold text-lg">{course.instructor.studentsCount}</p>
-                      <p className="text-sm text-muted-foreground">Students</p>
-                    </div>
-                    <div>
-                      <p className="font-bold text-lg">{course.instructor.reviewsCount}</p>
-                      <p className="text-sm text-muted-foreground">Reviews</p>
-                    </div>
-                  </div>
-                  
-                  <p className="mb-6">{course.instructor.bio}</p>
-                </div>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="reviews" className="animate-fade-in">
-              <h2 className="text-2xl font-bold mb-6">Student Reviews</h2>
-              
-              <div className="flex flex-col md:flex-row gap-8 mb-8">
-                <div className="md:w-1/3 flex flex-col items-center justify-center">
-                  <div className="text-5xl font-bold mb-2">{course.rating.toFixed(1)}</div>
-                  <div className="flex mb-2">
-                    {[...Array(5)].map((_, i) => (
-                      <Star 
-                        key={i} 
-                        size={24} 
-                        className={i < course.rating ? "fill-empower-gold text-empower-gold" : "text-muted"}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground">{course.reviews} reviews</p>
-                </div>
-                
-                <div className="md:w-2/3">
-                  {course.ratingBreakdown.map((item, index) => (
-                    <div key={index} className="flex items-center gap-3 mb-2">
-                      <span>{item.stars} stars</span>
-                      <Progress value={item.percentage} className="h-2 flex-1" />
-                      <span className="text-sm text-muted-foreground">{item.percentage}%</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="space-y-6">
-                {course.studentReviews.map((review, index) => (
-                  <div key={index} className="border-t pt-6">
+              <TabsContent value="reviews" className="mt-6 animate-fade-in">
+                <h3 className="text-xl font-semibold mb-3">Course Reviews</h3>
+                {course.reviewsList.map((review, index) => (
+                  <div key={index} className="bg-white rounded-lg shadow-md p-4 mb-4">
                     <div className="flex items-start gap-4">
-                      <Avatar>
-                        <AvatarImage src={review.avatar} alt={review.name} />
-                        <AvatarFallback>{review.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      
-                      <div className="flex-1">
-                        <div className="flex justify-between">
-                          <h4 className="font-medium">{review.name}</h4>
-                          <p className="text-sm text-muted-foreground">{review.date}</p>
-                        </div>
-                        
-                        <div className="flex mb-2">
-                          {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              size={16} 
-                              className={i < review.rating ? "fill-empower-gold text-empower-gold" : "text-muted"}
-                            />
+                      <img 
+                        src={review.avatar} 
+                        alt={review.name} 
+                        className="w-10 h-10 rounded-full object-cover" 
+                      />
+                      <div>
+                        <h4 className="font-semibold">{review.name}</h4>
+                        <div className="flex items-center gap-1 text-yellow-500 mb-1">
+                          {[...Array(review.rating)].map((_, i) => (
+                            <Star key={i} className="h-4 w-4" />
                           ))}
                         </div>
-                        
-                        <p>{review.comment}</p>
+                        <p className="text-gray-700">{review.comment}</p>
                       </div>
                     </div>
                   </div>
                 ))}
-              </div>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </main>
-      
-      <Footer />
-    </div>
+              </TabsContent>
+            </Tabs>
+          </section>
+
+          {/* Action Buttons */}
+          <section className="mt-8">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              {isEnrolled ? (
+                <Button 
+                  size="lg"
+                  className="bg-empower-olive hover:bg-empower-olive/90 text-white shadow-lg"
+                  onClick={handleAccessCourse}
+                >
+                  Access Course <CheckCircle className="ml-2 h-5 w-5" />
+                </Button>
+              ) : (
+                <>
+                  <Button 
+                    size="lg"
+                    className="bg-empower-terracotta hover:bg-empower-terracotta/90 text-white shadow-lg"
+                    onClick={handleEnroll}
+                  >
+                    Enroll Now for ${course.price}
+                  </Button>
+                  <Button variant="outline">
+                    <Heart className="mr-2 h-5 w-5" /> Add to Wishlist
+                  </Button>
+                  <Button variant="outline">
+                    <Bookmark className="mr-2 h-5 w-5" /> Save for Later
+                  </Button>
+                </>
+              )}
+            </div>
+          </section>
+        </main>
+        
+        <Footer />
+      </div>
+    </PageTransition>
   );
 };
 
