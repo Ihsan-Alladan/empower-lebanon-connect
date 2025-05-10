@@ -31,7 +31,8 @@ const serviceCards = [
     color: "bg-[#D946EF]",
     textColor: "text-[#D946EF]",
     borderClass: "border-2 border-[#D946EF]",
-    delay: 300
+    delay: 300,
+    link: "/donate"
   },
   {
     title: "Events",
@@ -40,7 +41,8 @@ const serviceCards = [
     color: "bg-[#ea384c]",
     textColor: "text-[#ea384c]",
     borderClass: "border-2 border-[#ea384c]",
-    delay: 400
+    delay: 400,
+    link: "/events"
   },
   {
     title: "Workshops",
@@ -49,7 +51,8 @@ const serviceCards = [
     color: "bg-empower-olive",
     textColor: "text-empower-olive",
     borderClass: "border-2 border-[#1EAEDB]",
-    delay: 500
+    delay: 500,
+    link: "/workshops"
   },
   {
     title: "Volunteer & Support",
@@ -58,7 +61,8 @@ const serviceCards = [
     color: "bg-empower-gold",
     textColor: "text-empower-gold",
     borderClass: "border-2 border-[#1EAEDB]",
-    delay: 600
+    delay: 600,
+    link: "/volunteer"
   }
 ];
 
@@ -82,28 +86,8 @@ const Services: React.FC = () => {
               key={index} 
               className={`bg-white rounded-xl shadow-md overflow-hidden hover-zoom transition-all duration-300 ${service.borderClass}`}
             >
-              {service.title === "Courses" || service.title === "Shop" ? (
-                <Link to={service.link} className="block h-full">
-                  <div className={`p-6 flex flex-col items-center text-center h-full`}>
-                    <div className={`${service.color} p-4 rounded-full mb-6`}>
-                      <service.icon className="h-8 w-8 text-white" />
-                    </div>
-                    <h3 className={`font-poppins font-semibold text-xl mb-3 text-float ${service.textColor}`}>
-                      {service.title}
-                    </h3>
-                    <p className="text-empower-brown">
-                      {service.description}
-                    </p>
-                    <div className={`mt-auto pt-6 text-sm font-medium ${service.textColor} hover:underline flex items-center`}>
-                      Learn More
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  </div>
-                </Link>
-              ) : (
-                <div className={`p-6 flex flex-col items-center text-center`}>
+              <Link to={service.link} className="block h-full">
+                <div className={`p-6 flex flex-col items-center text-center h-full`}>
                   <div className={`${service.color} p-4 rounded-full mb-6`}>
                     <service.icon className="h-8 w-8 text-white" />
                   </div>
@@ -113,14 +97,14 @@ const Services: React.FC = () => {
                   <p className="text-empower-brown">
                     {service.description}
                   </p>
-                  <button className={`mt-6 text-sm font-medium ${service.textColor} hover:underline flex items-center`}>
+                  <div className={`mt-auto pt-6 text-sm font-medium ${service.textColor} hover:underline flex items-center`}>
                     Learn More
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
-                  </button>
+                  </div>
                 </div>
-              )}
+              </Link>
             </div>
           ))}
         </div>

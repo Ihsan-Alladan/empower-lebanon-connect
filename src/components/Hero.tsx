@@ -58,17 +58,17 @@ const Hero: React.FC = () => {
         <div className="absolute inset-0 bg-black/40" /> {/* Overlay */}
       </div>
 
-      {/* Content */}
+      {/* Content - shifted to the left */}
       <div className="relative h-full flex items-end pb-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl text-white">
+          <div className="max-w-3xl text-white ml-0 md:ml-4 lg:ml-8">
             <motion.div 
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
               transition={{ delay: 0.3, duration: 0.8 }}
               className="mb-2"
             >
-              <h1 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-bold font-poppins">
+              <h1 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-bold font-poppins text-left">
                 <span className="inline-block">
                   {displayText}
                   <span className="inline-block w-[2px] h-[0.9em] bg-white animate-blink ml-1 align-middle"></span>
@@ -77,7 +77,7 @@ const Hero: React.FC = () => {
             </motion.div>
             
             <motion.h2 
-              className="mb-6 text-3xl md:text-4xl lg:text-5xl font-semibold font-poppins" 
+              className="mb-6 text-3xl md:text-4xl lg:text-5xl font-semibold font-poppins text-left" 
               initial={{ x: -50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 1.2, duration: 0.8 }}
@@ -88,7 +88,7 @@ const Hero: React.FC = () => {
             </motion.h2>
             
             <motion.p 
-              className="mb-10 text-lg md:text-xl opacity-90"
+              className="mb-10 text-lg md:text-xl opacity-90 text-left max-w-2xl"
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 1.5, duration: 0.8 }}
