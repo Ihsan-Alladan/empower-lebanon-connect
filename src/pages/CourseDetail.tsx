@@ -67,9 +67,9 @@ const CourseDetail = () => {
       description: "You now have access to all course materials"
     });
 
-    // Redirect learners to the classroom after enrolling
+    // Redirect learners to the dashboard after enrolling
     setTimeout(() => {
-      navigate('/learner-classroom', { state: { courseId: id } });
+      navigate('/learner-dashboard');
     }, 1000);
   };
 

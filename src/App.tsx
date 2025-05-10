@@ -21,6 +21,7 @@ import InstructorSignup from '@/pages/InstructorSignup';
 import InstructorDashboard from '@/pages/InstructorDashboard';
 import CustomerSignup from '@/pages/CustomerSignup';
 import CustomerProfile from '@/pages/CustomerProfile';
+import LearnerDashboard from '@/pages/LearnerDashboard';
 import LearnerClassroom from '@/pages/LearnerClassroom';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
 import ContentManagement from '@/pages/admin/ContentManagement';
@@ -105,6 +106,12 @@ function App() {
               <Route path="/courses/:id" element={<CourseDetail />} />
               
               {/* Learner Routes */}
+              <Route 
+                path="/learner-dashboard" 
+                element={
+                  <ProtectedRoute element={<LearnerDashboard />} role="learner" />
+                }
+              />
               <Route 
                 path="/learner-classroom" 
                 element={
