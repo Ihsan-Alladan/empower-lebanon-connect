@@ -1,119 +1,105 @@
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import {
-  BookOpen,
-  Calendar,
-  ChevronRight,
-  Home,
-  LogOut,
-  MessageSquare,
+import { NavLink } from 'react-router-dom';
+import { 
+  Book, 
+  Plus, 
+  ListTodo, 
+  Users, 
+  Activity, 
+  MessageSquare, 
   Settings,
-  Users
+  LogOut,
+  Calendar
 } from 'lucide-react';
-
-import { Button } from "@/components/ui/button";
-import { useAuth } from '@/contexts/AuthContext';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-
-interface SidebarItemProps {
-  icon: React.ReactNode;
-  text: string;
-  to: string;
-  active: boolean;
-  collapsed: boolean;
-}
-
-const SidebarItem: React.FC<SidebarItemProps> = ({ icon, text, to, active, collapsed }) => {
-  return (
-    <Link to={to} className="w-full">
-      <motion.div 
-        className={`flex items-center p-3 rounded-md mb-1 transition-colors group ${active 
-          ? 'bg-empower-terracotta text-white' 
-          : 'text-gray-600 hover:bg-empower-terracotta/10'}`}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <div className="text-inherit">{icon}</div>
-        {!collapsed && (
-          <span className={`ml-3 font-medium text-sm ${active ? 'text-white' : 'text-gray-600 group-hover:text-empower-terracotta'}`}>
-            {text}
-          </span>
-        )}
-        {active && !collapsed && (
-          <ChevronRight className="ml-auto text-white" size={16} />
-        )}
-      </motion.div>
-    </Link>
-  );
-};
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from '@/components/ui/sonner';
 
 interface InstructorSidebarProps {
   collapsed: boolean;
   toggleCollapsed: () => void;
 }
 
-const InstructorSidebar: React.FC<InstructorSidebarProps> = ({ collapsed, toggleCollapsed }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
+const InstructorSidebar: React.FC<InstructorSidebarProps> = ({ collapsed }) => {
   const { logout } = useAuth();
+  const navigate = useNavigate();
   
   const handleLogout = () => {
     logout();
+    toast.success('Logged out successfully');
     navigate('/login');
   };
   
-  const menuItems = [
-    { icon: <Home size={20} />, text: 'Dashboard', to: '/instructor-dashboard' },
-    { icon: <BookOpen size={20} />, text: 'My Courses', to: '/instructor-dashboard/courses' },
-    { icon: <Users size={20} />, text: 'Students', to: '/instructor-dashboard/students' },
-    { icon: <Calendar size={20} />, text: 'Schedule', to: '/instructor-dashboard/schedule' },
-    { icon: <MessageSquare size={20} />, text: 'Messages', to: '/instructor-dashboard/messages' },
-    { icon: <Settings size={20} />, text: 'Settings', to: '/instructor-dashboard/settings' },
-  ];
-
   return (
-    <motion.div 
-      className={`h-screen bg-white shadow-md transition-all duration-300 flex flex-col ${collapsed ? 'w-16' : 'w-64'}`}
-      initial={{ width: collapsed ? 64 : 256 }}
-      animate={{ width: collapsed ? 64 : 256 }}
-      transition={{ duration: 0.3 }}
+    <aside
+      className={cn(
+        'h-full bg-white border-r transition-all duration-300 flex flex-col',
+        collapsed ? 'w-[70px]' : 'w-[240px]'
+      )}
     >
-      <div className="flex items-center justify-center h-16 border-b">
-        <motion.div 
-          className="font-bold text-empower-brown"
-          animate={{ opacity: collapsed ? 0 : 1 }}
-          transition={{ duration: 0.2 }}
-        >
-          {!collapsed && "Instructor Panel"}
-        </motion.div>
+      {/* Logo */}
+      <div className="py-4 px-4 border-b flex justify-center">
+        <img 
+          src="/lovable-uploads/57514e04-8524-41e5-8cbd-c63693884459.png" 
+          alt="EmpowEra" 
+          className={cn(
+            'transition-all duration-300',
+            collapsed ? 'h-8' : 'h-10'
+          )}
+        />
       </div>
+
+      {/* Nav Links */}
+      <nav className="flex-1 overflow-y-auto py-4">
+        <ul className="space-y-1 px-2">
+          {[
+            { to: '/instructor-dashboard', icon: <Activity size={20} />, label: 'Dashboard' },
+            { to: '/instructor-dashboard/courses', icon: <Book size={20} />, label: 'My Courses' },
+            { to: '/instructor-dashboard/add-course', icon: <Plus size={20} />, label: 'Add New Course' },
+            { to: '/instructor-dashboard/assignments', icon: <ListTodo size={20} />, label: 'Assignments' },
+            { to: '/instructor-dashboard/classroom', icon: <Users size={20} />, label: 'Classroom Management' },
+            { to: '/instructor-dashboard/progress', icon: <Activity size={20} />, label: 'Student Progress' },
+            { to: '/instructor-dashboard/messages', icon: <MessageSquare size={20} />, label: 'Feedback' },
+            { to: '/instructor-dashboard/schedule', icon: <Calendar size={20} />, label: 'Schedule' },
+            { to: '/instructor-dashboard/settings', icon: <Settings size={20} />, label: 'Settings' }
+          ].map((item, index) => (
+            <li key={index}>
+              <NavLink
+                to={item.to}
+                className={({ isActive }) => cn(
+                  'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                  isActive
+                    ? 'bg-slate-100 text-empower-terracotta'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-empower-terracotta',
+                  collapsed && 'justify-center px-0'
+                )}
+              >
+                <span className={collapsed ? '' : 'mr-3'}>{item.icon}</span>
+                {!collapsed && <span>{item.label}</span>}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </nav>
       
-      <div className="flex-1 overflow-y-auto p-2">
-        {menuItems.map((item, index) => (
-          <SidebarItem
-            key={index}
-            icon={item.icon}
-            text={item.text}
-            to={item.to}
-            active={location.pathname === item.to}
-            collapsed={collapsed}
-          />
-        ))}
-      </div>
-      
-      <div className="p-2 border-t">
+      {/* Logout Button */}
+      <div className="mt-auto p-4 border-t">
         <Button 
-          onClick={handleLogout}
           variant="ghost" 
-          className="w-full flex items-center p-3 text-gray-600 hover:bg-red-50 hover:text-red-600"
+          className={cn(
+            'w-full flex items-center text-red-500 hover:bg-red-50 hover:text-red-600',
+            collapsed && 'justify-center px-0'
+          )}
+          onClick={handleLogout}
         >
-          <LogOut size={20} />
-          {!collapsed && <span className="ml-3 font-medium text-sm">Logout</span>}
+          <LogOut size={20} className={collapsed ? '' : 'mr-2'} />
+          {!collapsed && 'Logout'}
         </Button>
       </div>
-    </motion.div>
+    </aside>
   );
 };
 

@@ -1,3 +1,4 @@
+
 import { toast } from "@/components/ui/sonner";
 
 // Mock user data - in a real application, this would come from a database
@@ -27,6 +28,16 @@ const users = [
     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330"
   },
   {
+    id: "instructor1",
+    email: "instructor@instructor.com",
+    password: "instructor321",
+    name: "Sarah Williams",
+    role: "instructor",
+    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956",
+    bio: "Master craftsperson with over 15 years of experience in traditional weaving and textile arts. Passionate about preserving cultural techniques while innovating with sustainable approaches.",
+    expertise: ["Traditional Weaving", "Sustainable Textiles", "Cultural Crafts"]
+  },
+  {
     id: "customer1",
     email: "customer@customer.com",
     password: "customer321",
@@ -46,6 +57,8 @@ export interface User {
   avatar?: string;
   phoneNumber?: string;
   address?: string;
+  bio?: string;
+  expertise?: string[];
 }
 
 export const authService = {
@@ -99,6 +112,11 @@ export const authService = {
   isLearner: (): boolean => {
     const user = authService.getCurrentUser();
     return user?.role === "learner";
+  },
+  
+  isInstructor: (): boolean => {
+    const user = authService.getCurrentUser();
+    return user?.role === "instructor";
   },
   
   isCustomer: (): boolean => {
