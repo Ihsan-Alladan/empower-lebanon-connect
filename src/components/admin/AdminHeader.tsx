@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Bell, Menu, Settings, User, ChevronRight } from 'lucide-react';
+import { Bell, Menu, Settings, User, ChevronRight, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
