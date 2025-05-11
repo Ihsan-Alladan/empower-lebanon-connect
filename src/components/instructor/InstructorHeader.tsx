@@ -30,7 +30,7 @@ const InstructorHeader: React.FC<InstructorHeaderProps> = ({ toggleSidebar }) =>
   };
   
   return (
-    <header className="bg-white shadow-sm h-16 flex items-center justify-between px-4">
+    <header className="bg-white shadow-sm h-16 flex items-center justify-between px-4 z-30">
       <div className="flex items-center">
         <Button 
           variant="ghost"
@@ -41,13 +41,19 @@ const InstructorHeader: React.FC<InstructorHeaderProps> = ({ toggleSidebar }) =>
           <Menu />
         </Button>
         <Link to="/" className="flex items-center">
-          <div className="ml-2 text-lg font-medium text-empower-brown">EmpowEra Instructor</div>
+          <img 
+            src="/lovable-uploads/57514e04-8524-41e5-8cbd-c63693884459.png" 
+            alt="EmpowEra" 
+            className="h-8 mr-2"
+          />
+          <div className="text-lg font-medium text-empower-brown">EmpowEra Instructor</div>
         </Link>
       </div>
       
       <div className="flex items-center space-x-2">
-        <Button variant="ghost" size="icon" className="text-gray-500">
+        <Button variant="ghost" size="icon" className="text-gray-500 relative">
           <Bell size={20} />
+          <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
         </Button>
         
         <Button variant="ghost" size="icon" className="text-gray-500">
@@ -56,8 +62,12 @@ const InstructorHeader: React.FC<InstructorHeaderProps> = ({ toggleSidebar }) =>
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full bg-gray-100">
-              <User size={20} />
+            <Button variant="ghost" className="rounded-full h-8 w-8 overflow-hidden">
+              {user?.avatar ? (
+                <img src={user.avatar} alt={user?.name || 'User'} className="h-full w-full object-cover" />
+              ) : (
+                <User size={20} className="text-gray-600" />
+              )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">

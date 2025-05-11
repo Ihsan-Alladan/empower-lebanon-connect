@@ -48,7 +48,7 @@ const InstructorLayout: React.FC<InstructorLayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col h-screen bg-gray-50">
       {/* Mobile sidebar overlay */}
       {isMobile && sidebarOpen && (
         <div 
