@@ -33,6 +33,7 @@ import Settings from '@/pages/admin/Settings';
 import HomeDesign from '@/pages/admin/HomeDesign';
 import NotFound from '@/pages/NotFound';
 import Donate from '@/pages/Donate';
+import DonationCheckout from '@/pages/DonationCheckout';
 import Workshops from '@/pages/Workshops';
 import Events from '@/pages/Events';
 import NewsletterPage from '@/pages/Newsletter';
@@ -143,8 +144,11 @@ function App() {
               <Route path="/admin/home-design" element={<HomeDesign />} />
               <Route path="/admin/*" element={<Navigate to="/admin" />} />
               
-              {/* Other Routes */}
+              {/* Donation Routes */}
               <Route path="/donate" element={<Donate />} />
+              <Route path="/donate/checkout/:causeId" element={<DonationCheckout />} />
+              
+              {/* Other Routes */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
