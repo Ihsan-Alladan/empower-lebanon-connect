@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -31,6 +30,7 @@ import EventsManagement from '@/pages/admin/EventsManagement';
 import Newsletter from '@/pages/admin/Newsletter';
 import Analytics from '@/pages/admin/Analytics';
 import Settings from '@/pages/admin/Settings';
+import HomeDesign from '@/pages/admin/HomeDesign';
 import NotFound from '@/pages/NotFound';
 import Donate from '@/pages/Donate';
 import Workshops from '@/pages/Workshops';
@@ -132,7 +132,7 @@ function App() {
               <Route path="/signup/customer" element={<CustomerSignup />} />
               
               {/* Admin Routes */}
-              <Route path="/admin/*" element={<AdminDashboard />} />
+              <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/admin/content" element={<ContentManagement />} />
               <Route path="/admin/users" element={<UserManagement />} />
               <Route path="/admin/shop" element={<ShopManagement />} />
@@ -140,6 +140,8 @@ function App() {
               <Route path="/admin/newsletter" element={<Newsletter />} />
               <Route path="/admin/analytics" element={<Analytics />} />
               <Route path="/admin/settings" element={<Settings />} />
+              <Route path="/admin/home-design" element={<HomeDesign />} />
+              <Route path="/admin/*" element={<Navigate to="/admin" />} />
               
               {/* Other Routes */}
               <Route path="/donate" element={<Donate />} />

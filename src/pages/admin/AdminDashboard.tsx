@@ -8,9 +8,11 @@ import ContentManagement from '@/pages/admin/ContentManagement';
 import UserManagement from '@/pages/admin/UserManagement';
 import ShopManagement from '@/pages/admin/ShopManagement';
 import EventsManagement from '@/pages/admin/EventsManagement';
+import DonationsManagement from '@/pages/admin/DonationsManagement';
 import Newsletter from '@/pages/admin/Newsletter';
 import Analytics from '@/pages/admin/Analytics';
 import Settings from '@/pages/admin/Settings';
+import HomeDesign from '@/pages/admin/HomeDesign';
 
 const AdminDashboard: React.FC = () => {
   return (
@@ -21,9 +23,11 @@ const AdminDashboard: React.FC = () => {
         <Route path="/users" element={<UserManagement />} />
         <Route path="/shop" element={<ShopManagement />} />
         <Route path="/events" element={<EventsManagement />} />
+        <Route path="/donations" element={<DonationsManagement />} />
         <Route path="/newsletter" element={<Newsletter />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/home-design" element={<HomeDesign />} />
         <Route path="*" element={<Navigate to="/admin" />} />
       </Routes>
     </AdminLayout>

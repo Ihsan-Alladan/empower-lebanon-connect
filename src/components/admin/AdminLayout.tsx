@@ -1,14 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu } from 'lucide-react';
+import { toast } from 'sonner';
 
-import AdminSidebar from './AdminSidebar';
 import AdminHeader from './AdminHeader';
 import AdminFooter from './AdminFooter';
+import AdminSidebar from './AdminSidebar';
 import { getAdminAuthenticated } from '@/utils/adminAuth';
-import { Button } from '@/components/ui/button';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -19,10 +18,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   const navigate = useNavigate();
+  const location = useLocation();
   
   useEffect(() => {
     // Check if admin is authenticated, if not redirect to login
     if (!getAdminAuthenticated()) {
+      toast.error('Please login as admin to access this page');
       navigate('/login');
     }
     
@@ -49,34 +50,50 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     }
   };
 
+  // Generate breadcrumbs based on current path
+  const generateBreadcrumbs = () => {
+    if (location.pathname === '/admin') return [{ name: 'Dashboard', path: '/admin' }];
+    
+    const paths = location.pathname.split('/').filter(Boolean);
+    let currentPath = '';
+    
+    return paths.map((path, i) => {
+      currentPath += `/${path}`;
+      return {
+        name: path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, ' '),
+        path: currentPath
+      };
+    });
+  };
+
+  const breadcrumbs = generateBreadcrumbs();
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Mobile sidebar overlay */}
       {isMobile && sidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-10"
+          className="fixed inset-0 bg-black bg-opacity-50 z-20"
           onClick={() => setSidebarOpen(false)}
         />
       )}
       
       {/* Header */}
-      <AdminHeader toggleSidebar={toggleSidebar} />
+      <AdminHeader 
+        toggleSidebar={toggleSidebar} 
+        breadcrumbs={breadcrumbs}
+      />
       
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
-        <motion.div
-          className={`${isMobile ? 'fixed' : ''} z-20 h-[calc(100vh-64px)]`}
-          initial={{ x: isMobile && !sidebarOpen ? -320 : 0 }}
-          animate={{ x: isMobile && !sidebarOpen ? -320 : 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          {sidebarOpen && (
-            <AdminSidebar 
-              collapsed={collapsed} 
-              toggleCollapsed={toggleSidebar} 
-            />
-          )}
-        </motion.div>
+        {/* Sidebar - always visible on desktop */}
+        <div className={`${isMobile ? 'fixed' : 'sticky'} top-0 z-20 h-screen`}>
+          <AdminSidebar 
+            collapsed={collapsed} 
+            toggleCollapsed={toggleSidebar} 
+            isOpen={sidebarOpen}
+            currentPath={location.pathname}
+          />
+        </div>
         
         {/* Main content */}
         <div className="flex-1 flex flex-col overflow-hidden">
