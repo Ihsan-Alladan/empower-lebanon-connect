@@ -14,11 +14,14 @@ import { DonationCause } from '@/components/donations/DonationCauseCard';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import { CreditCard, Check } from 'lucide-react';
+import { useCart } from '@/hooks/useCart';
 
 const DonationCheckout: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { causeId } = useParams<{ causeId: string }>();
+  const { addToCart } = useCart();
   
   const cause = location.state?.cause as DonationCause;
   const [amount, setAmount] = useState(cause?.suggestedAmount || 50);
@@ -26,6 +29,8 @@ const DonationCheckout: React.FC = () => {
   const [email, setEmail] = useState('');
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [receiveUpdates, setReceiveUpdates] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'paypal'>('card');
   
   const handleSuccessfulDonation = () => {
     // Create confetti effect
@@ -47,9 +52,35 @@ const DonationCheckout: React.FC = () => {
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would integrate with a payment processor
-    // For now, we'll just simulate a successful donation
-    handleSuccessfulDonation();
+    setIsProcessing(true);
+    
+    // Allow the donation to be added to cart
+    if (cause) {
+      addToCart({
+        productId: `donation-${causeId}`,
+        quantity: 1,
+        name: cause.title,
+        description: `Donation to ${cause.title}`,
+        price: amount,
+        imageUrl: cause.imageUrl
+      });
+      
+      toast.success('Donation added to cart', {
+        description: 'You can now complete your purchase along with other items.',
+      });
+      
+      // Navigate to cart
+      setTimeout(() => {
+        navigate('/cart');
+      }, 1500);
+      return;
+    }
+    
+    // Simulated payment processing delay
+    setTimeout(() => {
+      setIsProcessing(false);
+      handleSuccessfulDonation();
+    }, 2000);
   };
   
   if (!cause) {
@@ -168,6 +199,7 @@ const DonationCheckout: React.FC = () => {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     className="mt-1"
+                                    placeholder="Your name"
                                   />
                                 </div>
                                 
@@ -179,6 +211,7 @@ const DonationCheckout: React.FC = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="mt-1"
+                                    placeholder="Your email address"
                                   />
                                 </div>
                               </div>
@@ -200,21 +233,134 @@ const DonationCheckout: React.FC = () => {
                         
                         <div className="mb-6">
                           <h2 className="text-xl font-semibold text-empower-brown mb-2">Payment Method</h2>
-                          <p className="text-gray-500 mb-4">
-                            This is a demonstration. In a live application, you would integrate with a payment processor.
-                          </p>
-                          {/* Payment method inputs would go here */}
-                          <div className="p-4 border border-gray-200 rounded-md bg-gray-50 text-center">
-                            [Payment Method Integration]
+                          
+                          <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                            <Button
+                              type="button"
+                              variant={paymentMethod === 'card' ? "default" : "outline"}
+                              className={`flex-1 flex items-center justify-center gap-2 ${
+                                paymentMethod === 'card' ? "bg-empower-gold hover:bg-empower-gold/90" : ""
+                              }`}
+                              onClick={() => setPaymentMethod('card')}
+                            >
+                              <CreditCard size={18} />
+                              Credit/Debit Card
+                            </Button>
+                            
+                            <Button
+                              type="button"
+                              variant={paymentMethod === 'paypal' ? "default" : "outline"}
+                              className={`flex-1 flex items-center justify-center gap-2 ${
+                                paymentMethod === 'paypal' ? "bg-empower-gold hover:bg-empower-gold/90" : ""
+                              }`}
+                              onClick={() => setPaymentMethod('paypal')}
+                            >
+                              <span className="font-bold text-blue-600">Pay</span>
+                              <span className="font-bold text-blue-800">Pal</span>
+                            </Button>
+                          </div>
+                          
+                          <div className="border border-gray-200 rounded-md p-4 bg-gray-50">
+                            {paymentMethod === 'card' ? (
+                              <div className="space-y-4">
+                                <div>
+                                  <Label htmlFor="card-number">Card Number</Label>
+                                  <Input
+                                    id="card-number"
+                                    placeholder="1234 5678 9012 3456"
+                                    className="mt-1"
+                                  />
+                                </div>
+                                
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <Label htmlFor="expiry">Expiry Date</Label>
+                                    <Input
+                                      id="expiry"
+                                      placeholder="MM/YY"
+                                      className="mt-1"
+                                    />
+                                  </div>
+                                  
+                                  <div>
+                                    <Label htmlFor="cvc">CVC</Label>
+                                    <Input
+                                      id="cvc"
+                                      placeholder="123"
+                                      className="mt-1"
+                                    />
+                                  </div>
+                                </div>
+                                
+                                <div>
+                                  <Label htmlFor="cardholder">Cardholder Name</Label>
+                                  <Input
+                                    id="cardholder"
+                                    placeholder="Name on card"
+                                    className="mt-1"
+                                  />
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="text-center py-2">
+                                <p className="mb-2">You will be redirected to PayPal to complete your payment.</p>
+                                <div className="inline-block bg-blue-100 rounded-md px-4 py-2">
+                                  <span className="font-bold text-lg">
+                                    <span className="text-blue-600">Pay</span>
+                                    <span className="text-blue-800">Pal</span>
+                                  </span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                          
+                          <div className="flex items-center mt-4">
+                            <Checkbox id="terms" className="mr-2" />
+                            <Label htmlFor="terms" className="text-sm text-gray-600">
+                              I agree to the <a href="/terms" className="text-empower-terracotta hover:underline">Terms and Conditions</a> and <a href="/privacy" className="text-empower-terracotta hover:underline">Privacy Policy</a>
+                            </Label>
                           </div>
                         </div>
                         
                         <Button
                           type="submit"
-                          className="w-full bg-empower-gold hover:bg-empower-gold/90 text-white py-6 text-lg font-medium"
+                          className="w-full bg-empower-terracotta hover:bg-empower-terracotta/90 text-white py-6 text-lg font-medium flex items-center justify-center gap-2"
+                          disabled={isProcessing}
                         >
-                          Donate ${amount}
+                          {isProcessing ? (
+                            <>
+                              <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
+                              Processing...
+                            </>
+                          ) : (
+                            <>
+                              <Check size={20} />
+                              Complete Donation (${amount})
+                            </>
+                          )}
                         </Button>
+                        
+                        <div className="flex justify-center mt-4">
+                          <Button
+                            type="button"
+                            variant="link"
+                            className="text-sm text-empower-terracotta"
+                            onClick={() => {
+                              addToCart({
+                                productId: `donation-${causeId}`,
+                                quantity: 1,
+                                name: cause.title,
+                                description: `Donation to ${cause.title}`,
+                                price: amount,
+                                imageUrl: cause.imageUrl
+                              });
+                              toast.success('Added to cart!');
+                              navigate('/cart');
+                            }}
+                          >
+                            Add to cart instead
+                          </Button>
+                        </div>
                         
                         <p className="text-center text-sm text-gray-500 mt-4">
                           Your donation is secure and tax-deductible. You will receive a receipt by email.
@@ -261,6 +407,9 @@ const DonationCheckout: React.FC = () => {
                           <div className="flex justify-between font-semibold">
                             <span>Total</span>
                             <span>${amount}</span>
+                          </div>
+                          <div className="text-xs text-gray-500 mt-1 text-right">
+                            100% goes to the cause
                           </div>
                         </div>
                       </div>

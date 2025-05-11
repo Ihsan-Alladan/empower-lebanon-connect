@@ -1,11 +1,10 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { CartItem } from '@/types/product';
 import { products } from '@/data/products';
 
 interface CartContextType {
-  cartItems: CartItem[];
-  addToCart: (item: CartItem) => void;
+  cartItems: (CartItem & { name?: string; description?: string; price?: number; imageUrl?: string })[];
+  addToCart: (item: CartItem & { name?: string; description?: string; price?: number; imageUrl?: string }) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -16,7 +15,12 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<(CartItem & { 
+    name?: string; 
+    description?: string; 
+    price?: number; 
+    imageUrl?: string 
+  })[]>([]);
   
   // Load cart from localStorage on mount
   useEffect(() => {
@@ -36,11 +40,16 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.setItem('empowera-cart', JSON.stringify(cartItems));
   }, [cartItems]);
   
-  const addToCart = (item: CartItem) => {
+  const addToCart = (item: CartItem & { 
+    name?: string; 
+    description?: string; 
+    price?: number; 
+    imageUrl?: string 
+  }) => {
     setCartItems(prevItems => {
       // Check if item already exists in cart
       const existingItemIndex = prevItems.findIndex(i => 
-        i.productId === item.productId && 
+        i.productId === item.productId &&
         i.color === item.color && 
         i.size === item.size && 
         i.material === item.material
@@ -79,6 +88,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   
   // Calculate total price of items in cart
   const cartTotal = cartItems.reduce((total, item) => {
+    // If it's a custom item with price (like donation)
+    if (item.price !== undefined) {
+      return total + (item.price * item.quantity);
+    }
+    
+    // Otherwise look up product from catalog
     const product = products.find(p => p.id === item.productId);
     if (!product) return total;
     
