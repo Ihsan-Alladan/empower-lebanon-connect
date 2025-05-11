@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
@@ -78,6 +79,11 @@ const CourseDetail = () => {
     navigate('/learner-classroom', { state: { courseId: id } });
   };
 
+  // Ensure curriculum and review data exists with proper fallbacks
+  const curriculum = course.curriculum || course.modules || [];
+  const reviewsList = course.reviewsList || course.studentReviews || [];
+  const learningObjectives = course.learningObjectives || [];
+
   return (
     <PageTransition>
       <div className="min-h-screen flex flex-col">
@@ -88,7 +94,7 @@ const CourseDetail = () => {
           <section className="mb-8">
             <div className="relative rounded-xl overflow-hidden shadow-lg">
               <img 
-                src={course.image} 
+                src={course.image || course.thumbnail} 
                 alt={course.title} 
                 className="w-full h-64 object-cover object-center" 
               />
@@ -122,7 +128,7 @@ const CourseDetail = () => {
                 <ul>
                   <li className="flex items-center gap-2 mb-2">
                     <Calendar className="h-5 w-5 text-empower-terracotta" />
-                    <span className="font-medium">Start Date:</span> {course.startDate}
+                    <span className="font-medium">Start Date:</span> {course.startDate || 'Flexible'}
                   </li>
                   <li className="flex items-center gap-2 mb-2">
                     <Clock className="h-5 w-5 text-empower-terracotta" />
@@ -134,7 +140,7 @@ const CourseDetail = () => {
                   </li>
                   <li className="flex items-center gap-2 mb-2">
                     <Users className="h-5 w-5 text-empower-terracotta" />
-                    <span className="font-medium">Participants:</span> {course.participants}
+                    <span className="font-medium">Participants:</span> {course.participants || course.studentsEnrolled || 0}
                   </li>
                   <li className="flex items-center gap-2 mb-2">
                     <Star className="h-5 w-5 text-empower-terracotta" />
@@ -147,13 +153,13 @@ const CourseDetail = () => {
                 <h2 className="text-2xl font-semibold mb-4">Instructor</h2>
                 <div className="flex items-center gap-4">
                   <img 
-                    src={course.instructorAvatar} 
-                    alt={course.instructorName} 
+                    src={course.instructorAvatar || course.instructor?.avatar} 
+                    alt={course.instructorName || course.instructor?.name} 
                     className="w-16 h-16 rounded-full object-cover" 
                   />
                   <div>
-                    <h3 className="font-semibold text-lg">{course.instructorName}</h3>
-                    <p className="text-gray-600">{course.instructorTitle}</p>
+                    <h3 className="font-semibold text-lg">{course.instructorName || course.instructor?.name}</h3>
+                    <p className="text-gray-600">{course.instructorTitle || course.instructor?.title}</p>
                   </div>
                 </div>
               </div>
@@ -171,11 +177,11 @@ const CourseDetail = () => {
               
               <TabsContent value="overview" className="mt-6 animate-fade-in">
                 <h3 className="text-xl font-semibold mb-3">About this course</h3>
-                <p className="text-gray-700 mb-4">{course.overview}</p>
+                <p className="text-gray-700 mb-4">{course.overview || course.description}</p>
                 
                 <h3 className="text-xl font-semibold mb-3">What you'll learn</h3>
                 <ul className="list-disc list-inside text-gray-700 mb-4">
-                  {course.learningObjectives.map((objective, index) => (
+                  {learningObjectives.map((objective, index) => (
                     <li key={index}>{objective}</li>
                   ))}
                 </ul>
@@ -195,7 +201,7 @@ const CourseDetail = () => {
               <TabsContent value="curriculum" className="mt-6 animate-fade-in">
                 <h3 className="text-xl font-semibold mb-3">Course Curriculum</h3>
                 <ul className="space-y-4">
-                  {course.curriculum.map((module, index) => (
+                  {curriculum && curriculum.map((module, index) => (
                     <li key={index} className="bg-white rounded-lg shadow-md p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -206,10 +212,10 @@ const CourseDetail = () => {
                       </div>
                       <p className="text-gray-700 mt-2">{module.description}</p>
                       <ul className="mt-2 space-y-2">
-                        {module.lessons.map((lesson, index) => (
-                          <li key={index} className="flex items-center gap-2">
+                        {module.lessons && module.lessons.map((lesson, idx) => (
+                          <li key={idx} className="flex items-center gap-2">
                             <ChevronRight className="h-4 w-4 text-gray-500" />
-                            {lesson}
+                            {typeof lesson === 'string' ? lesson : lesson.title}
                           </li>
                         ))}
                       </ul>
@@ -220,26 +226,30 @@ const CourseDetail = () => {
               
               <TabsContent value="reviews" className="mt-6 animate-fade-in">
                 <h3 className="text-xl font-semibold mb-3">Course Reviews</h3>
-                {course.reviewsList.map((review, index) => (
-                  <div key={index} className="bg-white rounded-lg shadow-md p-4 mb-4">
-                    <div className="flex items-start gap-4">
-                      <img 
-                        src={review.avatar} 
-                        alt={review.name} 
-                        className="w-10 h-10 rounded-full object-cover" 
-                      />
-                      <div>
-                        <h4 className="font-semibold">{review.name}</h4>
-                        <div className="flex items-center gap-1 text-yellow-500 mb-1">
-                          {[...Array(review.rating)].map((_, i) => (
-                            <Star key={i} className="h-4 w-4" />
-                          ))}
+                {reviewsList && reviewsList.length > 0 ? (
+                  reviewsList.map((review, index) => (
+                    <div key={index} className="bg-white rounded-lg shadow-md p-4 mb-4">
+                      <div className="flex items-start gap-4">
+                        <img 
+                          src={review.avatar} 
+                          alt={review.name} 
+                          className="w-10 h-10 rounded-full object-cover" 
+                        />
+                        <div>
+                          <h4 className="font-semibold">{review.name}</h4>
+                          <div className="flex items-center gap-1 text-yellow-500 mb-1">
+                            {[...Array(review.rating)].map((_, i) => (
+                              <Star key={i} className="h-4 w-4" />
+                            ))}
+                          </div>
+                          <p className="text-gray-700">{review.comment}</p>
                         </div>
-                        <p className="text-gray-700">{review.comment}</p>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="text-gray-500">No reviews yet for this course.</p>
+                )}
               </TabsContent>
             </Tabs>
           </section>
