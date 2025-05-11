@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -6,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { Heart, DollarSign, TrendingUp, Plus, Edit2, Trash2 } from 'lucide-react';
+import { Heart, DollarSign, TrendingUp, Plus, Edit2, Trash2, Users } from 'lucide-react';
 
 interface DonationCampaign {
   id: string;
