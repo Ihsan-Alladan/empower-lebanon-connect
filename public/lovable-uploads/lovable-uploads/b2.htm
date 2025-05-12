@@ -1,0 +1,997 @@
+<!DOCTYPE html><html lang="en-US">
+	<head><meta charset="UTF-8"><script>if(navigator.userAgent.match(/MSIE|Internet Explorer/i)||navigator.userAgent.match(/Trident\/7\..*?rv:11/i)){var href=document.location.href;if(!href.match(/[?&]nowprocket/)){if(href.indexOf("?")==-1){if(href.indexOf("#")==-1){document.location.href=href+"?nowprocket=1"}else{document.location.href=href.replace("#","?nowprocket=1#")}}else{if(href.indexOf("#")==-1){document.location.href=href+"&nowprocket=1"}else{document.location.href=href.replace("#","&nowprocket=1#")}}}}</script><script>(()=>{class RocketLazyLoadScripts{constructor(){this.v="2.0.3",this.userEvents=["keydown","keyup","mousedown","mouseup","mousemove","mouseover","mouseenter","mouseout","mouseleave","touchmove","touchstart","touchend","touchcancel","wheel","click","dblclick","input","visibilitychange"],this.attributeEvents=["onblur","onclick","oncontextmenu","ondblclick","onfocus","onmousedown","onmouseenter","onmouseleave","onmousemove","onmouseout","onmouseover","onmouseup","onmousewheel","onscroll","onsubmit"]}async t(){this.i(),this.o(),/iP(ad|hone)/.test(navigator.userAgent)&&this.h(),this.u(),this.l(this),this.m(),this.k(this),this.p(this),this._(),await Promise.all([this.R(),this.L()]),this.lastBreath=Date.now(),this.S(this),this.P(),this.D(),this.O(),this.M(),await this.C(this.delayedScripts.normal),await this.C(this.delayedScripts.defer),await this.C(this.delayedScripts.async),this.F("domReady"),await this.T(),await this.j(),await this.I(),this.F("windowLoad"),await this.A(),window.dispatchEvent(new Event("rocket-allScriptsLoaded")),this.everythingLoaded=!0,this.lastTouchEnd&&await new Promise((t=>setTimeout(t,500-Date.now()+this.lastTouchEnd))),this.H(),this.F("all"),this.U(),this.W()}i(){this.CSPIssue=sessionStorage.getItem("rocketCSPIssue"),document.addEventListener("securitypolicyviolation",(t=>{this.CSPIssue||"script-src-elem"!==t.violatedDirective||"data"!==t.blockedURI||(this.CSPIssue=!0,sessionStorage.setItem("rocketCSPIssue",!0))}),{isRocket:!0})}o(){window.addEventListener("pageshow",(t=>{this.persisted=t.persisted,this.realWindowLoadedFired=!0}),{isRocket:!0}),window.addEventListener("pagehide",(()=>{this.onFirstUserAction=null}),{isRocket:!0})}h(){let t;function e(e){t=e}window.addEventListener("touchstart",e,{isRocket:!0}),window.addEventListener("touchend",(function i(o){Math.abs(o.changedTouches[0].pageX-t.changedTouches[0].pageX)<10&&Math.abs(o.changedTouches[0].pageY-t.changedTouches[0].pageY)<10&&o.timeStamp-t.timeStamp<200&&(o.target.dispatchEvent(new PointerEvent("click",{target:o.target,bubbles:!0,cancelable:!0,detail:1})),event.preventDefault(),window.removeEventListener("touchstart",e,{isRocket:!0}),window.removeEventListener("touchend",i,{isRocket:!0}))}),{isRocket:!0})}q(t){this.userActionTriggered||("mousemove"!==t.type||this.firstMousemoveIgnored?"keyup"===t.type||"mouseover"===t.type||"mouseout"===t.type||(this.userActionTriggered=!0,this.onFirstUserAction&&this.onFirstUserAction()):this.firstMousemoveIgnored=!0),"click"===t.type&&t.preventDefault(),this.savedUserEvents.length>0&&(t.stopPropagation(),t.stopImmediatePropagation()),"touchstart"===this.lastEvent&&"touchend"===t.type&&(this.lastTouchEnd=Date.now()),"click"===t.type&&(this.lastTouchEnd=0),this.lastEvent=t.type,this.savedUserEvents.push(t)}u(){this.savedUserEvents=[],this.userEventHandler=this.q.bind(this),this.userEvents.forEach((t=>window.addEventListener(t,this.userEventHandler,{passive:!1,isRocket:!0})))}U(){this.userEvents.forEach((t=>window.removeEventListener(t,this.userEventHandler,{passive:!1,isRocket:!0}))),this.savedUserEvents.forEach((t=>{t.target.dispatchEvent(new window[t.constructor.name](t.type,t))}))}m(){this.eventsMutationObserver=new MutationObserver((t=>{const e="return false";for(const i of t){if("attributes"===i.type){const t=i.target.getAttribute(i.attributeName);t&&t!==e&&(i.target.setAttribute("data-rocket-"+i.attributeName,t),i.target["rocket"+i.attributeName]=new Function("event",t),i.target.setAttribute(i.attributeName,e))}"childList"===i.type&&i.addedNodes.forEach((t=>{if(t.nodeType===Node.ELEMENT_NODE)for(const i of t.attributes)this.attributeEvents.includes(i.name)&&i.value&&""!==i.value&&(t.setAttribute("data-rocket-"+i.name,i.value),t["rocket"+i.name]=new Function("event",i.value),t.setAttribute(i.name,e))}))}})),this.eventsMutationObserver.observe(document,{subtree:!0,childList:!0,attributeFilter:this.attributeEvents})}H(){this.eventsMutationObserver.disconnect(),this.attributeEvents.forEach((t=>{document.querySelectorAll("[data-rocket-"+t+"]").forEach((e=>{e.setAttribute(t,e.getAttribute("data-rocket-"+t)),e.removeAttribute("data-rocket-"+t)}))}))}k(t){Object.defineProperty(HTMLElement.prototype,"onclick",{get(){return this.rocketonclick||null},set(e){this.rocketonclick=e,this.setAttribute(t.everythingLoaded?"onclick":"data-rocket-onclick","this.rocketonclick(event)")}})}S(t){function e(e,i){let o=e[i];e[i]=null,Object.defineProperty(e,i,{get:()=>o,set(s){t.everythingLoaded?o=s:e["rocket"+i]=o=s}})}e(document,"onreadystatechange"),e(window,"onload"),e(window,"onpageshow");try{Object.defineProperty(document,"readyState",{get:()=>t.rocketReadyState,set(e){t.rocketReadyState=e},configurable:!0}),document.readyState="loading"}catch(t){console.log("WPRocket DJE readyState conflict, bypassing")}}l(t){this.originalAddEventListener=EventTarget.prototype.addEventListener,this.originalRemoveEventListener=EventTarget.prototype.removeEventListener,this.savedEventListeners=[],EventTarget.prototype.addEventListener=function(e,i,o){o&&o.isRocket||!t.B(e,this)&&!t.userEvents.includes(e)||t.B(e,this)&&!t.userActionTriggered||e.startsWith("rocket-")||t.everythingLoaded?t.originalAddEventListener.call(this,e,i,o):t.savedEventListeners.push({target:this,remove:!1,type:e,func:i,options:o})},EventTarget.prototype.removeEventListener=function(e,i,o){o&&o.isRocket||!t.B(e,this)&&!t.userEvents.includes(e)||t.B(e,this)&&!t.userActionTriggered||e.startsWith("rocket-")||t.everythingLoaded?t.originalRemoveEventListener.call(this,e,i,o):t.savedEventListeners.push({target:this,remove:!0,type:e,func:i,options:o})}}F(t){"all"===t&&(EventTarget.prototype.addEventListener=this.originalAddEventListener,EventTarget.prototype.removeEventListener=this.originalRemoveEventListener),this.savedEventListeners=this.savedEventListeners.filter((e=>{let i=e.type,o=e.target||window;return"domReady"===t&&"DOMContentLoaded"!==i&&"readystatechange"!==i||("windowLoad"===t&&"load"!==i&&"readystatechange"!==i&&"pageshow"!==i||(this.B(i,o)&&(i="rocket-"+i),e.remove?o.removeEventListener(i,e.func,e.options):o.addEventListener(i,e.func,e.options),!1))}))}p(t){let e;function i(e){return t.everythingLoaded?e:e.split(" ").map((t=>"load"===t||t.startsWith("load.")?"rocket-jquery-load":t)).join(" ")}function o(o){function s(e){const s=o.fn[e];o.fn[e]=o.fn.init.prototype[e]=function(){return this[0]===window&&t.userActionTriggered&&("string"==typeof arguments[0]||arguments[0]instanceof String?arguments[0]=i(arguments[0]):"object"==typeof arguments[0]&&Object.keys(arguments[0]).forEach((t=>{const e=arguments[0][t];delete arguments[0][t],arguments[0][i(t)]=e}))),s.apply(this,arguments),this}}if(o&&o.fn&&!t.allJQueries.includes(o)){const e={DOMContentLoaded:[],"rocket-DOMContentLoaded":[]};for(const t in e)document.addEventListener(t,(()=>{e[t].forEach((t=>t()))}),{isRocket:!0});o.fn.ready=o.fn.init.prototype.ready=function(i){function s(){parseInt(o.fn.jquery)>2?setTimeout((()=>i.bind(document)(o))):i.bind(document)(o)}return t.realDomReadyFired?!t.userActionTriggered||t.fauxDomReadyFired?s():e["rocket-DOMContentLoaded"].push(s):e.DOMContentLoaded.push(s),o([])},s("on"),s("one"),s("off"),t.allJQueries.push(o)}e=o}t.allJQueries=[],o(window.jQuery),Object.defineProperty(window,"jQuery",{get:()=>e,set(t){o(t)}})}P(){const t=new Map;document.write=document.writeln=function(e){const i=document.currentScript,o=document.createRange(),s=i.parentElement;let n=t.get(i);void 0===n&&(n=i.nextSibling,t.set(i,n));const c=document.createDocumentFragment();o.setStart(c,0),c.appendChild(o.createContextualFragment(e)),s.insertBefore(c,n)}}async R(){return new Promise((t=>{this.userActionTriggered?t():this.onFirstUserAction=t}))}async L(){return new Promise((t=>{document.addEventListener("DOMContentLoaded",(()=>{this.realDomReadyFired=!0,t()}),{isRocket:!0})}))}async I(){return this.realWindowLoadedFired?Promise.resolve():new Promise((t=>{window.addEventListener("load",t,{isRocket:!0})}))}M(){this.pendingScripts=[];this.scriptsMutationObserver=new MutationObserver((t=>{for(const e of t)e.addedNodes.forEach((t=>{"SCRIPT"!==t.tagName||t.noModule||t.isWPRocket||this.pendingScripts.push({script:t,promise:new Promise((e=>{const i=()=>{const i=this.pendingScripts.findIndex((e=>e.script===t));i>=0&&this.pendingScripts.splice(i,1),e()};t.addEventListener("load",i,{isRocket:!0}),t.addEventListener("error",i,{isRocket:!0}),setTimeout(i,1e3)}))})}))})),this.scriptsMutationObserver.observe(document,{childList:!0,subtree:!0})}async j(){await this.J(),this.pendingScripts.length?(await this.pendingScripts[0].promise,await this.j()):this.scriptsMutationObserver.disconnect()}D(){this.delayedScripts={normal:[],async:[],defer:[]},document.querySelectorAll("script[type$=rocketlazyloadscript]").forEach((t=>{t.hasAttribute("data-rocket-src")?t.hasAttribute("async")&&!1!==t.async?this.delayedScripts.async.push(t):t.hasAttribute("defer")&&!1!==t.defer||"module"===t.getAttribute("data-rocket-type")?this.delayedScripts.defer.push(t):this.delayedScripts.normal.push(t):this.delayedScripts.normal.push(t)}))}async _(){await this.L();let t=[];document.querySelectorAll("script[type$=rocketlazyloadscript][data-rocket-src]").forEach((e=>{let i=e.getAttribute("data-rocket-src");if(i&&!i.startsWith("data:")){i.startsWith("//")&&(i=location.protocol+i);try{const o=new URL(i).origin;o!==location.origin&&t.push({src:o,crossOrigin:e.crossOrigin||"module"===e.getAttribute("data-rocket-type")})}catch(t){}}})),t=[...new Map(t.map((t=>[JSON.stringify(t),t]))).values()],this.N(t,"preconnect")}async $(t){if(await this.G(),!0!==t.noModule||!("noModule"in HTMLScriptElement.prototype))return new Promise((e=>{let i;function o(){(i||t).setAttribute("data-rocket-status","executed"),e()}try{if(navigator.userAgent.includes("Firefox/")||""===navigator.vendor||this.CSPIssue)i=document.createElement("script"),[...t.attributes].forEach((t=>{let e=t.nodeName;"type"!==e&&("data-rocket-type"===e&&(e="type"),"data-rocket-src"===e&&(e="src"),i.setAttribute(e,t.nodeValue))})),t.text&&(i.text=t.text),t.nonce&&(i.nonce=t.nonce),i.hasAttribute("src")?(i.addEventListener("load",o,{isRocket:!0}),i.addEventListener("error",(()=>{i.setAttribute("data-rocket-status","failed-network"),e()}),{isRocket:!0}),setTimeout((()=>{i.isConnected||e()}),1)):(i.text=t.text,o()),i.isWPRocket=!0,t.parentNode.replaceChild(i,t);else{const i=t.getAttribute("data-rocket-type"),s=t.getAttribute("data-rocket-src");i?(t.type=i,t.removeAttribute("data-rocket-type")):t.removeAttribute("type"),t.addEventListener("load",o,{isRocket:!0}),t.addEventListener("error",(i=>{this.CSPIssue&&i.target.src.startsWith("data:")?(console.log("WPRocket: CSP fallback activated"),t.removeAttribute("src"),this.$(t).then(e)):(t.setAttribute("data-rocket-status","failed-network"),e())}),{isRocket:!0}),s?(t.fetchPriority="high",t.removeAttribute("data-rocket-src"),t.src=s):t.src="data:text/javascript;base64,"+window.btoa(unescape(encodeURIComponent(t.text)))}}catch(i){t.setAttribute("data-rocket-status","failed-transform"),e()}}));t.setAttribute("data-rocket-status","skipped")}async C(t){const e=t.shift();return e?(e.isConnected&&await this.$(e),this.C(t)):Promise.resolve()}O(){this.N([...this.delayedScripts.normal,...this.delayedScripts.defer,...this.delayedScripts.async],"preload")}N(t,e){this.trash=this.trash||[];let i=!0;var o=document.createDocumentFragment();t.forEach((t=>{const s=t.getAttribute&&t.getAttribute("data-rocket-src")||t.src;if(s&&!s.startsWith("data:")){const n=document.createElement("link");n.href=s,n.rel=e,"preconnect"!==e&&(n.as="script",n.fetchPriority=i?"high":"low"),t.getAttribute&&"module"===t.getAttribute("data-rocket-type")&&(n.crossOrigin=!0),t.crossOrigin&&(n.crossOrigin=t.crossOrigin),t.integrity&&(n.integrity=t.integrity),t.nonce&&(n.nonce=t.nonce),o.appendChild(n),this.trash.push(n),i=!1}})),document.head.appendChild(o)}W(){this.trash.forEach((t=>t.remove()))}async T(){try{document.readyState="interactive"}catch(t){}this.fauxDomReadyFired=!0;try{await this.G(),document.dispatchEvent(new Event("rocket-readystatechange")),await this.G(),document.rocketonreadystatechange&&document.rocketonreadystatechange(),await this.G(),document.dispatchEvent(new Event("rocket-DOMContentLoaded")),await this.G(),window.dispatchEvent(new Event("rocket-DOMContentLoaded"))}catch(t){console.error(t)}}async A(){try{document.readyState="complete"}catch(t){}try{await this.G(),document.dispatchEvent(new Event("rocket-readystatechange")),await this.G(),document.rocketonreadystatechange&&document.rocketonreadystatechange(),await this.G(),window.dispatchEvent(new Event("rocket-load")),await this.G(),window.rocketonload&&window.rocketonload(),await this.G(),this.allJQueries.forEach((t=>t(window).trigger("rocket-jquery-load"))),await this.G();const t=new Event("rocket-pageshow");t.persisted=this.persisted,window.dispatchEvent(t),await this.G(),window.rocketonpageshow&&window.rocketonpageshow({persisted:this.persisted})}catch(t){console.error(t)}}async G(){Date.now()-this.lastBreath>45&&(await this.J(),this.lastBreath=Date.now())}async J(){return document.hidden?new Promise((t=>setTimeout(t))):new Promise((t=>requestAnimationFrame(t)))}B(t,e){return e===document&&"readystatechange"===t||(e===document&&"DOMContentLoaded"===t||(e===window&&"DOMContentLoaded"===t||(e===window&&"load"===t||e===window&&"pageshow"===t)))}static run(){(new RocketLazyLoadScripts).t()}}RocketLazyLoadScripts.run()})();</script>
+				
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<style>
+	::root, body {
+		--wp--style--global--content-size: 1080px;
+	}
+	.has-white-color a {
+		color: var(--wp--preset--color--white) !important;
+	}
+	p.has-white-color {
+		margin-bottom: 0;
+	}
+	body {
+		overflow-x: hidden;
+	}
+	@media only screen and (min-width: 1200px) {
+		.alignfull > div {
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+		.alignwide,
+		.alignfull {
+			margin: 0 calc(50% - 50vw);
+			max-width: 100vw;
+			width: 100vw;
+		}
+	}
+	@media (max-width: 599px) {
+		.alignfull > div .wp-block-column {
+			margin-bottom: 30px;
+		}
+	}
+</style>
+<meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
+	<!-- Hubbub v.2.25.2 https://morehubbub.com/ -->
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Crochet Purse Pattern (FREE) - Crochet Dreamz" />
+<meta property="og:description" content="Try this free crochet purse pattern to create your own unique accessory. It is an easy design made from 3 flat pieces." />
+<meta property="og:url" content="https://crochetdreamz.com/crochet-purse-pattern/" />
+<meta property="og:site_name" content="Crochet Dreamz" />
+<meta property="og:updated_time" content="2024-05-28T20:16:01+00:00" />
+<meta property="article:published_time" content="2023-05-26T21:14:39+00:00" />
+<meta property="article:modified_time" content="2024-05-28T20:16:01+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Crochet Purse Pattern (FREE) - Crochet Dreamz" />
+<meta name="twitter:description" content="Try this free crochet purse pattern to create your own unique accessory. It is an easy design made from 3 flat pieces." />
+<meta class="flipboard-article" content="Try this free crochet purse pattern to create your own unique accessory. It is an easy design made from 3 flat pieces." />
+<meta property="og:image" content="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-8.jpg" />
+<meta name="twitter:image" content="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-8.jpg" />
+<meta property="og:image:width" content="700" />
+<meta property="og:image:height" content="933" />
+<!-- Hubbub v.2.25.2 https://morehubbub.com/ -->
+
+	<!-- This site is optimized with the Yoast SEO plugin v24.9 - https://yoast.com/wordpress/plugins/seo/ -->
+	<title>Crochet Purse Pattern (FREE) - Crochet Dreamz</title><link rel="preload" data-rocket-preload as="image" href="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-600x801.jpg.webp" imagesrcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-600x801.jpg.webp 600w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-546x728.jpg.webp 546w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-360x480.jpg.webp 360w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-240x320.jpg.webp 240w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-640x853.jpg.webp 640w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-150x200.jpg.webp 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11.jpg.webp 700w" imagesizes="(max-width: 600px) 100vw, 600px" fetchpriority="high">
+	<meta name="description" content="Try this free crochet purse pattern to create your own unique accessory. It is an easy design made from 3 flat pieces." />
+	<link rel="canonical" href="https://crochetdreamz.com/crochet-purse-pattern/" />
+	<meta name="author" content="Shehnaaz" />
+	<meta name="twitter:label1" content="Written by" />
+	<meta name="twitter:data1" content="Shehnaaz" />
+	<meta name="twitter:label2" content="Est. reading time" />
+	<meta name="twitter:data2" content="12 minutes" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://crochetdreamz.com/crochet-purse-pattern/","url":"https://crochetdreamz.com/crochet-purse-pattern/","name":"Crochet Purse Pattern (FREE) - Crochet Dreamz","isPartOf":{"@id":"https://crochetdreamz.com/#website"},"primaryImageOfPage":{"@id":"https://crochetdreamz.com/crochet-purse-pattern/#primaryimage"},"image":{"@id":"https://crochetdreamz.com/crochet-purse-pattern/#primaryimage"},"thumbnailUrl":"https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-8.jpg","datePublished":"2023-05-27T02:14:39+00:00","dateModified":"2024-05-29T01:16:01+00:00","author":{"@id":"https://crochetdreamz.com/#/schema/person/f7abc52e9320685191e5343c92327e33"},"description":"Try this free crochet purse pattern to create your own unique accessory. It is an easy design made from 3 flat pieces.","breadcrumb":{"@id":"https://crochetdreamz.com/crochet-purse-pattern/#breadcrumb"},"inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https://crochetdreamz.com/crochet-purse-pattern/"]}]},{"@type":"ImageObject","inLanguage":"en-US","@id":"https://crochetdreamz.com/crochet-purse-pattern/#primaryimage","url":"https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-8.jpg","contentUrl":"https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-8.jpg","width":700,"height":933},{"@type":"BreadcrumbList","@id":"https://crochetdreamz.com/crochet-purse-pattern/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://crochetdreamz.com/"},{"@type":"ListItem","position":2,"name":"Free Crochet Purse Pattern, Luxe Handbag"}]},{"@type":"WebSite","@id":"https://crochetdreamz.com/#website","url":"https://crochetdreamz.com/","name":"Crochet Dreamz","description":"Trendy Crochet Patterns","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://crochetdreamz.com/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"en-US"},{"@type":"Person","@id":"https://crochetdreamz.com/#/schema/person/f7abc52e9320685191e5343c92327e33","name":"Shehnaaz","image":{"@type":"ImageObject","inLanguage":"en-US","@id":"https://crochetdreamz.com/#/schema/person/image/","url":"https://secure.gravatar.com/avatar/7f09a827ee685ee0f52e93b5e0ce2605?s=96&d=mm&r=g","contentUrl":"https://secure.gravatar.com/avatar/7f09a827ee685ee0f52e93b5e0ce2605?s=96&d=mm&r=g","caption":"Shehnaaz"},"url":"https://crochetdreamz.com/author/crochet_dreamz"}]}</script>
+	<!-- / Yoast SEO plugin. -->
+
+
+<link rel='dns-prefetch' href='//scripts.mediavine.com' />
+<link rel='dns-prefetch' href='//plausible.io' />
+<link rel='dns-prefetch' href='//www.googletagmanager.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//pipdigz.co.uk' />
+<link rel='dns-prefetch' href='//cdnjs.cloudflare.com' />
+<link rel='dns-prefetch' href='//a.mailmunch.co' />
+<link rel='dns-prefetch' href='//s7.addthis.com' />
+
+<link rel="alternate" type="application/rss+xml" title="Crochet Dreamz &raquo; Feed" href="https://crochetdreamz.com/feed" />
+<link rel="alternate" type="application/rss+xml" title="Crochet Dreamz &raquo; Comments Feed" href="https://crochetdreamz.com/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="Crochet Dreamz &raquo; Free Crochet Purse Pattern, Luxe Handbag Comments Feed" href="https://crochetdreamz.com/crochet-purse-pattern/feed" />
+<link rel="alternate" type="application/rss+xml" title="Crochet Dreamz &raquo; Stories Feed" href="https://crochetdreamz.com/web-stories/feed/"><style type="text/css" id="mv-trellis-custom-css">:root{--mv-trellis-color-link:var(--mv-trellis-color-primary);--mv-trellis-color-link-hover:var(--mv-trellis-color-secondary);--mv-trellis-font-body:"Century Gothic",CenturyGothic,AppleGothic,sans-serif;--mv-trellis-font-heading:Times New Roman;--mv-trellis-font-size-ex-sm:0.83375rem;--mv-trellis-font-size-sm:1.09375rem;--mv-trellis-font-size:1.25rem;--mv-trellis-font-size-lg:1.40625rem;--mv-trellis-color-primary:#DC143C;--mv-trellis-color-secondary:#800080;--mv-trellis-max-logo-size:150px;--mv-trellis-gutter-small:24px;--mv-trellis-gutter:48px;--mv-trellis-gutter-double:96px;--mv-trellis-gutter-large:96px;--mv-trellis-wisteria-desktop-logo-width:454px;--mv-trellis-color-background-accent:#fafafa;--mv-trellis-h1-font-color:#000000;--mv-trellis-h1-font-size:2.25rem;}</style><link rel='stylesheet' id='wp-block-library-css' href='https://crochetdreamz.com/wp-includes/css/dist/block-library/style.min.css?ver=6.7.2' type='text/css' media='all' />
+<style id='classic-theme-styles-inline-css' type='text/css'>
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<style id='global-styles-inline-css' type='text/css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--color--very-light-gray: #eeeeee;--wp--preset--color--very-dark-gray: #313131;--wp--preset--color--kb-palette-6: #cceff2;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+</style>
+<link rel='stylesheet' id='dpsp-frontend-style-pro-css' href='https://crochetdreamz.com/wp-content/plugins/social-pug/assets/dist/style-frontend-pro.css?ver=2.25.2' type='text/css' media='all' />
+<style id='dpsp-frontend-style-pro-inline-css' type='text/css'>
+
+				@media screen and ( max-width : 720px ) {
+					.dpsp-content-wrapper.dpsp-hide-on-mobile,
+					.dpsp-share-text.dpsp-hide-on-mobile {
+						display: none;
+					}
+					.dpsp-has-spacing .dpsp-networks-btns-wrapper li {
+						margin:0 2% 10px 0;
+					}
+					.dpsp-network-btn.dpsp-has-label:not(.dpsp-has-count) {
+						max-height: 40px;
+						padding: 0;
+						justify-content: center;
+					}
+					.dpsp-content-wrapper.dpsp-size-small .dpsp-network-btn.dpsp-has-label:not(.dpsp-has-count){
+						max-height: 32px;
+					}
+					.dpsp-content-wrapper.dpsp-size-large .dpsp-network-btn.dpsp-has-label:not(.dpsp-has-count){
+						max-height: 46px;
+					}
+				}
+			
+							.dpsp-button-style-2 .dpsp-networks-btns-content.dpsp-networks-btns-wrapper .dpsp-network-btn, .dpsp-button-style-2 .dpsp-networks-btns-content.dpsp-networks-btns-wrapper .dpsp-network-btn.dpsp-has-count {
+								--customNetworkColor: #41a4a9;
+								--customNetworkHoverColor: ;
+								background: #41a4a9;
+								border-color: #41a4a9;
+							}
+							.dpsp-button-style-2 .dpsp-networks-btns-content.dpsp-networks-btns-wrapper .dpsp-network-btn .dpsp-network-icon {
+								background: #3b9599;
+								border-color: #3b9599;
+							}
+						
+			@media screen and ( max-width : 720px ) {
+				aside#dpsp-floating-sidebar.dpsp-hide-on-mobile.opened {
+					display: none;
+				}
+			}
+			
+			@media screen and ( max-width : 720px ) {
+				aside#dpsp-floating-sidebar.dpsp-hide-on-mobile.opened {
+					display: none;
+				}
+			}
+			
+@media only screen and (min-width:701px) and (max-width: 1320px) {.has-grow-sidebar:not(.blog) .wrapper-content {padding-left:60px;}.footer:not(.blog) {padding-left:60px;}}@media only screen and (min-width:701px) and (max-width:1208px) {.archive-header, .page-header, .entry-header  { transform:translatex(-20px);}.entry-header h1.entry-title {text-align:center!important;} .entry-header .article-meta {text-align:center!important;} }@media only screen and (max-width:1208px) {.wrapper-content{display:block!important;}.has-grow-sidebar .widget-container.mv_trellis_mobile_hide{display:none;}}
+@media only screen and (max-width:600px) {.hide-featured-image-on-mobile #content .article-featured-img img{display: none;}}
+</style>
+<link rel='stylesheet' id='tablepress-default-css' href='https://crochetdreamz.com/wp-content/plugins/tablepress/css/build/default.css?ver=3.1.1' type='text/css' media='all' />
+<style id='kadence-blocks-global-variables-inline-css' type='text/css'>
+:root {--global-kb-font-size-sm:clamp(0.8rem, 0.73rem + 0.217vw, 0.9rem);--global-kb-font-size-md:clamp(1.1rem, 0.995rem + 0.326vw, 1.25rem);--global-kb-font-size-lg:clamp(1.75rem, 1.576rem + 0.543vw, 2rem);--global-kb-font-size-xl:clamp(2.25rem, 1.728rem + 1.63vw, 3rem);--global-kb-font-size-xxl:clamp(2.5rem, 1.456rem + 3.26vw, 4rem);--global-kb-font-size-xxxl:clamp(2.75rem, 0.489rem + 7.065vw, 6rem);}:root {--global-palette1: #3182CE;--global-palette2: #2B6CB0;--global-palette3: #1A202C;--global-palette4: #2D3748;--global-palette5: #4A5568;--global-palette6: #718096;--global-palette7: #EDF2F7;--global-palette8: #F7FAFC;--global-palette9: #ffffff;}
+</style>
+<link rel='stylesheet' id='mv-trellis-wisteria-css' href='https://crochetdreamz.com/wp-content/themes/wisteria-trellis/assets/dist/css/main.1.0.2.css?ver=1.0.2' type='text/css' media='all' />
+<link rel='stylesheet' id='inc-frontend-css' href='https://crochetdreamz.com/wp-content/plugins/imark-interactive-toolkit/frontend/css/inc-frontend-style.css?ver=2.3.19' type='text/css' media='all' />
+<link rel='stylesheet' id='imp-frontend-css' href='https://crochetdreamz.com/wp-content/plugins/imark-interactive-toolkit/frontend/css/imp-frontend-style.css?ver=2.3.19' type='text/css' media='all' />
+<style id="kadence_blocks_palette_css">:root .has-kb-palette-6-color{color:#cceff2}:root .has-kb-palette-6-background-color{background-color:#cceff2}</style>				<script id="mv-trellis-localModel" data-cfasync="false">
+					window.$adManagementConfig = window.$adManagementConfig || {};
+					window.$adManagementConfig.web = window.$adManagementConfig.web || {};
+					window.$adManagementConfig.web.localModel = {"optimize_mobile_pagespeed":true,"optimize_desktop_pagespeed":true,"content_selector":".mvt-content","footer_selector":"footer.footer","content_selector_mobile":".mvt-content","comments_selector":"","sidebar_atf_selector":".sidebar-primary .widget-container:nth-last-child(3)","sidebar_atf_position":"afterend","sidebar_btf_selector":".mv-sticky-slot","sidebar_btf_position":"beforeend","content_stop_selector":"","sidebar_btf_stop_selector":"footer.footer","custom_css":"","ad_box":true,"sidebar_minimum_width":"1209","native_html_templates":{"feed":"<aside class=\"mv-trellis-native-ad-feed\"><div class=\"native-ad-image\" style=\"min-height:320px;min-width:240px;\"><div style=\"display: none;\" data-native-size=\"[300, 250]\" data-native-type=\"video\"><\/div><div style=\"width:240px;height:320px;\" data-native-size=\"[240,320]\" data-native-type=\"image\"><\/div><\/div><div class=\"native-content\"><img class=\"native-icon\" data-native-type=\"icon\" style=\"max-height: 50px; width: auto;\"><h2 data-native-len=\"80\" data-native-d-len=\"120\" data-native-type=\"title\"><\/h2><div data-native-len=\"140\" data-native-d-len=\"340\" data-native-type=\"body\"><\/div><div class=\"cta-container\"><div data-native-type=\"sponsoredBy\"><\/div><a rel=\"nonopener sponsor\" data-native-type=\"clickUrl\" class=\"button article-read-more\"><span data-native-type=\"cta\"><\/span><\/a><\/div><\/div><\/aside>","content":"<aside class=\"mv-trellis-native-ad-content\"><div class=\"native-ad-image\"><div style=\"display: none;\" data-native-size=\"[300, 250]\" data-native-type=\"video\"><\/div><div data-native-size=\"[300,300]\" data-native-type=\"image\"><\/div><\/div><div class=\"native-content\"><img class=\"native-icon\" data-native-type=\"icon\" style=\"max-height: 50px; width: auto;\"><h2 data-native-len=\"80\" data-native-d-len=\"120\" data-native-type=\"title\"><\/h2><div data-native-len=\"140\" data-native-d-len=\"340\" data-native-type=\"body\"><\/div><div class=\"cta-container\"><div data-native-type=\"sponsoredBy\"><\/div><a data-native-type=\"clickUrl\" class=\"button article-read-more\"><span data-native-type=\"cta\"><\/span><\/a><\/div><\/div><\/aside>","sidebar":"<aside class=\"mv-trellis-native-ad-sidebar\"><div class=\"native-ad-image\"><div style=\"display: none;\" data-native-size=\"[300, 250]\" data-native-type=\"video\"><\/div><div data-native-size=\"[300,300]\" data-native-type=\"image\"><\/div><\/div><img class=\"native-icon\" data-native-type=\"icon\" style=\"max-height: 50px; width: auto;\"><h3 data-native-len=\"80\"><a rel=\"nonopener sponsor\" data-native-type=\"title\"><\/a><\/h3><div data-native-len=\"140\" data-native-d-len=\"340\" data-native-type=\"body\"><\/div><div data-native-type=\"sponsoredBy\"><\/div><a data-native-type=\"clickUrl\" class=\"button article-read-more\"><span data-native-type=\"cta\"><\/span><\/a><\/aside>","sticky_sidebar":"<aside class=\"mv-trellis-native-ad-sticky-sidebar\"><div class=\"native-ad-image\"><div style=\"display: none;\" data-native-size=\"[300, 250]\" data-native-type=\"video\"><\/div><div data-native-size=\"[300,300]\" data-native-type=\"image\"><\/div><\/div><img class=\"native-icon\" data-native-type=\"icon\" style=\"max-height: 50px; width: auto;\"><h3 data-native-len=\"80\" data-native-type=\"title\"><\/h3><div data-native-len=\"140\" data-native-d-len=\"340\" data-native-type=\"body\"><\/div><div data-native-type=\"sponsoredBy\"><\/div><a data-native-type=\"clickUrl\" class=\"button article-read-more\"><span data-native-type=\"cta\"><\/span><\/a><\/aside>","adhesion":"<aside class=\"mv-trellis-native-ad-adhesion\"><div data-native-size=\"[100,100]\" data-native-type=\"image\"><\/div><div class=\"native-content\"><img class=\"native-icon\" data-native-type=\"icon\" style=\"max-height: 50px; width: auto;\"><div data-native-type=\"sponsoredBy\"><\/div><h6 data-native-len=\"80\" data-native-d-len=\"120\" data-native-type=\"title\"><\/h6><\/div><div class=\"cta-container\"><a class=\"button article-read-more\" data-native-type=\"clickUrl\"><span data-native-type=\"cta\"><\/span><\/a><\/div><\/aside>"}};
+				</script>
+			<script type="text/javascript" async="async" fetchpriority="high" data-noptimize="1" data-cfasync="false" src="https://scripts.mediavine.com/tags/crochet-dreamz.js?ver=6.7.2" id="mv-script-wrapper-js"></script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" defer data-domain='crochetdreamz.com' data-api='https://plausible.io/api/event' data-cfasync='false' data-rocket-src="https://plausible.io/js/plausible.outbound-links.js?ver=2.3.1" id="plausible-analytics-js"></script>
+<script type="text/javascript" id="plausible-analytics-js-after">
+/* <![CDATA[ */
+window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=UA-113065847-1" id="ga/js-js"></script>
+<script type="text/javascript" src="https://crochetdreamz.com/wp-content/plugins/mediavine-trellis-images/assets/dist/IO.0.7.1.js?ver=0.7.1" id="mv-trellis-images/intersection-observer-js"></script>
+<script type="text/javascript" src="https://crochetdreamz.com/wp-content/plugins/mediavine-trellis-images/assets/dist/main.0.7.1.js?ver=0.7.1" id="mv-trellis-images/webp-check-js"></script>
+<link rel="https://api.w.org/" href="https://crochetdreamz.com/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://crochetdreamz.com/wp-json/wp/v2/posts/32465" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://crochetdreamz.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 6.7.2" />
+<link rel='shortlink' href='https://crochetdreamz.com/?p=32465' />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://crochetdreamz.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcrochetdreamz.com%2Fcrochet-purse-pattern%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://crochetdreamz.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcrochetdreamz.com%2Fcrochet-purse-pattern%2F&#038;format=xml" />
+<script type="rocketlazyloadscript">
+	function reveal() {
+		var reveals = document.querySelectorAll("#imark_newsletter, .not-a-thing");
+		let bodyElement = document.getElementsByTagName('body')[0];
+		for (var i = 0; i < reveals.length; i++) {
+			var windowHeight = window.innerHeight;
+			var elementTop = reveals[i].getBoundingClientRect().top;
+			var elementVisible = reveals[i].offsetHeight - 50;
+			var divID = reveals[i].getAttribute('id');
+			if (elementTop < windowHeight - elementVisible) {
+				if(! reveals[i].classList.contains('animate_triggred') ){
+					bodyElement.classList.add("promote-active");
+					reveals[i].classList.add("active-promote");
+				}
+			}
+			if ( elementTop < 200 ) {
+				reveals[i].classList.remove("active-promote");
+				reveals[i].classList.add("animate_triggred");
+				bodyElement.classList.remove("promote-active");
+			}
+		}
+	}
+
+	var animItem = [];
+	document.addEventListener("DOMContentLoaded", function(event) {
+		window.addEventListener("scroll", reveal);
+		var cookies_disable = '';
+		if( getCookie('promote_disable') == 'wait' && cookies_disable == '' ) {
+			var reveals = document.querySelectorAll(".imark_newsletter");
+			reveals[0].classList.add("animate_triggred");
+		}
+		// reveal();
+	});
+	
+	window.addEventListener("click", function(){
+		let bodyElement = document.getElementsByTagName('body')[0];
+		var reveals = document.querySelectorAll("#imark_newsletter, .not-a-thing");
+		bodyElement.classList.remove("promote-active");
+		for (var i = 0; i < reveals.length; i++) {
+			if( reveals[i].classList.contains('active-promote') ){
+				reveals[i].classList.add("animate_triggred");
+			}
+			if( reveals[i].classList.contains('imark_newsletter') ) { 
+				setCookie( 'promote_disable', 'wait', 1 );
+			}
+		}
+	});
+
+	function setCookie( cname, cvalue, exdays ) {
+		const d = new Date();
+		d.setTime( d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+		let expires = "expires="+d.toUTCString();
+		document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+	}
+
+	function getCookie(cname) {
+		let name = cname + "=";
+		let ca = document.cookie.split(';');
+		for(let i = 0; i < ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == ' ') {
+				c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return "";
+	}
+</script><style>
+.not-a-thing {
+    padding: 15px;
+}
+.not-a-thing.active-promote {
+    position: relative;
+    z-index: 999999999999;
+    box-shadow: 0px 0px 2px 2px #fff;
+    background: #fff;
+}
+body.promote-disable .not-a-thing {
+    position: initial;
+    z-index: initial;
+    padding: initial;
+    background: initial;
+    box-shadow: initial;
+}
+body.promote-active article.post:before, body.promote-active article.page:before {
+    content: "";
+    background: #000;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    opacity: 0.8;
+}
+</style><script type="rocketlazyloadscript" async data-rocket-src="https://js.ravelry.com/cart/2.0.js" data-rocket-type="text/javascript"></script><script type="rocketlazyloadscript" data-rocket-type='text/javascript' data-cfasync='false'>var _mmunch = {'front': false, 'page': false, 'post': false, 'category': false, 'author': false, 'search': false, 'attachment': false, 'tag': false};_mmunch['post'] = true; _mmunch['postData'] = {"ID":32465,"post_name":"free-crochet-purse-pattern","post_title":"Free Crochet Purse Pattern, Luxe Handbag","post_type":"post","post_author":"1","post_status":"publish"}; _mmunch['postCategories'] = [{"term_id":598,"name":"Crochet Bags, Baskets, and Cozies","slug":"bags-baskets-cases","term_group":0,"term_taxonomy_id":598,"taxonomy":"category","description":"","parent":0,"count":25,"filter":"raw","cat_ID":598,"category_count":25,"category_description":"","cat_name":"Crochet Bags, Baskets, and Cozies","category_nicename":"bags-baskets-cases","category_parent":0}]; _mmunch['postTags'] = false; _mmunch['postAuthor'] = {"name":"Shehnaaz","ID":1};</script><script type="rocketlazyloadscript" data-cfasync="false" data-rocket-src="//a.mailmunch.co/app/v1/site.js" id="mailmunch-script" data-plugin="mailmunch" data-mailmunch-site-id="517903" async></script><meta name="hubbub-info" description="Hubbub Pro 2.25.2"><meta name='plausible-analytics-version' content='2.3.1' />
+<style type="text/css" id="mv-trellis-native-ads-css">:root{--mv-trellis-color-native-ad-background: var(--mv-trellis-color-background-accent,#fafafa);}[class*="mv-trellis-native-ad"]{display:flex;flex-direction:column;text-align:center;align-items:center;padding:10px;margin:15px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;background-color:var(--mv-trellis-color-native-ad-background,#fafafa)}[class*="mv-trellis-native-ad"] [data-native-type="image"]{background-repeat:no-repeat;background-size:cover;background-position:center center;}[class*="mv-trellis-native-ad"] [data-native-type="sponsoredBy"]{font-size:0.875rem;text-decoration:none;transition:color .3s ease-in-out,background-color .3s ease-in-out;}[class*="mv-trellis-native-ad"] [data-native-type="title"]{line-height:1;margin:10px 0;max-width:100%;text-decoration:none;transition:color .3s ease-in-out,background-color .3s ease-in-out;}[class*="mv-trellis-native-ad"] [data-native-type="title"],[class*="mv-trellis-native-ad"] [data-native-type="sponsoredBy"]{color:var(--mv-trellis-color-link)}[class*="mv-trellis-native-ad"] [data-native-type="title"]:hover,[class*="mv-trellis-native-ad"] [data-native-type="sponsoredBy"]:hover{color:var(--mv-trellis-color-link-hover)}[class*="mv-trellis-native-ad"] [data-native-type="body"]{max-width:100%;}[class*="mv-trellis-native-ad"] .article-read-more{display:inline-block;font-size:0.875rem;line-height:1.25;margin-left:0px;margin-top:10px;padding:10px 20px;text-align:right;text-decoration:none;text-transform:uppercase;}@media only screen and (min-width:600px){.mv-trellis-native-ad-feed,.mv-trellis-native-ad-content{flex-direction:row;padding:0;text-align:left;}.mv-trellis-native-ad-feed .native-content,.mv-trellis-native-ad-content{padding:10px}}.mv-trellis-native-ad-feed [data-native-type="image"]{max-width:100%;height:auto;}.mv-trellis-native-ad-feed .cta-container,.mv-trellis-native-ad-content .cta-container{display:flex;flex-direction:column;align-items:center;}@media only screen and (min-width:600px){.mv-trellis-native-ad-feed .cta-container,.mv-trellis-native-ad-content .cta-container{flex-direction:row;align-items: flex-end;justify-content:space-between;}}@media only screen and (min-width:600px){.mv-trellis-native-ad-content{padding:0;}.mv-trellis-native-ad-content .native-content{max-width:calc(100% - 300px);padding:15px;}}.mv-trellis-native-ad-content [data-native-type="image"]{height:300px;max-width:100%;width:300px;}.mv-trellis-native-ad-sticky-sidebar,.mv-trellis-native-ad-sidebar{font-size:var(--mv-trellis-font-size-sm,0.875rem);margin:20px 0;max-width:300px;padding:0 0 var(--mv-trellis-gutter,20px);}.mv-trellis-native-ad-sticky-sidebar [data-native-type="image"],.mv-trellis-native-ad-sticky-sidebar [data-native-type="image"]{height:300px;margin:0 auto;max-width:100%;width:300px;}.mv-trellis-native-ad-sticky-sidebar [data-native-type="body"]{padding:0 var(--mv-trellis-gutter,20px);}.mv-trellis-native-ad-sticky-sidebar [data-native-type="sponsoredBy"],.mv-trellis-native-ad-sticky-sidebar [data-native-type="sponsoredBy"]{display:inline-block}.mv-trellis-native-ad-sticky-sidebar h3,.mv-trellis-native-ad-sidebar h3 [data-native-type="title"]{margin:15px auto;width:300px;}.mv-trellis-native-ad-adhesion{background-color:transparent;flex-direction:row;height:90px;margin:0;padding:0 20px;}.mv-trellis-native-ad-adhesion [data-native-type="image"]{height:120px;margin:0 auto;max-width:100%;transform:translateY(-20px);width:120px;}.mv-trellis-native-ad-adhesion [data-native-type="sponsoredBy"],.mv-trellis-native-ad-adhesion  .article-read-more{font-size:0.75rem;}.mv-trellis-native-ad-adhesion [data-native-type="title"]{font-size:1rem;}.mv-trellis-native-ad-adhesion .native-content{display:flex;flex-direction:column;justify-content:center;padding:0 10px;text-align:left;}.mv-trellis-native-ad-adhesion .cta-container{display:flex;align-items:center;}</style><link rel="icon" href="https://crochetdreamz.com/wp-content/uploads/2021/12/cropped-Crochet-Hat-Digram-as-Favicon-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://crochetdreamz.com/wp-content/uploads/2021/12/cropped-Crochet-Hat-Digram-as-Favicon-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://crochetdreamz.com/wp-content/uploads/2021/12/cropped-Crochet-Hat-Digram-as-Favicon-180x180.png" />
+<meta name="msapplication-TileImage" content="https://crochetdreamz.com/wp-content/uploads/2021/12/cropped-Crochet-Hat-Digram-as-Favicon-270x270.png" />
+		<style type="text/css" id="wp-custom-css">
+			#menu-footer li.menu-item {
+	display: inline-block !important;
+	margin-right: 20px;
+}
+.footer-container {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+.middle-footer {
+	min-width: 100% !important;
+	order: 3;
+}
+#menu-footer {
+	display: flex !important;
+	justify-content: center !important;
+}
+.left-footer, .right-footer {
+	order: 5;
+	display: flex !important;
+	justify-content: center !important;
+}
+
+.middle-footer p {text-align: center;}
+
+.posted-on, .excerpt-excerpt {display: none;}
+
+.home .featured-hero, .header-singular {background: white !important;}
+
+.menu-item a, .excerpt-title a {color: #333 !important;}
+.search-toggle .magnifying-glass, button.nav-toggle svg {fill: #333}
+
+table {word-break: initial !important;}
+.blog .excerpt-excerpt { display: none!important; }
+
+/* Adjust Caption Font */
+.wp-caption-text > span {
+	font-size: 14pt !important;
+}
+
+.page-id-38205 main#content h2 {
+	position: relative;
+	text-align: center;
+}
+
+.page-id-38205 main#content h2:after {
+	content: '';
+	background: #cceff2;
+	position: absolute;
+	width: 100%;
+	height: 20px;
+	left: 0;
+	bottom: 0px;
+	z-index: -1;
+}
+
+.kb-row-layout-wrap.alignnone {
+	margin: 0 auto;
+}
+
+.header .menu-item a, .header .sub-menu .menu-item a {
+	font-size: 20px;
+	letter-spacing: 1px;
+}
+
+/* Buy Buttons */
+.buy-buttons {
+ display: flex;
+	justify-content: center;
+}
+.buy-buttons .btn {
+	margin: 0 10px;
+	font-weight: bold;
+}
+
+.buy-buttons a:hover {
+	color: #fff;
+}		</style>
+				<meta name="google-site-verification" content="08LFO5X1Qr0p2q4Y5Ij7_eW8W4FYX9XOZR83Xx27XhI" />
+<meta http-equiv="Content-Security-Policy" content="block-all-mixed-content" />
+<script type="rocketlazyloadscript" async data-rocket-src="https://js.ravelry.com/cart/2.0.js" data-rocket-type="text/javascript"></script>	<style id="rocket-lazyrender-inline-css">[data-wpr-lazyrender] {content-visibility: auto;}</style><meta name="generator" content="WP Rocket 3.18.3" data-wpr-features="wpr_delay_js wpr_automatic_lazy_rendering wpr_oci wpr_desktop wpr_dns_prefetch" /></head>
+	<body class="post-template-default single single-post postid-32465 single-format-standard mvt-no-js has-grow-sidebar wisteria-trellis promote-enable-check">
+				<a href="#content" class="screen-reader-text">Skip to Content</a>
+		<div  class="before-content">
+						<header  class="header">
+	<div  class="wrapper wrapper-header">
+				<div class="header-container">
+			<button class="search-toggle">
+	<span class="screen-reader-text">Search</span>
+	<svg version="1.1" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 12 12" class="magnifying-glass">
+		<title>Magnifying Glass</title>
+		<path d="M10.37 9.474L7.994 7.1l-.17-.1a3.45 3.45 0 0 0 .644-2.01A3.478 3.478 0 1 0 4.99 8.47c.75 0 1.442-.24 2.01-.648l.098.17 2.375 2.373c.19.188.543.142.79-.105s.293-.6.104-.79zm-5.38-2.27a2.21 2.21 0 1 1 2.21-2.21A2.21 2.21 0 0 1 4.99 7.21z"></path>
+	</svg>
+</button>
+<div id="search-container">
+	<form role="search" method="get" class="searchform" action="https://crochetdreamz.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field"
+			placeholder="Enter search keywords"
+			value="" name="s"
+			title="Search for:" />
+	</label>
+	<input type="submit" class="search-submit" value="Search" />
+</form>
+	<button class="search-close">
+		<span class="screen-reader-text">Close Search</span>
+		&times;
+	</button>
+</div>
+			<div class="nav">
+	<div class="wrapper nav-wrapper">
+						<button class="nav-toggle" aria-label="Menu"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32px" height="32px">
+	<path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z" />
+</svg>
+</button>
+				<nav id="primary-nav" class="nav-container nav-closed"><ul id="menu-menu-1" class="nav-list"><li id="menu-item-1530" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1530"><a href="https://crochetdreamz.com"><span>Home</span></a></li>
+<li id="menu-item-1531" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-1531"><a href="#"><span>Crochet Patterns</span><span class="toggle-sub-menu"><svg class="icon-arrow-down" width="6" height="4" viewBox="0 0 6 4" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3 3.5L0 0L6 0L3 3.5Z" fill="#41A4A9"></path></svg></span></a>
+<ul class="sub-menu">
+	<li id="menu-item-1670" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1670"><a href="https://crochetdreamz.com/free-crochet-patterns">Free Patterns</a></li>
+	<li id="menu-item-1672" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1672"><a href="https://crochetdreamz.com/womens-crochet-patterns">Women</a></li>
+	<li id="menu-item-1671" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1671"><a href="https://crochetdreamz.com/babies-children-crochet-patterns">Babies &#038; Children</a></li>
+	<li id="menu-item-1669" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1669"><a href="https://crochetdreamz.com/all-crochet-patterns">All Crochet Patterns</a></li>
+</ul>
+</li>
+<li id="menu-item-1535" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1535"><a href="https://crochetdreamz.com/how-crochet-tutorials"><span>Tutorials</span></a></li>
+<li id="menu-item-38321" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-38321"><a target="_blank" href="https://page.co/3yyc2"><span>Subscribe</span></a></li>
+</ul></nav>	</div>
+</div>
+
+
+							<div class="header-logo-container">
+					<a href="https://crochetdreamz.com/" title="Crochet Dreamz" class="header-logo"><picture><source srcset="https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo.png.webp, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo.png.webp 3402w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-600x146.png.webp 600w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-1440x351.png.webp 1440w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-1536x374.png.webp 1536w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-2048x499.png.webp 2048w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-735x179.png.webp 735w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-335x82.png.webp 335w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-347x85.png.webp 347w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-520x127.png.webp 520w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-640x156.png.webp 640w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-768x187.png.webp 768w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-960x234.png.webp 960w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-1080x263.png.webp 1080w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-150x37.png.webp 150w" type="image/webp"><img src="https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo.png" srcset="https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo.png 3402w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-600x146.png 600w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-1440x351.png 1440w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-1536x374.png 1536w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-2048x499.png 2048w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-735x179.png 735w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-335x82.png 335w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-347x85.png 347w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-520x127.png 520w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-640x156.png 640w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-768x187.png 768w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-960x234.png 960w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-1080x263.png 1080w, https://crochetdreamz.com/wp-content/uploads/2021/12/Crochet-Dreamz-Logo-150x37.png 150w" sizes="(max-width: 760px) calc(100vw - 96px), 720px" class="size-full size-ratio-full wp-image-20327 header-logo-img ggnoads" alt="Crochet Dreamz" data-pin-nopin="true" height="829" width="3402"></picture></a>				</div>
+					</div>
+	</div>
+	</header>
+					</div>
+		
+	<!-- Main Content Section -->
+	<div  class="content">
+		<div  class="wrapper wrapper-content">
+					<main  id="content" class="content-container">
+				
+		<article id="post-32465" class="article-post article post-32465 post type-post status-publish format-standard has-post-thumbnail hentry category-bags-baskets-cases mv-content-wrapper grow-content-body">
+
+			<header class="entry-header header-singular wrapper">
+		<h1 class="entry-title article-heading">Free Crochet Purse Pattern, Luxe Handbag</h1>
+	<div class="article-meta post-meta-wrapper post-meta-single post-meta-single-top no-author-meta">
+			<p class="meta-cats"><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="https://crochetdreamz.com/category/bags-baskets-cases" rel="category tag">Crochet Bags, Baskets, and Cozies</a></span></p>
+		</div>
+
+</header>
+
+			<div class="entry-content mvt-content">
+					<p class="dpsp-share-text " style="margin-bottom:10px">
+		Share the Love!	</p>
+	<div id="dpsp-content-top" class="dpsp-content-wrapper dpsp-shape-rounded dpsp-size-small dpsp-has-spacing dpsp-no-labels-mobile dpsp-show-on-mobile dpsp-show-total-share-count dpsp-show-total-share-count-after dpsp-button-style-2" style="min-height:32px;position:relative">
+	
+<div class="dpsp-total-share-wrapper" style="position:absolute;right:0">
+	<span class="dpsp-icon-total-share"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 26 32"><path d="M20.8 20.8q1.984 0 3.392 1.376t1.408 3.424q0 1.984-1.408 3.392t-3.392 1.408-3.392-1.408-1.408-3.392q0-0.192 0.032-0.448t0.032-0.384l-8.32-4.992q-1.344 1.024-2.944 1.024-1.984 0-3.392-1.408t-1.408-3.392 1.408-3.392 3.392-1.408q1.728 0 2.944 0.96l8.32-4.992q0-0.128-0.032-0.384t-0.032-0.384q0-1.984 1.408-3.392t3.392-1.408 3.392 1.376 1.408 3.424q0 1.984-1.408 3.392t-3.392 1.408q-1.664 0-2.88-1.024l-8.384 4.992q0.064 0.256 0.064 0.832 0 0.512-0.064 0.768l8.384 4.992q1.152-0.96 2.88-0.96z"></path></svg></span>
+	<span class="dpsp-total-share-count">7350</span>
+	<span>shares</span>
+</div>
+<ul class="dpsp-networks-btns-wrapper dpsp-networks-btns-share dpsp-networks-btns-content dpsp-column-3 dpsp-has-button-icon-animation" style="padding:0;margin:0;list-style-type:none">
+<li class="dpsp-network-list-item dpsp-network-list-item-pinterest" style="float:left">
+	<button data-href="https://pinterest.com/pin/create/button/?url=https%3A%2F%2Fcrochetdreamz.com%2Fcrochet-purse-pattern%2F&#038;media=&#038;description=Try%20this%20free%20crochet%20bag%20pattern%20that%20is%20easy%20yet%20cute.%20The%20crochet%20bag%20pattern%20helps%20you%20make%20a%20cute%20crossbody%20bag%20or%20clutch%20with%20T%20shirt%20yarn.%20This%20is%20a%20crochet%20project%20that%20even%20beginners%20can%20make.%20" class="dpsp-network-btn dpsp-pinterest dpsp-first dpsp-has-label dpsp-has-label-mobile" aria-label="Save to Pinterest" title="Save to Pinterest" style="font-size:14px;padding:0rem;max-height:32px">	<span class="dpsp-network-icon "><span class="dpsp-network-icon-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 23 32"><path d="M0 10.656q0-1.92 0.672-3.616t1.856-2.976 2.72-2.208 3.296-1.408 3.616-0.448q2.816 0 5.248 1.184t3.936 3.456 1.504 5.12q0 1.728-0.32 3.36t-1.088 3.168-1.792 2.656-2.56 1.856-3.392 0.672q-1.216 0-2.4-0.576t-1.728-1.568q-0.16 0.704-0.48 2.016t-0.448 1.696-0.352 1.28-0.48 1.248-0.544 1.12-0.832 1.408-1.12 1.536l-0.224 0.096-0.16-0.192q-0.288-2.816-0.288-3.36 0-1.632 0.384-3.68t1.184-5.152 0.928-3.616q-0.576-1.152-0.576-3.008 0-1.504 0.928-2.784t2.368-1.312q1.088 0 1.696 0.736t0.608 1.824q0 1.184-0.768 3.392t-0.8 3.36q0 1.12 0.8 1.856t1.952 0.736q0.992 0 1.824-0.448t1.408-1.216 0.992-1.696 0.672-1.952 0.352-1.984 0.128-1.792q0-3.072-1.952-4.8t-5.12-1.728q-3.552 0-5.952 2.304t-2.4 5.856q0 0.8 0.224 1.536t0.48 1.152 0.48 0.832 0.224 0.544q0 0.48-0.256 1.28t-0.672 0.8q-0.032 0-0.288-0.032-0.928-0.288-1.632-0.992t-1.088-1.696-0.576-1.92-0.192-1.92z"></path></svg></span></span>
+	<span class="dpsp-network-label dpsp-network-hide-label-mobile">Pin </span></button></li>
+
+<li class="dpsp-network-list-item dpsp-network-list-item-facebook" style="float:left">
+	<a rel="nofollow noopener" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcrochetdreamz.com%2Fcrochet-purse-pattern%2F&#038;t=Crochet%20Purse%20Pattern%20%28FREE%29%20-%20Crochet%20Dreamz" class="dpsp-network-btn dpsp-facebook dpsp-has-label dpsp-has-label-mobile" target="_blank" aria-label="Share on Facebook" title="Share on Facebook" style="font-size:14px;padding:0rem;max-height:32px">	<span class="dpsp-network-icon "><span class="dpsp-network-icon-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 18 32"><path d="M17.12 0.224v4.704h-2.784q-1.536 0-2.080 0.64t-0.544 1.92v3.392h5.248l-0.704 5.28h-4.544v13.568h-5.472v-13.568h-4.544v-5.28h4.544v-3.904q0-3.328 1.856-5.152t4.96-1.824q2.624 0 4.064 0.224z"></path></svg></span></span>
+	<span class="dpsp-network-label dpsp-network-hide-label-mobile">Facebook</span></a></li>
+
+<li class="dpsp-network-list-item dpsp-network-list-item-flipboard" style="float:left">
+	<a rel="nofollow noopener" href="https://share.flipboard.com/bookmarklet/popout?v=2&#038;url=https%3A%2F%2Fcrochetdreamz.com%2Fcrochet-purse-pattern%2F&#038;title=Crochet%20Purse%20Pattern%20%28FREE%29%20-%20Crochet%20Dreamz" class="dpsp-network-btn dpsp-flipboard dpsp-has-label dpsp-has-label-mobile" target="_blank" aria-label="Share on Flipboard" title="Share on Flipboard" style="font-size:14px;padding:0rem;max-height:32px">	<span class="dpsp-network-icon "><span class="dpsp-network-icon-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M0 0h10.272v32h-10.272v-32zM11.328 11.328h10.4v10.4h-10.4v-10.4zM11.328 0h20.672v10.272h-20.672v-10.272z"></path></svg></span></span>
+	<span class="dpsp-network-label dpsp-network-hide-label-mobile">Flipboard</span></a></li>
+
+<li class="dpsp-network-list-item dpsp-network-list-item-email" style="float:left">
+	<a rel="nofollow noopener" href="mailto:?subject=Crochet%20Purse%20Pattern%20%28FREE%29%20-%20Crochet%20Dreamz&#038;body=https%3A%2F%2Fcrochetdreamz.com%2Fcrochet-purse-pattern%2F" class="dpsp-network-btn dpsp-email dpsp-last dpsp-has-label dpsp-has-label-mobile" target="_blank" aria-label="Send over email" title="Send over email" style="font-size:14px;padding:0rem;max-height:32px">	<span class="dpsp-network-icon "><span class="dpsp-network-icon-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 28 32"><path d="M18.56 17.408l8.256 8.544h-25.248l8.288-8.448 4.32 4.064zM2.016 6.048h24.32l-12.16 11.584zM20.128 15.936l8.224-7.744v16.256zM0 24.448v-16.256l8.288 7.776z"></path></svg></span></span>
+	<span class="dpsp-network-label dpsp-network-hide-label-mobile">Email</span></a></li>
+</ul></div>
+<style>img#mv-trellis-img-1::before{padding-top:133.5%; }img#mv-trellis-img-1{display:block;}img#mv-trellis-img-2::before{padding-top:133.5%; }img#mv-trellis-img-2{display:block;}img#mv-trellis-img-3::before{padding-top:75%; }img#mv-trellis-img-3{display:block;}img#mv-trellis-img-4::before{padding-top:133.5%; }img#mv-trellis-img-4{display:block;}img#mv-trellis-img-5::before{padding-top:133.5%; }img#mv-trellis-img-5{display:block;}img#mv-trellis-img-6::before{padding-top:133.5%; }img#mv-trellis-img-6{display:block;}img#mv-trellis-img-7::before{padding-top:74.888888888889%; }img#mv-trellis-img-7{display:block;}img#mv-trellis-img-8::before{padding-top:74.888888888889%; }img#mv-trellis-img-8{display:block;}img#mv-trellis-img-9::before{padding-top:74.888888888889%; }img#mv-trellis-img-9{display:block;}img#mv-trellis-img-10::before{padding-top:74.888888888889%; }img#mv-trellis-img-10{display:block;}img#mv-trellis-img-11::before{padding-top:74.888888888889%; }img#mv-trellis-img-11{display:block;}img#mv-trellis-img-12::before{padding-top:74.888888888889%; }img#mv-trellis-img-12{display:block;}img#mv-trellis-img-13::before{padding-top:74.888888888889%; }img#mv-trellis-img-13{display:block;}img#mv-trellis-img-14::before{padding-top:74.888888888889%; }img#mv-trellis-img-14{display:block;}img#mv-trellis-img-15::before{padding-top:220.05494505495%; }img#mv-trellis-img-15{display:block;}</style><div class="mailmunch-forms-before-post" style="display: none !important;"></div><div>
+<h2><strong>Free Crochet Purse Pattern for Summer</strong></h2>
+<div>
+<p>This lovely crochet purse pattern is perfect for everyday use. It is a simple design made from just 3 pieces that people of all skill levels can enjoy.</p>
+</div>
+<p>&nbsp;</p>
+<h2><noscript><img fetchpriority="high" decoding="async" class="aligncenter wp-image-32505 size-medium" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-600x801.jpg" alt="Finished crochet purse pattern displayed on fur" width="600" height="801" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-600x801.jpg 600w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-546x728.jpg 546w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-360x480.jpg 360w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-240x320.jpg 240w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-640x853.jpg 640w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-150x200.jpg 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11.jpg 700w" sizes="(max-width: 600px) 100vw, 600px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11.jpg"></noscript><img fetchpriority="high" decoding="async" class="aligncenter wp-image-32505 size-medium eager-load" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20600%20801'%3E%3Crect%20width='600'%20height='801'%20style='fill:%23e3e3e3'/%3E%3C/svg%3E" alt="Finished crochet purse pattern displayed on fur" width="600" height="801" sizes="(max-width: 600px) 100vw, 600px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11.jpg" id="mv-trellis-img-1" loading="eager" data-src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-600x801.jpg.webp" data-srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-600x801.jpg.webp 600w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-546x728.jpg.webp 546w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-360x480.jpg.webp 360w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-240x320.jpg.webp 240w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-640x853.jpg.webp 640w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11-150x200.jpg.webp 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-11.jpg.webp 700w" data-svg="1" data-trellis-processed="1"></h2>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</div>
+<h2><noscript><img decoding="async" class="aligncenter wp-image-32497 size-medium" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3-600x801.jpg" alt="Side view of crochet purse showing the shape and size of the bag" width="600" height="801" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3-600x801.jpg 600w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3-546x728.jpg 546w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3-360x480.jpg 360w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3-240x320.jpg 240w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3-640x853.jpg 640w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3-150x200.jpg 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3.jpg 700w" sizes="(max-width: 600px) 100vw, 600px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3.jpg"></noscript><img decoding="async" class="aligncenter wp-image-32497 size-medium lazyload" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3-600x801.jpg.webp" alt="Side view of crochet purse showing the shape and size of the bag" width="600" height="801" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3-600x801.jpg.webp 600w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3-546x728.jpg.webp 546w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3-360x480.jpg.webp 360w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3-240x320.jpg.webp 240w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3-640x853.jpg.webp 640w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3-150x200.jpg.webp 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3.jpg.webp 700w" sizes="(max-width: 600px) 100vw, 600px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-3.jpg" id="mv-trellis-img-2" loading="lazy" data-trellis-processed="1"></h2>
+<p>&nbsp;</p>
+<p>The great texture of this stitch pattern is achieved using only basic crochet stitches like single crochet, double crochet, and half double crochet.&nbsp;</p>
+<h2>&nbsp;</h2>
+<div>
+<h2><noscript><img decoding="async" class="aligncenter wp-image-32501 size-medium" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-7-600x450.jpg" alt="Crochet purse placed flat on white fur fabric" width="600" height="450" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-7-600x450.jpg 600w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-7-728x546.jpg 728w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-7-150x113.jpg 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-7.jpg 800w" sizes="(max-width: 760px) calc(100vw - 96px), 720px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-7.jpg"></noscript><img decoding="async" class="aligncenter wp-image-32501 size-medium lazyload" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-7-600x450.jpg.webp" alt="Crochet purse placed flat on white fur fabric" width="600" height="450" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-7-600x450.jpg.webp 600w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-7-728x546.jpg.webp 728w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-7-150x113.jpg.webp 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-7.jpg.webp 800w" sizes="(max-width: 760px) calc(100vw - 96px), 720px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-7.jpg" id="mv-trellis-img-3" loading="lazy" data-trellis-processed="1"></h2>
+<p>&nbsp;</p>
+</div>
+<p>This free pattern designed using t-shirt yarn will make the perfect size bag to carry all your essentials like keys, cards, and your phone.&nbsp;</p>
+<p>&nbsp;</p>
+<div>
+<h2><noscript><img loading="lazy" decoding="async" class="aligncenter wp-image-32495 size-medium" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1-600x801.jpg" alt="Finished purse crochet pattern displayed on a mannequin" width="600" height="801" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1-600x801.jpg 600w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1-546x728.jpg 546w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1-360x480.jpg 360w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1-240x320.jpg 240w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1-640x853.jpg 640w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1-150x200.jpg 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1.jpg 700w" sizes="auto, (max-width: 600px) 100vw, 600px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1.jpg"></noscript><img loading="lazy" decoding="async" class="aligncenter wp-image-32495 size-medium lazyload" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1-600x801.jpg.webp" alt="Finished purse crochet pattern displayed on a mannequin" width="600" height="801" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1-600x801.jpg.webp 600w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1-546x728.jpg.webp 546w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1-360x480.jpg.webp 360w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1-240x320.jpg.webp 240w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1-640x853.jpg.webp 640w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1-150x200.jpg.webp 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1.jpg.webp 700w" sizes="auto, (max-width: 600px) 100vw, 600px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-1.jpg" id="mv-trellis-img-4" data-trellis-processed="1"></h2>
+<p>&nbsp;</p>
+<h2>&nbsp;</h2>
+<h2><noscript><img loading="lazy" decoding="async" class="aligncenter wp-image-32506 size-medium" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12-600x801.jpg" alt='""' width="600" height="801" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12-600x801.jpg 600w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12-546x728.jpg 546w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12-360x480.jpg 360w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12-240x320.jpg 240w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12-640x853.jpg 640w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12-150x200.jpg 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12.jpg 700w" sizes="auto, (max-width: 600px) 100vw, 600px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12.jpg"></noscript><img loading="lazy" decoding="async" class="aligncenter wp-image-32506 size-medium lazyload" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12-600x801.jpg.webp" alt='""' width="600" height="801" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12-600x801.jpg.webp 600w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12-546x728.jpg.webp 546w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12-360x480.jpg.webp 360w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12-240x320.jpg.webp 240w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12-640x853.jpg.webp 640w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12-150x200.jpg.webp 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12.jpg.webp 700w" sizes="auto, (max-width: 600px) 100vw, 600px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-12.jpg" id="mv-trellis-img-5" data-trellis-processed="1"></h2>
+<p>&nbsp;</p>
+</div>
+<p>Little bags like these can make a special gift for someone you love. How I wish I had published it before Mother&rsquo;s Day! Oh well, maybe you can make it for the next holiday season.&nbsp;</p>
+<div>
+<p>&nbsp;</p>
+<h2><noscript><img loading="lazy" decoding="async" class="aligncenter wp-image-32503 size-medium" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9-600x801.jpg" alt="Closeup of the crochet purse showing bumpy texture" width="600" height="801" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9-600x801.jpg 600w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9-546x728.jpg 546w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9-360x480.jpg 360w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9-240x320.jpg 240w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9-640x853.jpg 640w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9-150x200.jpg 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9.jpg 700w" sizes="auto, (max-width: 600px) 100vw, 600px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9.jpg"></noscript><img loading="lazy" decoding="async" class="aligncenter wp-image-32503 size-medium lazyload" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9-600x801.jpg.webp" alt="Closeup of the crochet purse showing bumpy texture" width="600" height="801" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9-600x801.jpg.webp 600w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9-546x728.jpg.webp 546w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9-360x480.jpg.webp 360w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9-240x320.jpg.webp 240w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9-640x853.jpg.webp 640w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9-150x200.jpg.webp 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9.jpg.webp 700w" sizes="auto, (max-width: 600px) 100vw, 600px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-pattern-9.jpg" id="mv-trellis-img-6" data-trellis-processed="1"></h2>
+<p>&nbsp;</p>
+</div>
+<p>So, without further ado, let&rsquo;s get to work on this beautiful pattern.</p>
+<p>&nbsp;</p>
+<div>
+<p><strong>Disclosure:</strong>&nbsp;This post might contain affiliate links and I might earn a small commission if you purchase using my links. You can read my full&nbsp;<a href="https://crochetdreamz.com/disclosure-policy" target="_blank" rel="noopener noreferrer">Disclosure Policy</a>&nbsp;here.</p>
+<p>&nbsp;</p>
+<h2 style="text-align: center;">Crochet Purse Pattern</h2>
+<p style="text-align: left;"><strong><a style="font-size: 16px;" href="http://www.ravelry.com/purchase/crochet-dreamz/857414">You can work from the free pattern below or purchase an ad-free PDF for $3.99 here. You will receive a download link once you make payment and click &ldquo;Return to Merchant&rdquo;.</a></strong></p>
+</div>
+<p>&nbsp;</p>
+<div>
+<h3><strong>Materials</strong></h3>
+<p>This crochet purse has a stiff body and a lining that will help the bag hold its shape.&nbsp;</p>
+<p><strong>1.</strong> <a href="https://amzn.to/3opnbJv" target="_blank" rel="noopener sponsored">Bernat Maker Home Dec yarn</a> in color Cream. It is a size 5 Bulky weight t-shirt yarn.</p>
+<p><strong>2.</strong> <a href="https://amzn.to/3Eb8c9w" target="_blank" rel="noopener sponsored">An H (5)mm hook. </a>Use any size hook to attain the gauge.</p>
+<p><strong>3.</strong> <a href="https://amzn.to/3oyk3uO" target="_blank" rel="noopener sponsored">Golden Chain Strap.</a> I used 47.2&Prime; strap for my bag. You can also use a crochet strap in its place.</p>
+<p><strong>4.</strong> <a href="https://amzn.to/3IKZBO7" target="_blank" rel="noopener sponsored">Tuck Lock.</a> You can also use a magnetic snap button in its place.</p>
+<p><strong>5.</strong> Lining fabric- 1/4&nbsp; yard.</p>
+<p><strong>6.</strong> <a href="https://amzn.to/3M0Y7yA" target="_blank" rel="noopener sponsored">Plastic canvas</a> to stiffen the body of the bag.&nbsp;</p>
+<p><strong>7.</strong> A matching sewing thread and needle to attach the plastic canvas and the lining to your purse.</p>
+<p><strong>8.</strong> A plastic tapestry needle to weave in the ends. A metal one will get caught in t-shirt yarn.</p>
+<p><strong>9.</strong> A metal tapestry needle to weave in yarn through the chain strap. The plastic ones have a big eye that cannot pass through the chain links.&nbsp;</p>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h3><strong>Finished Size of the Crochet Purse</strong></h3>
+<div>
+<p>9-1/4 inches wide and 8&Prime; tall.</p>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div>
+<h3>Yardage</h3>
+<p>400 Yards</p>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div>
+<h3><strong>Stitch Abbreviations</strong></h3>
+<p><strong>ch:</strong> chain</p>
+<p><strong>st: </strong>stitch</p>
+<div align="JUSTIFY"><strong>sc:</strong> single crochet</div>
+<div align="JUSTIFY">&nbsp;</div>
+<div align="JUSTIFY"><strong>hdc:</strong> half double crochet</div>
+<div align="JUSTIFY">&nbsp;</div>
+<div align="JUSTIFY"><strong>dc:</strong> double crochet</div>
+<div align="JUSTIFY">&nbsp;</div>
+<div align="JUSTIFY"><strong>sk:</strong> skip</div>
+<div align="JUSTIFY">&nbsp;</div>
+</div>
+<div align="JUSTIFY">&nbsp;</div>
+<div align="JUSTIFY">&nbsp;</div>
+<div>
+<h3><strong>Gauge</strong></h3>
+<h3 style="text-align: center;"><strong>Pattern for Gauge Swatch</strong></h3>
+<p>Ch 22, and follow Rows 1 and 2 under &lsquo;Body of the Purse&rsquo; below. You will have 5 repeats at the end of each row. Repeat Row 2 until you have completed a total of 11 rows and measure for gauge.&nbsp;</p>
+<p>&nbsp;</p>
+<h3><strong>Gauge</strong></h3>
+<p>3 Repeats and 7-3/4 Rows= 3&Prime; square</p>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div>
+<h3><strong>Stitch Explanation</strong></h3>
+<div><strong>Cluster (cl):</strong> YO, insert your hook into the st specified and pull up a loop, YO and pull through 2 loops, keeping the remaining 2 loops on your hook, YO again, insert your hook into the same st and pull up a loop, YO and pull through 2 loops, YO and pull through the remaining 3 loops on your hook.&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div><strong>sc2tog: </strong>Pull up a loop in the first stitch specified, pull up another loop in the next st, YO, and pull through all the 3 loops on your hook.</div>
+</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<h3><strong>More Crochet Purse Patterns</strong>&nbsp;</h3>
+<p><strong><a href="https://crochetdreamz.com/granny-square-bag-pattern/" target="_blank" rel="noopener">Granny Square Bag</a></strong></p>
+<p><strong><a href="https://crochetdreamz.com/crochet-tote-bag/" target="_blank" rel="noopener">Crochet Tote Bag Pattern</a></strong></p>
+<p><strong><a href="https://crochetdreamz.com/crochet-water-bottle-holder-pattern/" target="_blank" rel="noopener">How to Crochet a Water Bottle Holder&nbsp;</a></strong></p>
+<p>&nbsp;</p>
+<div>&nbsp;</div>
+<h2 style="text-align: center;"><strong>Free Purse Crochet Pattern</strong></h2>
+<h2 style="text-align: center;"><strong>Body of the Purse</strong></h2>
+<div id="attachment_32535" style="width: 460px" class="wp-caption aligncenter"><noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32535" class="wp-image-32535 size-full" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-3.jpg" alt="Rectangular body of the crochet purse " width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-3.jpg 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-3-150x112.jpg 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-3.jpg"></noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32535" class="wp-image-32535 size-full lazyload" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-3.jpg.webp" alt="Rectangular body of the crochet purse " width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-3.jpg.webp 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-3-150x112.jpg.webp 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-3.jpg" id="mv-trellis-img-7" data-trellis-processed="1"><p id="caption-attachment-32535" class="wp-caption-text"><span style="font-size: 12pt;"><strong>1.</strong> Body of the bag completed </span></p></div>
+<div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>Chain 36+2. The initial chain is a multiple of 4 + 2 extra chains.</div>
+</div>
+<div dir="ltr">
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div><strong>Row 1:</strong> (1 sc, hdc, 2 dc) all into the 2nd ch from hook, *sk next 3 chs, (sc, hdc, 2 dc) into the next ch, repeat from * until 4 chs left, sk next 3 sts, 1 sc in last st, turn. &mdash;&ndash;9 repeats</div>
+</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div><strong>Pattern Note:</strong> In the next Row, when you skip 3 sts, the first of the 3 sts you have to skip will be partly hidden under the 2 dc sts, so do not miss it.</div>
+<div>&nbsp;</div>
+<div dir="ltr">
+<div>&nbsp;</div>
+<div><strong>Row 2:</strong> Ch 1, (1 sc, hdc, 2 dc) in the same st as ch 1, *sk next 3 st, (1sc, hdc, 2 dc)in the next st, repeat from * until 4 sts left, sk 3 sts, 1 sc in the last st, turn.&mdash;&mdash;9 repeats</div>
+<div>&nbsp;</div>
+<div>
+<p>&nbsp;</p>
+<p>Repeat Row 2 until you have completed 45 rows in total. Do not fasten off.</p>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<div>
+<h2 style="text-align: center;"><strong>Shaping the Flap</strong></h2>
+<h3><strong>Pattern Note</strong></h3>
+<p>Now we will add 3 decrease rows to taper the rectangular piece. This tapered side will form the flap that closes the bag.&nbsp;</p>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<div>
+<p><strong>Row 46:</strong> Ch 1, (1 sc, dc2tog) in same the st as ch 1, *sk next 3 st, (1sc, hdc, 2 dc) in the next st, repeat from * until 2 repeats or total 8 sts are left, sk next 3 sts, (1 sc, dc2tog)in next st, sk next 3 sts, 1 sc in last st, turn.</p>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<div>
+<p><strong>Row 47:</strong> Ch 1, (1 sc, 1 dc)in the same st as ch 1, sk next st, (1sc, hdc, 2 dc) in the next st *sk next 3 st, (1sc, hdc, 2 dc) in the next st, repeat from * until 6 sts are left, sk next 3 sts, (1 sc, 1 dc)in next st, sk next st, 1 sc in last st, turn.&nbsp;</p>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<div>
+<p><strong>Row 48:</strong> Ch 1, 1 sc in same st as ch 1, sk next st, (1sc, hdc, 1 dc) in the next st, *sk next 3 st, (1sc, hdc, 2 dc) in the next st, repeat from * until 6 sts are left, sk next 3 sts, (1sc, hdc, 1 dc) in the next st, sk next st, 1 sc in the last st. Fasten off.&nbsp;</p>
+</div>
+<p>&nbsp;</p>
+<div>
+<p>Now your work will measure 9&Prime; wide (measured at the widest part) and 18-1/2&Prime; long.&nbsp;</p>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<div>
+<h2 style="text-align: center;"><strong>Finishing the Body</strong></h2>
+<p>Weave in any tails left. You will have to use a plastic tapestry needle to weave in the ends with any T-shirt yarn like this or it will get caught in the yarn fabric. Work your needle in and out through the gaps in the stitches and do not poke into the yarn itself.&nbsp;</p>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<h2 style="text-align: center;"><strong>Sides&nbsp;</strong></h2>
+<div id="attachment_32540" style="width: 460px" class="wp-caption aligncenter"><noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32540" class="wp-image-32540 size-full" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-4.jpg" alt="Sides pieces of the crochet purse " width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-4.jpg 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-4-150x112.jpg 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-4.jpg"></noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32540" class="wp-image-32540 size-full lazyload" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-4.jpg.webp" alt="Sides pieces of the crochet purse " width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-4.jpg.webp 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-4-150x112.jpg.webp 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-4.jpg" id="mv-trellis-img-8" data-trellis-processed="1"><p id="caption-attachment-32540" class="wp-caption-text"><span style="font-size: 14pt;"><strong> 2.</strong> Two side pieces completed</span></p></div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong>Pattern Note:</strong> The sides are worked with 2 strands to make the bag sturdy.&nbsp;</p>
+<p>&nbsp;</p><div class="mailmunch-forms-in-post-middle" style="display: none !important;"></div>
+<p><strong>Row 1:</strong> With H hook and 2 strands of yarn held together, ch 7, 1 sc in 2nd ch from hook and each ch across to end, turn.&mdash;&ndash;6 sc</p>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<p><strong>Row 2:</strong> Ch 1 (does not count as a st here and throughout), 2 sc in the first st (same st as beginning ch 1), 1 sc in next 4 sts, 2 sc in last st, turn.&mdash;&ndash;8 sc</p>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<p><strong>Row 3 to 7:</strong> Ch 1, 1 sc in the same st as beginning ch-1, 1 sc in each st across to end, turn.&mdash;&mdash;-8 sc</p>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<p><strong>Row 8:</strong> Ch 1, sc2tog across the same st as beginning ch-1 and the next st, 1 sc in next 4 sts, sc2tog in the last 2 sts, turn.&mdash;&mdash;6 sc</p>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<p><strong>Row 9:</strong> Ch 1, 1 sc in the same st as beginning ch-1, 1 sc in each st across to end, turn.&mdash;6sc</p>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<p>Repeat the above row 7 more times until you have a total of 16 Rows. Fasten off and weave in the ends.</p>
+</div>
+<p>&nbsp;</p>
+<div dir="ltr">
+<p>Your piece will now measure 5-3/4&Prime; long and approximately 3&Prime; wide at the widest part. Make one more side piece following the same pattern.&nbsp;</p>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<div>
+<h2 style="text-align: center;"><strong>Making the Crochet Purse Stiff</strong></h2>
+<div id="attachment_32537" style="width: 460px" class="wp-caption aligncenter"><noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32537" class="wp-image-32537 size-full" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-Stiffening-Copy.jpg" alt="Plastic canvas placed on the body of the bag and showing points to sew" width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-Stiffening-Copy.jpg 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-Stiffening-Copy-150x112.jpg 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-Stiffening-Copy.jpg"></noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32537" class="wp-image-32537 size-full lazyload" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-Stiffening-Copy.jpg.webp" alt="Plastic canvas placed on the body of the bag and showing points to sew" width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-Stiffening-Copy.jpg.webp 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-Stiffening-Copy-150x112.jpg.webp 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Crochet-Purse-Stiffening-Copy.jpg" id="mv-trellis-img-9" data-trellis-processed="1"><p id="caption-attachment-32537" class="wp-caption-text"><span style="font-size: 14pt;"><strong>&nbsp;3.</strong> Place plastic canvas 1/2&rdquo; away from the edges and sew at 6 points as shown</span></p></div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Cut out a piece of plastic canvas that is 8&Prime; wide and 11&Prime; long. The plastic canvas will only be attached to the bottom of the bag and will not extend across the flap.</p>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<div>
+<p>Place the canvas on the lower part of the bag near the foundation chain side. Make sure it is placed in the middle about half an inch away from the edges.&nbsp;</p>
+</div>
+</div>
+<p>&nbsp;</p>
+<div dir="ltr">
+<div>
+<p>Using a regular sewing needle and matching thread, sew down the plastic canvas to the crochet fabric at a&nbsp; few places. I sewed down at 6 points along the shorter sides a<mark>s shown in pic 3 above.&nbsp;</mark></p>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<div>
+<h2 style="text-align: center;"><strong>Lining the Purse</strong></h2>
+<div id="attachment_32538" style="width: 460px" class="wp-caption aligncenter"><noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32538" class="wp-image-32538 size-full" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-5.jpg" alt="Lining with edges folded and ironed" width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-5.jpg 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-5-150x112.jpg 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-5.jpg"></noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32538" class="wp-image-32538 size-full lazyload" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-5.jpg.webp" alt="Lining with edges folded and ironed" width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-5.jpg.webp 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-5-150x112.jpg.webp 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-5.jpg" id="mv-trellis-img-10" data-trellis-processed="1"><p id="caption-attachment-32538" class="wp-caption-text"><span style="font-size: 14pt;"><strong>4.</strong> Fold the edges and iron in place</span></p></div>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<div>
+<p>Place the crochet piece on the lining fabric and trace it around. Cut the lining out, fold 1/4 inch along the longer sides and 1/2 inch along the shorter sides, and iron to hold the folds in place.&nbsp;</p>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<div id="attachment_32539" style="width: 460px" class="wp-caption aligncenter"><noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32539" class="wp-image-32539 size-full" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-7.jpg" alt="Lining placed on the body of the crochet purse" width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-7.jpg 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-7-150x112.jpg 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-7.jpg"></noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32539" class="wp-image-32539 size-full lazyload" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-7.jpg.webp" alt="Lining placed on the body of the crochet purse" width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-7.jpg.webp 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-7-150x112.jpg.webp 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-7.jpg" id="mv-trellis-img-11" data-trellis-processed="1"><p id="caption-attachment-32539" class="wp-caption-text"><span style="font-size: 14pt;"><strong>5.</strong> Place the folded lining on top of the plastic canvas, and sew it around.</span></p></div>
+<div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Place the lining on top of the crochet fabric folded side facing down. It should now completely hide the plastic canvas <mark>but leave the edges of the crochet fabric free to work a sc row later.</mark> Use the sewing needle and thread to whip-stitch the lining to the bag all around.&nbsp;</p>
+<p>&nbsp;</p>
+</div>
+<p>&nbsp;</p>
+</div>
+<h2 style="text-align: center;"><strong>Attaching the Sides&nbsp;</strong></h2>
+<div id="attachment_32541" style="width: 460px" class="wp-caption aligncenter"><noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32541" class="wp-image-32541 size-full" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-8.jpg" alt="Attach the sides to the body of the bag" width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-8.jpg 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-8-150x112.jpg 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-8.jpg"></noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32541" class="wp-image-32541 size-full lazyload" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-8.jpg.webp" alt="Attach the sides to the body of the bag" width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-8.jpg.webp 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-8-150x112.jpg.webp 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-8.jpg" id="mv-trellis-img-12" data-trellis-processed="1"><p id="caption-attachment-32541" class="wp-caption-text"><span style="font-size: 14pt;"><strong>6.</strong> Curve the body of the bag around the side piece and attach them </span></p></div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Curve the body of the bag along the edge of the side piece, attach them with a sc row, and fasten off. Remember to do this on the plastic canvas side and not the flap area.&nbsp; I have placed pins in the picture to make it clear, but you can just attach them as you go.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Attach the second side piece in the same way. <mark><strong>Don&rsquo;t weave in the tails now.</strong></mark>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2 style="text-align: center;"><strong>Shaping the Sides</strong></h2>
+<div id="attachment_32542" style="width: 460px" class="wp-caption aligncenter"><noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32542" class="wp-image-32542 size-full" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-9.jpg" alt="Pinching the side of the crochet handbag" width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-9.jpg 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-9-150x112.jpg 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-9.jpg"></noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32542" class="wp-image-32542 size-full lazyload" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-9.jpg.webp" alt="Pinching the side of the crochet handbag" width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-9.jpg.webp 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-9-150x112.jpg.webp 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-9.jpg" id="mv-trellis-img-13" data-trellis-processed="1"><p id="caption-attachment-32542" class="wp-caption-text"><span style="font-size: 14pt;"><strong>7.</strong> Pinch the side inwards and sew </span></p></div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Let&rsquo;s now make a dent on the sides so it will fold inwards when you close the flap. To do this, pinch the side inwards and whip stitch 1-inch using the yarn tail left and tapestry needle. It will open up once you let go, but when you close the flap, it will fold inwards.&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div dir="ltr">
+<h2 style="text-align: center;"><strong>Preparing the Chain Handle</strong></h2>
+<div id="attachment_32543" style="width: 460px" class="wp-caption aligncenter"><noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32543" class="wp-image-32543 size-full" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-1.jpg" alt="Threading yarn through the chain handle" width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-1.jpg 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-1-150x112.jpg 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-1.jpg"></noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-32543" class="wp-image-32543 size-full lazyload" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-1.jpg.webp" alt="Threading yarn through the chain handle" width="450" height="337" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-1.jpg.webp 450w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-1-150x112.jpg.webp 150w" sizes="auto, (max-width: 450px) 100vw, 450px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-Steps-for-making-crochet-purse-1.jpg" id="mv-trellis-img-14" data-trellis-processed="1"><p id="caption-attachment-32543" class="wp-caption-text"><span style="font-size: 14pt;"><strong> 8.</strong> Pass yarn through the chain links </span></p></div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Cut out 2 strands of yarn which are around 3 times the length of your chain handle. Thread both strands together through a metal tapestry needle, leave 1/2 yard, and run the yarn in and out of the chain links, leave 1/2 yard free again, and trim.&nbsp;</p>
+<p>&nbsp;</p>
+<h2 style="text-align: center;"><strong>Attaching the Handle&nbsp;</strong></h2>
+<p>First, clip it onto the inside of the dent you made along the sides of the bag. Now use the yarn tail left on the handle to sew and reinforce it.&nbsp;</p>
+<p>&nbsp;</p>
+<h2 style="text-align: center;"><strong>Adding the Tuck Lock</strong></h2>
+<p>Let&rsquo;s attach the top part to the flap first. Some tuck locks come with screws but the one I used just had to be pressed down into position. Find the middle of your flap, pull the flap through the gap in the tuck lock, and press hard to lock it in place.&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>To attach the bottom part, align it with the top part and push the prongs down. If it doesn&rsquo;t go through easily, mark the position of the prongs and use a screwdriver to poke holes through the plastic canvas and the lining. Once the prongs are inserted, slide the plate over the prongs, and flatten the prongs outwards to lock things in place. Your bag closure is now ready.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2 style="text-align: center;">Finishing the Crochet Purse Pattern</h2>
+<p>Weave in any tails left on the inside of the bag. It will be a little hard to work inside the bag, but I promise it will be worth it when you see your lovely crochet purse completed and ready to use.&nbsp;</p>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h3><strong>More Crochet Purse Tutorials</strong>&nbsp;</h3>
+<p><strong><a href="https://crochetdreamz.com/granny-square-bag-pattern/" target="_blank" rel="noopener">Granny Square Bag Pattern</a></strong></p>
+<p><strong><a href="https://crochetdreamz.com/crochet-tote-bag/" target="_blank" rel="noopener">Crochet Tote Bag Pattern in 2 Sizes</a></strong></p>
+<p><strong><a href="https://crochetdreamz.com/crochet-water-bottle-holder-pattern/" target="_blank" rel="noopener">How to Crochet a Water Bottle Holder&nbsp;</a></strong></p>
+<p>&nbsp;</p>
+<p>Pin it for later:</p>
+<div id="attachment_38286" style="width: 374px" class="wp-caption aligncenter"><noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-38286" class="size-medium wp-image-38286" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4-364x801.jpg" alt='""' width="364" height="801" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4-364x801.jpg 364w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4-436x960.jpg 436w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4-491x1080.jpg 491w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4-545x1200.jpg 545w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4-150x330.jpg 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4.jpg 750w" sizes="auto, (max-width: 760px) calc(100vw - 96px), 720px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4.jpg"></noscript><img loading="lazy" decoding="async" aria-describedby="caption-attachment-38286" class="size-medium wp-image-38286 lazyload" src="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4-364x801.jpg.webp" alt='""' width="364" height="801" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4-364x801.jpg.webp 364w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4-436x960.jpg.webp 436w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4-491x1080.jpg.webp 491w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4-545x1200.jpg.webp 545w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4-150x330.jpg.webp 150w, https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4.jpg.webp 750w" sizes="auto, (max-width: 760px) calc(100vw - 96px), 720px" data-pin-media="https://crochetdreamz.com/wp-content/uploads/2023/05/N116-free-crochet-bag-pattern-4.jpg" id="mv-trellis-img-15" data-trellis-processed="1"><p id="caption-attachment-38286" class="wp-caption-text">xr:d:DAFcKNOCVvo:729,j:7173527425537944082,t:24021823</p></div>
+<h2><strong>Free Crochet Purse Pattern for Summer</strong></h2>
+<div class="mailmunch-forms-after-post" style="display: none !important;"></div>	<p class="dpsp-share-text " style="margin-bottom:10px">
+		Share the Love!	</p>
+	<div id="dpsp-content-bottom" class="dpsp-content-wrapper dpsp-shape-rounded dpsp-size-small dpsp-has-spacing dpsp-no-labels-mobile dpsp-show-on-mobile dpsp-show-total-share-count dpsp-show-total-share-count-after dpsp-button-style-2" style="min-height:32px;position:relative">
+	
+<div class="dpsp-total-share-wrapper" style="position:absolute;right:0">
+	<span class="dpsp-icon-total-share"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 26 32"><path d="M20.8 20.8q1.984 0 3.392 1.376t1.408 3.424q0 1.984-1.408 3.392t-3.392 1.408-3.392-1.408-1.408-3.392q0-0.192 0.032-0.448t0.032-0.384l-8.32-4.992q-1.344 1.024-2.944 1.024-1.984 0-3.392-1.408t-1.408-3.392 1.408-3.392 3.392-1.408q1.728 0 2.944 0.96l8.32-4.992q0-0.128-0.032-0.384t-0.032-0.384q0-1.984 1.408-3.392t3.392-1.408 3.392 1.376 1.408 3.424q0 1.984-1.408 3.392t-3.392 1.408q-1.664 0-2.88-1.024l-8.384 4.992q0.064 0.256 0.064 0.832 0 0.512-0.064 0.768l8.384 4.992q1.152-0.96 2.88-0.96z"></path></svg></span>
+	<span class="dpsp-total-share-count">7350</span>
+	<span>shares</span>
+</div>
+<ul class="dpsp-networks-btns-wrapper dpsp-networks-btns-share dpsp-networks-btns-content dpsp-column-3 dpsp-has-button-icon-animation" style="padding:0;margin:0;list-style-type:none">
+<li class="dpsp-network-list-item dpsp-network-list-item-pinterest" style="float:left">
+	<button data-href="https://pinterest.com/pin/create/button/?url=https%3A%2F%2Fcrochetdreamz.com%2Fcrochet-purse-pattern%2F&#038;media=&#038;description=Try%20this%20free%20crochet%20bag%20pattern%20that%20is%20easy%20yet%20cute.%20The%20crochet%20bag%20pattern%20helps%20you%20make%20a%20cute%20crossbody%20bag%20or%20clutch%20with%20T%20shirt%20yarn.%20This%20is%20a%20crochet%20project%20that%20even%20beginners%20can%20make.%20" class="dpsp-network-btn dpsp-pinterest dpsp-first dpsp-has-label dpsp-has-label-mobile" aria-label="Save to Pinterest" title="Save to Pinterest" style="font-size:14px;padding:0rem;max-height:32px">	<span class="dpsp-network-icon "><span class="dpsp-network-icon-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 23 32"><path d="M0 10.656q0-1.92 0.672-3.616t1.856-2.976 2.72-2.208 3.296-1.408 3.616-0.448q2.816 0 5.248 1.184t3.936 3.456 1.504 5.12q0 1.728-0.32 3.36t-1.088 3.168-1.792 2.656-2.56 1.856-3.392 0.672q-1.216 0-2.4-0.576t-1.728-1.568q-0.16 0.704-0.48 2.016t-0.448 1.696-0.352 1.28-0.48 1.248-0.544 1.12-0.832 1.408-1.12 1.536l-0.224 0.096-0.16-0.192q-0.288-2.816-0.288-3.36 0-1.632 0.384-3.68t1.184-5.152 0.928-3.616q-0.576-1.152-0.576-3.008 0-1.504 0.928-2.784t2.368-1.312q1.088 0 1.696 0.736t0.608 1.824q0 1.184-0.768 3.392t-0.8 3.36q0 1.12 0.8 1.856t1.952 0.736q0.992 0 1.824-0.448t1.408-1.216 0.992-1.696 0.672-1.952 0.352-1.984 0.128-1.792q0-3.072-1.952-4.8t-5.12-1.728q-3.552 0-5.952 2.304t-2.4 5.856q0 0.8 0.224 1.536t0.48 1.152 0.48 0.832 0.224 0.544q0 0.48-0.256 1.28t-0.672 0.8q-0.032 0-0.288-0.032-0.928-0.288-1.632-0.992t-1.088-1.696-0.576-1.92-0.192-1.92z"></path></svg></span></span>
+	<span class="dpsp-network-label dpsp-network-hide-label-mobile">Pin </span></button></li>
+
+<li class="dpsp-network-list-item dpsp-network-list-item-facebook" style="float:left">
+	<a rel="nofollow noopener" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcrochetdreamz.com%2Fcrochet-purse-pattern%2F&#038;t=Crochet%20Purse%20Pattern%20%28FREE%29%20-%20Crochet%20Dreamz" class="dpsp-network-btn dpsp-facebook dpsp-has-label dpsp-has-label-mobile" target="_blank" aria-label="Share on Facebook" title="Share on Facebook" style="font-size:14px;padding:0rem;max-height:32px">	<span class="dpsp-network-icon "><span class="dpsp-network-icon-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 18 32"><path d="M17.12 0.224v4.704h-2.784q-1.536 0-2.080 0.64t-0.544 1.92v3.392h5.248l-0.704 5.28h-4.544v13.568h-5.472v-13.568h-4.544v-5.28h4.544v-3.904q0-3.328 1.856-5.152t4.96-1.824q2.624 0 4.064 0.224z"></path></svg></span></span>
+	<span class="dpsp-network-label dpsp-network-hide-label-mobile">Facebook</span></a></li>
+
+<li class="dpsp-network-list-item dpsp-network-list-item-flipboard" style="float:left">
+	<a rel="nofollow noopener" href="https://share.flipboard.com/bookmarklet/popout?v=2&#038;url=https%3A%2F%2Fcrochetdreamz.com%2Fcrochet-purse-pattern%2F&#038;title=Crochet%20Purse%20Pattern%20%28FREE%29%20-%20Crochet%20Dreamz" class="dpsp-network-btn dpsp-flipboard dpsp-has-label dpsp-has-label-mobile" target="_blank" aria-label="Share on Flipboard" title="Share on Flipboard" style="font-size:14px;padding:0rem;max-height:32px">	<span class="dpsp-network-icon "><span class="dpsp-network-icon-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M0 0h10.272v32h-10.272v-32zM11.328 11.328h10.4v10.4h-10.4v-10.4zM11.328 0h20.672v10.272h-20.672v-10.272z"></path></svg></span></span>
+	<span class="dpsp-network-label dpsp-network-hide-label-mobile">Flipboard</span></a></li>
+
+<li class="dpsp-network-list-item dpsp-network-list-item-email" style="float:left">
+	<a rel="nofollow noopener" href="mailto:?subject=Crochet%20Purse%20Pattern%20%28FREE%29%20-%20Crochet%20Dreamz&#038;body=https%3A%2F%2Fcrochetdreamz.com%2Fcrochet-purse-pattern%2F" class="dpsp-network-btn dpsp-email dpsp-last dpsp-has-label dpsp-has-label-mobile" target="_blank" aria-label="Send over email" title="Send over email" style="font-size:14px;padding:0rem;max-height:32px">	<span class="dpsp-network-icon "><span class="dpsp-network-icon-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 28 32"><path d="M18.56 17.408l8.256 8.544h-25.248l8.288-8.448 4.32 4.064zM2.016 6.048h24.32l-12.16 11.584zM20.128 15.936l8.224-7.744v16.256zM0 24.448v-16.256l8.288 7.776z"></path></svg></span></span>
+	<span class="dpsp-network-label dpsp-network-hide-label-mobile">Email</span></a></li>
+</ul></div>
+			</div>
+						<footer class="entry-footer">
+				<div class="post-meta-wrapper post-meta-single post-meta-single-bottom">
+			<div class="post-meta-author-date combo-box">
+			<img alt='' src='https://secure.gravatar.com/avatar/7f09a827ee685ee0f52e93b5e0ce2605?s=50&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/7f09a827ee685ee0f52e93b5e0ce2605?s=100&#038;d=mm&#038;r=g 2x' class='avatar avatar-50 photo' height='50' width='50' data-pin-nopin="true" loading='lazy' decoding='async'/>			<div class="author-date">
+				<div class="post-meta-author">
+					By 					<span class="byline"><span class="screen-reader-text">Author </span><a class="url fn n" href="https://crochetdreamz.com/author/crochet_dreamz">Shehnaaz</a></span>				</div>
+									<p><span class="posted-on"><span class="screen-reader-text">Posted on </span>Last updated: <time class="entry-date" datetime="2024-05-28T20:16:01-05:00">May 28, 2024</time></span></p>
+							</div>
+		</div>
+				<p class="meta-cats"><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="https://crochetdreamz.com/category/bags-baskets-cases" rel="category tag">Crochet Bags, Baskets, and Cozies</a></span></p>
+		</div>
+
+			</footer><!-- .entry-footer -->
+					</article>
+		
+	<nav class="navigation post-navigation" aria-label="Posts">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="https://crochetdreamz.com/sun-hat-pattern-with-flowers/" rel="prev" aria-hidden="true" tabindex="-1" class="post-thumbnail"><style>img#mv-trellis-img-16::before{padding-top:133.33333333333%; }img#mv-trellis-img-16{display:block;}</style><noscript><img src="https://crochetdreamz.com/wp-content/uploads/2023/05/N115-Crochet-Sun-Hat-with-Flowers-8-240x320.jpg" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N115-Crochet-Sun-Hat-with-Flowers-8-240x320.jpg 240w, https://crochetdreamz.com/wp-content/uploads/2023/05/N115-Crochet-Sun-Hat-with-Flowers-8-360x480.jpg 360w" sizes="(max-width: 599px) 320px, (max-width: 700px) calc(50vw - 30px), 320px" alt="" data-pin-nopin="true" class="size-mv_trellis_3x4_low_res size-ratio-mv_trellis_3x4 wp-image-32345 post-nav-img ggnoads" height="320" width="240"></noscript><img src="https://crochetdreamz.com/wp-content/uploads/2023/05/N115-Crochet-Sun-Hat-with-Flowers-8-240x320.jpg.webp" srcset="https://crochetdreamz.com/wp-content/uploads/2023/05/N115-Crochet-Sun-Hat-with-Flowers-8-240x320.jpg.webp 240w, https://crochetdreamz.com/wp-content/uploads/2023/05/N115-Crochet-Sun-Hat-with-Flowers-8-360x480.jpg.webp 360w" sizes="(max-width: 599px) 320px, (max-width: 700px) calc(50vw - 30px), 320px" alt="" data-pin-nopin="true" class="size-mv_trellis_3x4_low_res size-ratio-mv_trellis_3x4 wp-image-32345 post-nav-img ggnoads lazyload" height="320" width="240" id="mv-trellis-img-16" loading="lazy" data-trellis-processed="1"></a><a href="https://crochetdreamz.com/sun-hat-pattern-with-flowers/" rel="prev"><p class="post-title-wrap"><span class="post-title h3">Sun Hat Pattern with Flowers, Daisy Sun Hat</span></p></a></div><div class="nav-next"><a href="https://crochetdreamz.com/baby-girl-dress-crochet-pattern/" rel="next" aria-hidden="true" tabindex="-1" class="post-thumbnail"><style>img#mv-trellis-img-17::before{padding-top:133.33333333333%; }img#mv-trellis-img-17{display:block;}</style><noscript><img src="https://crochetdreamz.com/wp-content/uploads/2023/06/N117-free-baby-crochet-dress-pattern-41-240x320.jpg" srcset="https://crochetdreamz.com/wp-content/uploads/2023/06/N117-free-baby-crochet-dress-pattern-41-240x320.jpg 240w, https://crochetdreamz.com/wp-content/uploads/2023/06/N117-free-baby-crochet-dress-pattern-41-360x480.jpg 360w" sizes="(max-width: 599px) 320px, (max-width: 700px) calc(50vw - 30px), 320px" alt="" data-pin-nopin="true" class="size-mv_trellis_3x4_low_res size-ratio-mv_trellis_3x4 wp-image-32616 post-nav-img ggnoads" height="320" width="240"></noscript><img src="https://crochetdreamz.com/wp-content/uploads/2023/06/N117-free-baby-crochet-dress-pattern-41-240x320.jpg.webp" srcset="https://crochetdreamz.com/wp-content/uploads/2023/06/N117-free-baby-crochet-dress-pattern-41-240x320.jpg.webp 240w, https://crochetdreamz.com/wp-content/uploads/2023/06/N117-free-baby-crochet-dress-pattern-41-360x480.jpg.webp 360w" sizes="(max-width: 599px) 320px, (max-width: 700px) calc(50vw - 30px), 320px" alt="" data-pin-nopin="true" class="size-mv_trellis_3x4_low_res size-ratio-mv_trellis_3x4 wp-image-32616 post-nav-img ggnoads lazyload" height="320" width="240" id="mv-trellis-img-17" loading="lazy" data-trellis-processed="1"></a><a href="https://crochetdreamz.com/baby-girl-dress-crochet-pattern/" rel="next"><p class="post-title-wrap"><span class="post-title h3">Crochet Baby Dress Pattern, Little Bow Peep Dress</span></p></a></div></div>
+	</nav><style>.trellis-comments .post-title::after{content: " on: Free Crochet Purse Pattern, Luxe Handbag"}</style><div id="mv-trellis-comments" class="mv-trellis-comments" data-post-id="32465" style="min-height:520px;">	<div id="respond" class="">
+		<a rel="nofollow" id="cancel-comment-reply-link" href="/crochet-purse-pattern/#respond" style="display:none;">Click here to cancel reply.</a><form action="" method="post" id="" class="trellis-proxy-form">
+</form>	</div><!-- #respond -->
+	
+	<div class="trellis-comments">
+
+		
+			<div class="trellis-comment trellis-comment-new ">
+				<div class="trellis-comment-header">
+					<div class="trellis-comment-text">
+						<p class="trellis-comment-author">Jacky</p>
+						<p class="trellis-comment-date">Wednesday 13th of December 2023</p>
+					</div>
+				</div>
+				<div class="trellis-comment-content">
+					<p>At the end of row 1 and row 2 you have "repeats 9" what exactly are we repeating? All of row 1 nine times? Pls and thank you</p>
+				</div>
+
+										<div class="trellis-comment-child trellis-comment-new ">
+							<div class="trellis-comment-header">
+								<div class="trellis-comment-text">
+									<p class="trellis-comment-author">Shehnaaz</p>
+									<p class="trellis-comment-date">Wednesday 13th of December 2023</p>
+								</div>
+							</div>
+							<div>
+								<p>That number gives the number of pattern repeats (projections) at the end of the row.</p>
+							</div>
+						</div>
+						
+			</div>
+			
+	</div>
+
+	</div>			</main>
+						<div  class="sidebar">
+<aside class="sidebar-container sidebar-primary">
+	<div id="block-5" class="mv_trellis_mobile_hide widget-container widget_block widget_categories"><div class="wp-block-categories-dropdown wp-block-categories"><label class="wp-block-categories__label" for="wp-block-categories-1">Categories</label><select name="category_name" id="wp-block-categories-1" class="postform">
+	<option value="-1">Select Category</option>
+	<option class="level-0" value="amigurumi-patterns">Amigurumi Patterns</option>
+	<option class="level-0" value="baby-dress">Baby Dress</option>
+	<option class="level-0" value="crochet-afghans">Crochet Afghans</option>
+	<option class="level-0" value="bags-baskets-cases">Crochet Bags, Baskets, and Cozies</option>
+	<option class="level-0" value="crochet-booties-sandals">Crochet Booties and Sandals</option>
+	<option class="level-0" value="crochet-cardigans-and-sweaters">Crochet Cardigans and Sweaters</option>
+	<option class="level-0" value="crochet-dishcloths-and-kitchen-towels">Crochet Dishcloths and Kitchen Towels</option>
+	<option class="level-0" value="crochet-hats-2">Crochet Hats</option>
+	<option class="level-0" value="crochet-headband-pattern">Crochet Headbands and Ear Warmers</option>
+	<option class="level-0" value="home-decor">Crochet Home Decor</option>
+	<option class="level-0" value="crochet-mittens-or-gloves">Crochet Mittens or Gloves</option>
+	<option class="level-0" value="crochet-ponchos-and-kimonos">Crochet Ponchos and Kimonos</option>
+	<option class="level-0" value="crochet-scarves-and-cowls">Crochet Scarves and Cowls</option>
+	<option class="level-0" value="crochet-slippers">Crochet Slippers</option>
+	<option class="level-0" value="crochet-stitches-and-tutorials">Crochet Stitches and Tutorials</option>
+	<option class="level-0" value="trending">Trending</option>
+	<option class="level-0" value="uncategorized">Uncategorized</option>
+</select><script type="rocketlazyloadscript" data-rocket-type="text/javascript">
+/* <![CDATA[ */
+	
+	( function() {
+		var dropdown = document.getElementById( 'wp-block-categories-1' );
+		function onCatChange() {
+			if ( dropdown.options[ dropdown.selectedIndex ].value !== -1 ) {
+				location.href = "https://crochetdreamz.com/?" + dropdown.name + '=' + dropdown.options[ dropdown.selectedIndex ].value;
+			}
+		}
+		dropdown.onchange = onCatChange;
+	})();
+	
+	
+/* ]]> */
+</script>
+
+</div></div></aside>
+		<aside class="mv-sticky-slot"></aside>
+</div>
+		</div>
+	</div>
+
+		<footer data-wpr-lazyrender="1" class="footer">
+			<div  class="wrapper wrapper-footer">
+							<div  class="footer-container">
+			<div class="left-footer footer-widget-area">				</div>
+			<div class="middle-footer footer-widget-area"><div id="block-3" class="widget-container widget_block"><center><a style="color: #fff;" class="button btn" href="#">&uarr; back to top</a></center></div><div id="block-7" class="widget-container widget_block"><style id="kadence-blocks-advancedheading-inline-css" type="text/css">
+.wp-block-kadence-advancedheading mark{background:transparent;border-style:solid;border-width:0}.wp-block-kadence-advancedheading mark.kt-highlight{color:#f76a0c;}.kb-adv-heading-icon{display: inline-flex;justify-content: center;align-items: center;} .is-layout-constrained > .kb-advanced-heading-link {display: block;}
+</style>
+<link rel="stylesheet" id="kadence-blocks-column-css" href="https://crochetdreamz.com/wp-content/plugins/kadence-blocks/dist/style-blocks-column.css?ver=3.5.3" type="text/css" media="all">
+<link rel="stylesheet" id="kadence-blocks-rowlayout-css" href="https://crochetdreamz.com/wp-content/plugins/kadence-blocks/dist/style-blocks-rowlayout.css?ver=3.5.3" type="text/css" media="all">
+<style>.kb-row-layout-idblock-7_476d2f-14 > .kt-row-column-wrap{align-content:start;}:where(.kb-row-layout-idblock-7_476d2f-14 > .kt-row-column-wrap) > .wp-block-kadence-column{justify-content:start;}.kb-row-layout-idblock-7_476d2f-14 > .kt-row-column-wrap{column-gap:var(--global-kb-gap-md, 2rem);row-gap:var(--global-kb-gap-md, 2rem);padding-top:var(--global-kb-spacing-sm, 1.5rem);padding-bottom:var(--global-kb-spacing-sm, 1.5rem);}.kb-row-layout-idblock-7_476d2f-14 > .kt-row-column-wrap > div:not(.added-for-specificity){grid-column:initial;}.kb-row-layout-idblock-7_476d2f-14 > .kt-row-column-wrap{grid-template-columns:repeat(3, minmax(0, 1fr));}.kb-row-layout-idblock-7_476d2f-14 > .kt-row-layout-overlay{opacity:0.30;}@media all and (max-width: 1024px){.kb-row-layout-idblock-7_476d2f-14 > .kt-row-column-wrap > div:not(.added-for-specificity){grid-column:initial;}}@media all and (max-width: 1024px){.kb-row-layout-idblock-7_476d2f-14 > .kt-row-column-wrap{grid-template-columns:repeat(3, minmax(0, 1fr));}}@media all and (max-width: 767px){.kb-row-layout-idblock-7_476d2f-14 > .kt-row-column-wrap > div:not(.added-for-specificity){grid-column:initial;}.kb-row-layout-idblock-7_476d2f-14 > .kt-row-column-wrap{grid-template-columns:minmax(0, 1fr);}}</style><div class="kb-row-layout-wrap kb-row-layout-idblock-7_476d2f-14 alignnone wp-block-kadence-rowlayout"><div class="kt-row-column-wrap kt-has-3-columns kt-row-layout-equal kt-tab-layout-inherit kt-mobile-layout-row kt-row-valign-top">
+<style>.kadence-column59e13a-20 > .kt-inside-inner-col,.kadence-column59e13a-20 > .kt-inside-inner-col:before{border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-right-radius:0px;border-bottom-left-radius:0px;}.kadence-column59e13a-20 > .kt-inside-inner-col{column-gap:var(--global-kb-gap-sm, 1rem);}.kadence-column59e13a-20 > .kt-inside-inner-col{flex-direction:column;}.kadence-column59e13a-20 > .kt-inside-inner-col > .aligncenter{width:100%;}.kadence-column59e13a-20 > .kt-inside-inner-col:before{opacity:0.3;}.kadence-column59e13a-20{position:relative;}@media all and (max-width: 1024px){.kadence-column59e13a-20 > .kt-inside-inner-col{flex-direction:column;}}@media all and (max-width: 767px){.kadence-column59e13a-20 > .kt-inside-inner-col{flex-direction:column;}}</style>
+<div class="wp-block-kadence-column kadence-column59e13a-20"><div class="kt-inside-inner-col"><style>.wp-block-kadence-advancedheading.kt-adv-heading442ffe-88, .wp-block-kadence-advancedheading.kt-adv-heading442ffe-88[data-kb-block="kb-adv-heading442ffe-88"]{margin-bottom:var(--global-kb-spacing-xxs, 0.5rem);text-align:center;font-style:normal;}.wp-block-kadence-advancedheading.kt-adv-heading442ffe-88 mark.kt-highlight, .wp-block-kadence-advancedheading.kt-adv-heading442ffe-88[data-kb-block="kb-adv-heading442ffe-88"] mark.kt-highlight{font-style:normal;color:#f76a0c;-webkit-box-decoration-break:clone;box-decoration-break:clone;padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;}</style>
+<h4 class="kt-adv-heading442ffe-88 wp-block-kadence-advancedheading" data-kb-block="kb-adv-heading442ffe-88">About</h4>
+
+
+
+<p class="has-text-align-center"><a href="https://crochetdreamz.com/hi-creatives-welcome-to-my-happy-place">ABOUT</a><br><a href="https://crochetdreamz.com/privacy-policy-2">PRIVACY POLICY</a></p>
+</div></div>
+
+
+<style>.kadence-columna0f8ce-a1 > .kt-inside-inner-col,.kadence-columna0f8ce-a1 > .kt-inside-inner-col:before{border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-right-radius:0px;border-bottom-left-radius:0px;}.kadence-columna0f8ce-a1 > .kt-inside-inner-col{column-gap:var(--global-kb-gap-sm, 1rem);}.kadence-columna0f8ce-a1 > .kt-inside-inner-col{flex-direction:column;}.kadence-columna0f8ce-a1 > .kt-inside-inner-col > .aligncenter{width:100%;}.kadence-columna0f8ce-a1 > .kt-inside-inner-col:before{opacity:0.3;}.kadence-columna0f8ce-a1{position:relative;}@media all and (max-width: 1024px){.kadence-columna0f8ce-a1 > .kt-inside-inner-col{flex-direction:column;}}@media all and (max-width: 767px){.kadence-columna0f8ce-a1 > .kt-inside-inner-col{flex-direction:column;}}</style>
+<div class="wp-block-kadence-column kadence-columna0f8ce-a1"><div class="kt-inside-inner-col"></div></div>
+
+
+<style>.kadence-column38a070-2d > .kt-inside-inner-col,.kadence-column38a070-2d > .kt-inside-inner-col:before{border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-right-radius:0px;border-bottom-left-radius:0px;}.kadence-column38a070-2d > .kt-inside-inner-col{column-gap:var(--global-kb-gap-sm, 1rem);}.kadence-column38a070-2d > .kt-inside-inner-col{flex-direction:column;}.kadence-column38a070-2d > .kt-inside-inner-col > .aligncenter{width:100%;}.kadence-column38a070-2d > .kt-inside-inner-col:before{opacity:0.3;}.kadence-column38a070-2d{position:relative;}@media all and (max-width: 1024px){.kadence-column38a070-2d > .kt-inside-inner-col{flex-direction:column;}}@media all and (max-width: 767px){.kadence-column38a070-2d > .kt-inside-inner-col{flex-direction:column;}}</style>
+<div class="wp-block-kadence-column kadence-column38a070-2d"><div class="kt-inside-inner-col"><style>.wp-block-kadence-advancedheading.kt-adv-headingfbee8a-f9, .wp-block-kadence-advancedheading.kt-adv-headingfbee8a-f9[data-kb-block="kb-adv-headingfbee8a-f9"]{margin-bottom:var(--global-kb-spacing-xxs, 0.5rem);text-align:center;font-style:normal;}.wp-block-kadence-advancedheading.kt-adv-headingfbee8a-f9 mark.kt-highlight, .wp-block-kadence-advancedheading.kt-adv-headingfbee8a-f9[data-kb-block="kb-adv-headingfbee8a-f9"] mark.kt-highlight{font-style:normal;color:#f76a0c;-webkit-box-decoration-break:clone;box-decoration-break:clone;padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;}</style>
+<h4 class="kt-adv-headingfbee8a-f9 wp-block-kadence-advancedheading" data-kb-block="kb-adv-headingfbee8a-f9">Contact</h4>
+
+
+
+<p class="has-text-align-center"><a href="https://crochetdreamz.com/contact-form-name-email-subject-message">CONTACT ME</a><br><a href="https://crochetdreamz.com/disclosure-policy" target="_blank" rel="noreferrer noopener">DISCLOSURE</a></p>
+</div></div>
+
+</div></div></div>				</div>
+			<div class="right-footer footer-widget-area">				</div>
+						</div>
+			<div  class="footer-copy"><p><strong>You’re welcome and encouraged to link to crochetdreamz.com or use a single image with a brief description to link back to any post.</strong>  &nbsp;  Please do not reprint, publish, or post my patterns in whole or in part. Please don’t use my pictures if you use my patterns to make and sell finished products.  &nbsp;  As an Amazon Associate, I earn from qualifying purchases.  <a href="https://crochetdreamz.com/do-not-sell-my-personal-information" target="_blank" rel="noopener">Do not Sell My Personal Information</a>  | Wisteria on Trellis Framework by <a href="https://www.mediavine.com/" target="_blank" rel="noopener nofollow">Mediavine</a></p></div>			</div>
+		</footer>
+		<script async data-id="101416688" src="//static.getclicky.com/js"></script>
+<noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101416688ns.gif" /></p></noscript><div id="mv-grow-data" data-settings='{&quot;floatingSidebar&quot;:{&quot;stopSelector&quot;:false},&quot;general&quot;:{&quot;contentSelector&quot;:false,&quot;show_count&quot;:{&quot;content&quot;:false,&quot;sidebar&quot;:false,&quot;pop_up&quot;:false,&quot;sticky_bar&quot;:false},&quot;isTrellis&quot;:true,&quot;license_last4&quot;:&quot;1b4d&quot;},&quot;post&quot;:{&quot;ID&quot;:32465,&quot;categories&quot;:[{&quot;ID&quot;:598}]},&quot;shareCounts&quot;:{&quot;facebook&quot;:76,&quot;pinterest&quot;:7274,&quot;reddit&quot;:0,&quot;twitter&quot;:0},&quot;shouldRun&quot;:true,&quot;buttonSVG&quot;:{&quot;share&quot;:{&quot;height&quot;:32,&quot;width&quot;:26,&quot;paths&quot;:[&quot;M20.8 20.8q1.984 0 3.392 1.376t1.408 3.424q0 1.984-1.408 3.392t-3.392 1.408-3.392-1.408-1.408-3.392q0-0.192 0.032-0.448t0.032-0.384l-8.32-4.992q-1.344 1.024-2.944 1.024-1.984 0-3.392-1.408t-1.408-3.392 1.408-3.392 3.392-1.408q1.728 0 2.944 0.96l8.32-4.992q0-0.128-0.032-0.384t-0.032-0.384q0-1.984 1.408-3.392t3.392-1.408 3.392 1.376 1.408 3.424q0 1.984-1.408 3.392t-3.392 1.408q-1.664 0-2.88-1.024l-8.384 4.992q0.064 0.256 0.064 0.832 0 0.512-0.064 0.768l8.384 4.992q1.152-0.96 2.88-0.96z&quot;]},&quot;pinterest&quot;:{&quot;height&quot;:32,&quot;width&quot;:23,&quot;paths&quot;:[&quot;M0 10.656q0-1.92 0.672-3.616t1.856-2.976 2.72-2.208 3.296-1.408 3.616-0.448q2.816 0 5.248 1.184t3.936 3.456 1.504 5.12q0 1.728-0.32 3.36t-1.088 3.168-1.792 2.656-2.56 1.856-3.392 0.672q-1.216 0-2.4-0.576t-1.728-1.568q-0.16 0.704-0.48 2.016t-0.448 1.696-0.352 1.28-0.48 1.248-0.544 1.12-0.832 1.408-1.12 1.536l-0.224 0.096-0.16-0.192q-0.288-2.816-0.288-3.36 0-1.632 0.384-3.68t1.184-5.152 0.928-3.616q-0.576-1.152-0.576-3.008 0-1.504 0.928-2.784t2.368-1.312q1.088 0 1.696 0.736t0.608 1.824q0 1.184-0.768 3.392t-0.8 3.36q0 1.12 0.8 1.856t1.952 0.736q0.992 0 1.824-0.448t1.408-1.216 0.992-1.696 0.672-1.952 0.352-1.984 0.128-1.792q0-3.072-1.952-4.8t-5.12-1.728q-3.552 0-5.952 2.304t-2.4 5.856q0 0.8 0.224 1.536t0.48 1.152 0.48 0.832 0.224 0.544q0 0.48-0.256 1.28t-0.672 0.8q-0.032 0-0.288-0.032-0.928-0.288-1.632-0.992t-1.088-1.696-0.576-1.92-0.192-1.92z&quot;]},&quot;facebook&quot;:{&quot;height&quot;:32,&quot;width&quot;:18,&quot;paths&quot;:[&quot;M17.12 0.224v4.704h-2.784q-1.536 0-2.080 0.64t-0.544 1.92v3.392h5.248l-0.704 5.28h-4.544v13.568h-5.472v-13.568h-4.544v-5.28h4.544v-3.904q0-3.328 1.856-5.152t4.96-1.824q2.624 0 4.064 0.224z&quot;]},&quot;flipboard&quot;:{&quot;height&quot;:32,&quot;width&quot;:32,&quot;paths&quot;:[&quot;M0 0h10.272v32h-10.272v-32zM11.328 11.328h10.4v10.4h-10.4v-10.4zM11.328 0h20.672v10.272h-20.672v-10.272z&quot;]},&quot;email&quot;:{&quot;height&quot;:32,&quot;width&quot;:28,&quot;paths&quot;:[&quot;M18.56 17.408l8.256 8.544h-25.248l8.288-8.448 4.32 4.064zM2.016 6.048h24.32l-12.16 11.584zM20.128 15.936l8.224-7.744v16.256zM0 24.448v-16.256l8.288 7.776z&quot;]}},&quot;saveThis&quot;:{&quot;spotlight&quot;:&quot;&quot;,&quot;successMessage&quot;:&quot;&quot;,&quot;consent&quot;:&quot;&quot;,&quot;consentForMailingList&quot;:&quot;&quot;,&quot;position&quot;:&quot;&quot;,&quot;mailingListService&quot;:&quot;&quot;},&quot;utmParams&quot;:[],&quot;pinterest&quot;:{&quot;pinDescriptionSource&quot;:&quot;post_pinterest_description&quot;,&quot;pinDescription&quot;:&quot;Try this free crochet bag pattern that is easy yet cute. The crochet bag pattern helps you make a cute crossbody bag or clutch with T shirt yarn. This is a crochet project that even beginners can make.&quot;,&quot;pinTitle&quot;:null,&quot;pinImageURL&quot;:null,&quot;pinnableImages&quot;:&quot;all_images&quot;,&quot;postImageHidden&quot;:&quot;yes&quot;,&quot;postImageHiddenMultiple&quot;:&quot;yes&quot;,&quot;lazyLoadCompatibility&quot;:&quot;yes&quot;,&quot;buttonPosition&quot;:&quot;top-left&quot;,&quot;buttonShape&quot;:&quot;rectangular&quot;,&quot;showButtonLabel&quot;:&quot;yes&quot;,&quot;buttonLabelText&quot;:&quot;SAVE&quot;,&quot;buttonShareBehavior&quot;:&quot;post_image&quot;,&quot;hoverButtonShareBehavior&quot;:&quot;hover_image&quot;,&quot;minimumImageWidth&quot;:&quot;&quot;,&quot;minimumImageHeight&quot;:&quot;&quot;,&quot;showImageOverlay&quot;:null,&quot;alwaysShowMobile&quot;:null,&quot;alwaysShowDesktop&quot;:null,&quot;postTypeDisplay&quot;:[&quot;post&quot;],&quot;imagePinIt&quot;:&quot;1&quot;,&quot;hasContent&quot;:&quot;1&quot;,&quot;shareURL&quot;:&quot;https:\/\/crochetdreamz.com\/crochet-purse-pattern\/&quot;,&quot;bypassClasses&quot;:[&quot;mv-grow-bypass&quot;,&quot;no_pin&quot;],&quot;bypassDenyClasses&quot;:[&quot;dpsp-post-pinterest-image-hidden-inner&quot;,&quot;mv-create-pinterest&quot;],&quot;ignoreSelectors&quot;:[],&quot;hoverButtonIgnoreClasses&quot;:[&quot;lazyloaded&quot;,&quot;lazyload&quot;,&quot;lazy&quot;,&quot;loading&quot;,&quot;loaded&quot;,&quot;td-animation-stack&quot;,&quot;ezlazyloaded&quot;,&quot;penci-lazy&quot;,&quot;ut-lazy&quot;,&quot;ut-image-loaded&quot;,&quot;ut-animated-image&quot;,&quot;skip-lazy&quot;],&quot;disableIframes&quot;:null},&quot;inlineContentHook&quot;:[&quot;loop_start&quot;]}'></div><aside id="dpsp-floating-sidebar" aria-label="social sharing sidebar" class="dpsp-shape-rounded dpsp-size-small   dpsp-hide-on-mobile dpsp-position-left dpsp-button-style-1 dpsp-animation-2" data-trigger-scroll="false">
+	
+<div class="dpsp-total-share-wrapper">
+	<span class="dpsp-icon-total-share"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 26 32"><path d="M20.8 20.8q1.984 0 3.392 1.376t1.408 3.424q0 1.984-1.408 3.392t-3.392 1.408-3.392-1.408-1.408-3.392q0-0.192 0.032-0.448t0.032-0.384l-8.32-4.992q-1.344 1.024-2.944 1.024-1.984 0-3.392-1.408t-1.408-3.392 1.408-3.392 3.392-1.408q1.728 0 2.944 0.96l8.32-4.992q0-0.128-0.032-0.384t-0.032-0.384q0-1.984 1.408-3.392t3.392-1.408 3.392 1.376 1.408 3.424q0 1.984-1.408 3.392t-3.392 1.408q-1.664 0-2.88-1.024l-8.384 4.992q0.064 0.256 0.064 0.832 0 0.512-0.064 0.768l8.384 4.992q1.152-0.96 2.88-0.96z"></path></svg></span>
+	<span class="dpsp-total-share-count">7350</span>
+	<span>shares</span>
+</div>
+<ul class="dpsp-networks-btns-wrapper dpsp-networks-btns-share dpsp-networks-btns-sidebar  ">
+<li class="dpsp-network-list-item dpsp-network-list-item-pinterest">
+	<button data-href="https://pinterest.com/pin/create/button/?url=https%3A%2F%2Fcrochetdreamz.com%2Fcrochet-purse-pattern%2F&#038;media=&#038;description=Try%20this%20free%20crochet%20bag%20pattern%20that%20is%20easy%20yet%20cute.%20The%20crochet%20bag%20pattern%20helps%20you%20make%20a%20cute%20crossbody%20bag%20or%20clutch%20with%20T%20shirt%20yarn.%20This%20is%20a%20crochet%20project%20that%20even%20beginners%20can%20make.%20" class="dpsp-network-btn dpsp-pinterest dpsp-no-label dpsp-first dpsp-has-label-mobile" aria-label="Save to Pinterest" title="Save to Pinterest">	<span class="dpsp-network-icon "><span class="dpsp-network-icon-inner"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 23 32"><path d="M0 10.656q0-1.92 0.672-3.616t1.856-2.976 2.72-2.208 3.296-1.408 3.616-0.448q2.816 0 5.248 1.184t3.936 3.456 1.504 5.12q0 1.728-0.32 3.36t-1.088 3.168-1.792 2.656-2.56 1.856-3.392 0.672q-1.216 0-2.4-0.576t-1.728-1.568q-0.16 0.704-0.48 2.016t-0.448 1.696-0.352 1.28-0.48 1.248-0.544 1.12-0.832 1.408-1.12 1.536l-0.224 0.096-0.16-0.192q-0.288-2.816-0.288-3.36 0-1.632 0.384-3.68t1.184-5.152 0.928-3.616q-0.576-1.152-0.576-3.008 0-1.504 0.928-2.784t2.368-1.312q1.088 0 1.696 0.736t0.608 1.824q0 1.184-0.768 3.392t-0.8 3.36q0 1.12 0.8 1.856t1.952 0.736q0.992 0 1.824-0.448t1.408-1.216 0.992-1.696 0.672-1.952 0.352-1.984 0.128-1.792q0-3.072-1.952-4.8t-5.12-1.728q-3.552 0-5.952 2.304t-2.4 5.856q0 0.8 0.224 1.536t0.48 1.152 0.48 0.832 0.224 0.544q0 0.48-0.256 1.28t-0.672 0.8q-0.032 0-0.288-0.032-0.928-0.288-1.632-0.992t-1.088-1.696-0.576-1.92-0.192-1.92z"></path></svg></span></span>
+	</button></li>
+
+<li class="dpsp-network-list-item dpsp-network-list-item-email">
+	<a rel="nofollow noopener" href="mailto:?subject=Crochet%20Purse%20Pattern%20%28FREE%29%20-%20Crochet%20Dreamz&#038;body=https%3A%2F%2Fcrochetdreamz.com%2Fcrochet-purse-pattern%2F" class="dpsp-network-btn dpsp-email dpsp-no-label dpsp-has-label-mobile" target="_blank" aria-label="Send over email" title="Send over email">	<span class="dpsp-network-icon "><span class="dpsp-network-icon-inner"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 28 32"><path d="M18.56 17.408l8.256 8.544h-25.248l8.288-8.448 4.32 4.064zM2.016 6.048h24.32l-12.16 11.584zM20.128 15.936l8.224-7.744v16.256zM0 24.448v-16.256l8.288 7.776z"></path></svg></span></span>
+	</a></li>
+
+<li class="dpsp-network-list-item dpsp-network-list-item-flipboard">
+	<a rel="nofollow noopener" href="https://share.flipboard.com/bookmarklet/popout?v=2&#038;url=https%3A%2F%2Fcrochetdreamz.com%2Fcrochet-purse-pattern%2F&#038;title=Crochet%20Purse%20Pattern%20%28FREE%29%20-%20Crochet%20Dreamz" class="dpsp-network-btn dpsp-flipboard dpsp-no-label dpsp-has-label-mobile" target="_blank" aria-label="Share on Flipboard" title="Share on Flipboard">	<span class="dpsp-network-icon "><span class="dpsp-network-icon-inner"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M0 0h10.272v32h-10.272v-32zM11.328 11.328h10.4v10.4h-10.4v-10.4zM11.328 0h20.672v10.272h-20.672v-10.272z"></path></svg></span></span>
+	</a></li>
+
+<li class="dpsp-network-list-item dpsp-network-list-item-facebook">
+	<a rel="nofollow noopener" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcrochetdreamz.com%2Fcrochet-purse-pattern%2F&#038;t=Crochet%20Purse%20Pattern%20%28FREE%29%20-%20Crochet%20Dreamz" class="dpsp-network-btn dpsp-facebook dpsp-no-label dpsp-last dpsp-has-label-mobile" target="_blank" aria-label="Share on Facebook" title="Share on Facebook">	<span class="dpsp-network-icon "><span class="dpsp-network-icon-inner"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 18 32"><path d="M17.12 0.224v4.704h-2.784q-1.536 0-2.080 0.64t-0.544 1.92v3.392h5.248l-0.704 5.28h-4.544v13.568h-5.472v-13.568h-4.544v-5.28h4.544v-3.904q0-3.328 1.856-5.152t4.96-1.824q2.624 0 4.064 0.224z"></path></svg></span></span>
+	</a></li>
+</ul></aside>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<link rel="preconnect" href="https://www.google-analytics.com">
+		<link rel="preconnect" href="https://stats.g.doubleclick.net">
+		<script>
+							setTimeout(function(){
+						window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+							gtag('config', 'UA-113065847-1', {'anonymize_ip': true, 'allow_google_signals': false, 'allow_ad_personalization_signals': false});
+										gtag('config', 'G-03R2W8TJK7', {'allow_google_signals': false, 'allow_ad_personalization_signals': false});
+			
+							}, 3000);
+					</script>
+		<script type="text/javascript" id="dpsp-frontend-js-pro-js-extra">
+/* <![CDATA[ */
+var dpsp_ajax_send_save_this_email = {"ajax_url":"https:\/\/crochetdreamz.com\/wp-admin\/admin-ajax.php","dpsp_token":"d88c4bd4b2"};
+/* ]]> */
+</script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript" id="dpsp-frontend-js-pro-js-before">
+/* <![CDATA[ */
+		var dpsp_pin_button_data = {"pin_description_source":"post_pinterest_description","pinterest_pinnable_images":"all_images","pinterest_button_share_behavior":"post_image","post_pinterest_image_hidden":"yes","post_multiple_hidden_pinterest_images":"yes","page_builder_compatibility":"yes","lazy_load_compatibility":"yes","button_position":"top_left","button_shape":"rectangular","minimum_image_width":"","minimum_image_height":"","show_button_text_label":"yes","button_text_label":"SAVE","button_share_behavior":"hover_image","post_type_display":["post"],"pinterest_description":"Try this free crochet bag pattern that is easy yet cute. The crochet bag pattern helps you make a cute crossbody bag or clutch with T shirt yarn. This is a crochet project that even beginners can make."}
+	
+/* ]]> */
+</script>
+<script type="text/javascript" async data-noptimize  data-cfasync="false" src="https://crochetdreamz.com/wp-content/plugins/social-pug/assets/dist/front-end-pro.js?ver=2.25.2" id="dpsp-frontend-js-pro-js"></script>
+<script type="text/javascript" id="mv-trellis-js-extra">
+/* <![CDATA[ */
+var mvt = {"version":"0.18.1","options":{"register_pwa":false,"require_name_email":true},"rest_url":"https:\/\/crochetdreamz.com\/wp-json\/","site_url":"https:\/\/crochetdreamz.com","img_host":"crochetdreamz.com","theme_directory":"https:\/\/crochetdreamz.com\/wp-content\/themes\/mediavine-trellis","pwa_version":"49578","comments":{"order":"asc","per_page":10,"page_comments":true,"enabled":true,"has_comments":"2"},"i18n":{"COMMENTS":"Comments","REPLY":"Reply","COMMENT":"Comment","COMMENT_PLACEHOLDER":"Write your comment...","REPLY_PLACEHOLDER":"Write your reply...","NAME":"Name","EMAIL":"Email","AT":"at","SHOW_MORE":"Show More Comments","LOADING":"Loading...","PLEASE_WAIT":"Please wait...","COMMENT_POSTED":"Comment posted!","FLOOD_MESSAGE":"Please wait before posting another comment.","FLOOD_HEADER":"Slow down, you're commenting too quickly!","DUPLICATE_MESSAGE":"It looks as though you've already said that!","DUPLICATE_HEADER":"Duplicate comment detected","INVALID_PARAM_MESSAGE":"Please check your email address.","INVALID_PARAM_HEADER":"Invalid email address","INVALID_CONTENT_MESSAGE":"Please check your comment before sending it again.","INVALID_CONTENT_HEADER":"Invalid content","AUTHOR_REQUIRED_MESSAGE":"Creating a comment requires valid author name and email values.","AUTHOR_REQUIRED_HEADER":"Missing some fields","GENERIC_ERROR":"Something went wrong."}};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://crochetdreamz.com/wp-content/themes/mediavine-trellis/assets/dist/main.0.18.1.js?ver=0.18.1" id="mv-trellis-js"></script>
+	</body>
+</html>
