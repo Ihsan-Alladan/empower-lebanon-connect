@@ -65,6 +65,16 @@ const AboutUs: React.FC = () => {
     }
   };
 
+  // New images for the About section
+  const aboutImages = [
+    { url: "/lovable-uploads/lovable-uploads/course.webp", alt: "Woman on laptop", border: "border-[#F97316]" },
+    { url: "/lovable-uploads/lovable-uploads/donation1.webp", alt: "Donation image", border: "border-[#D946EF]" },
+    { url: "/lovable-uploads/lovable-uploads/shop10.gif", alt: "Colorful code", border: "border-[#1EAEDB]" },
+    { url: "/lovable-uploads/lovable-uploads/shop8.png", alt: "Matrix code", border: "border-[#F97316]" },
+    { url: "/lovable-uploads/lovable-uploads/course2.webp", alt: "Course image", border: "border-[#ea384c]" },
+    { url: "/lovable-uploads/lovable-uploads/shop11.gif", alt: "Group around screens", border: "border-[#D946EF]" }
+  ];
+
   return (
     <section className="py-20 bg-white" id="about">
       <div className="container mx-auto px-4">
@@ -112,7 +122,7 @@ const AboutUs: React.FC = () => {
             </motion.p>
           </motion.div>
 
-          {/* Enhanced Image Gallery with animations */}
+          {/* Updated Image Gallery with new images */}
           <motion.div 
             className="order-1 md:order-2 grid grid-cols-3 gap-3"
             variants={imageContainerVariants}
@@ -126,8 +136,8 @@ const AboutUs: React.FC = () => {
                 whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
               >
                 <img 
-                  src="/lovable-uploads/fdb57aa4-45f1-4e8d-8cd5-c7f24268e936.png" 
-                  alt="Guide to selling handmade items online" 
+                  src={aboutImages[0].url}
+                  alt={aboutImages[0].alt}
                   className="w-full h-40 object-cover transition-all duration-700 hover:scale-110"
                   loading="lazy"
                 />
@@ -138,8 +148,8 @@ const AboutUs: React.FC = () => {
                 whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
               >
                 <img 
-                  src="/lovable-uploads/f6ddb42e-7197-483b-b428-24ce8a62075d.png" 
-                  alt="Artisan chocolate workshop" 
+                  src={aboutImages[1].url}
+                  alt={aboutImages[1].alt}
                   className="w-full h-32 object-cover transition-all duration-700 hover:scale-110"
                   loading="lazy"
                 />
@@ -153,8 +163,8 @@ const AboutUs: React.FC = () => {
                 whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
               >
                 <img 
-                  src="/lovable-uploads/9ccc3dc6-1453-4e2f-8240-babd3b2a121d.png" 
-                  alt="Blue fluid art" 
+                  src={aboutImages[2].url}
+                  alt={aboutImages[2].alt}
                   className="w-full h-32 object-cover transition-all duration-700 hover:scale-110"
                   loading="lazy"
                 />
@@ -165,8 +175,8 @@ const AboutUs: React.FC = () => {
                 whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
               >
                 <img 
-                  src="/lovable-uploads/c9caa428-0f2f-4648-8934-29a619641101.png" 
-                  alt="Donation box with hearts" 
+                  src={aboutImages[3].url}
+                  alt={aboutImages[3].alt}
                   className="w-full h-40 object-cover transition-all duration-700 hover:scale-110"
                   loading="lazy"
                 />
@@ -180,8 +190,8 @@ const AboutUs: React.FC = () => {
                 whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
               >
                 <img 
-                  src="/lovable-uploads/c9caa428-0f2f-4648-8934-29a619641101.png" 
-                  alt="Donation box with hearts" 
+                  src={aboutImages[4].url}
+                  alt={aboutImages[4].alt}
                   className="w-full h-40 object-cover transition-all duration-700 hover:scale-110"
                   loading="lazy"
                 />
@@ -192,8 +202,8 @@ const AboutUs: React.FC = () => {
                 whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
               >
                 <img 
-                  src="/lovable-uploads/20ce0643-5492-4294-888b-72a0795637e8.png" 
-                  alt="E-learning illustration" 
+                  src={aboutImages[5].url}
+                  alt={aboutImages[5].alt}
                   className="w-full h-32 object-cover transition-all duration-700 hover:scale-110"
                   loading="lazy"
                 />

@@ -30,19 +30,31 @@ const OurMission: React.FC = () => {
     }
   };
 
-  // Image data for the carousel
+  // Updated Image data for the carousel
   const missionImages = [
     {
-      url: "https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-      alt: "Lebanese landscape"
+      url: "/lovable-uploads/lovable-uploads/team.webp",
+      alt: "Team collaboration"
     },
     {
-      url: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-      alt: "Community support"
+      url: "/lovable-uploads/lovable-uploads/team1.webp",
+      alt: "Team meeting"
     },
     {
-      url: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-      alt: "Empowerment through education"
+      url: "/lovable-uploads/lovable-uploads/technologyW1.jpg",
+      alt: "Technology workshop"
+    },
+    {
+      url: "/lovable-uploads/lovable-uploads/technologyW2.jpg",
+      alt: "Technology education"
+    },
+    {
+      url: "/lovable-uploads/lovable-uploads/workshop1.avif",
+      alt: "Creative workshop"
+    },
+    {
+      url: "/lovable-uploads/lovable-uploads/workshop2.webp",
+      alt: "Educational workshop"
     }
   ];
 
@@ -89,7 +101,7 @@ const OurMission: React.FC = () => {
             </motion.p>
           </motion.div>
           
-          {/* Image slider/carousel */}
+          {/* Image slider/carousel with updated images */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
