@@ -53,7 +53,18 @@ const LearnerDashboard = () => {
       setTimeout(() => {
         // If no enrolled courses, set empty array
         if (enrolledCourseIds.length === 0) {
-          setEnrolledCourses([]);
+          // Add a default course for demonstration purpose
+          const defaultCourses: EnrolledCourse[] = [
+            {
+              id: 'google-classroom-demo',
+              title: 'Google Classroom Style Demo Course',
+              instructor: 'Alex Johnson',
+              thumbnail: '/lovable-uploads/lovable-uploads/course2.webp',
+              lastAccessed: 'Just now',
+              progress: 0
+            }
+          ];
+          setEnrolledCourses(defaultCourses);
           setIsLoading(false);
           return;
         }
@@ -82,6 +93,16 @@ const LearnerDashboard = () => {
         const userEnrolledCourses = mockEnrolledCourses.filter(
           course => enrolledCourseIds.includes(course.id)
         );
+        
+        // Add the default course for demonstration
+        userEnrolledCourses.unshift({
+          id: 'google-classroom-demo',
+          title: 'Google Classroom Style Demo Course',
+          instructor: 'Alex Johnson',
+          thumbnail: '/lovable-uploads/lovable-uploads/course2.webp',
+          lastAccessed: 'Just now',
+          progress: 0
+        });
         
         setEnrolledCourses(userEnrolledCourses);
         setIsLoading(false);
