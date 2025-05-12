@@ -51,9 +51,9 @@ const Shop: React.FC = () => {
   });
 
   const sliderImages = [
-    "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?q=80&w=2574&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1561571994-3c61c554181a?q=80&w=2574&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1635982990938-856392a399b3?q=80&w=2574&auto=format&fit=crop"
+    "/lovable-uploads/lovable-uploads/shop8.png",
+    "/lovable-uploads/lovable-uploads/shop9.png",
+    "/lovable-uploads/lovable-uploads/shop1.jpg"
   ];
 
   // Automatic slider

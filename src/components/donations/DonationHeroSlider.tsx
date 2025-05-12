@@ -21,19 +21,19 @@ const DonationHeroSlider: React.FC<DonationHeroSliderProps> = ({ scrollToCauses 
       id: 1,
       title: "Support a Learner's Journey",
       subtitle: "Help unlock potential through education",
-      imageUrl: "/lovable-uploads/f6ddb42e-7197-483b-b428-24ce8a62075d.png"
+      imageUrl: "/lovable-uploads/lovable-uploads/best_free_coding_courses_for_women_in_london_women_who_code.jpg"
     },
     {
       id: 2,
       title: "Empower Women Entrepreneurs",
       subtitle: "Your donation builds sustainable futures",
-      imageUrl: "/lovable-uploads/88cb08a3-5df1-4252-b772-5ebb5ed8b0d5.png"
+      imageUrl: "/lovable-uploads/lovable-uploads/roboticsW.jpg"
     },
     {
       id: 3,
       title: "Support Youth Development",
       subtitle: "Invest in tomorrow's leaders today",
-      imageUrl: "/lovable-uploads/c9caa428-0f2f-4648-8934-29a619641101.png"
+      imageUrl: "/lovable-uploads/lovable-uploads/BenefitsOfYouthLeadershipPrograms-300x175 (2).png"
     }
   ];
   

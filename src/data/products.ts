@@ -1,4 +1,3 @@
-
 import { Product } from "@/types/product";
 
 export const products: Product[] = [
@@ -100,7 +99,7 @@ export const products: Product[] = [
     images: [
       {
         id: "img1",
-        url: "/lovable-uploads/Sdaae16c91d874965b4929ed296d51c61Z.avif", // Updated image
+        url: "/lovable-uploads/lovable-uploads/7101YDE0+7L._AC_UF350,350_QL80_.jpg",
         alt: "Ceramic mug set"
       }
     ],

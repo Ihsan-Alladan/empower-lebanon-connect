@@ -24,7 +24,7 @@ const Donate: React.FC = () => {
       id: 'edu-tech',
       title: "Fund Women's Coding Courses",
       description: "Help women develop tech skills that lead to sustainable careers and economic independence.",
-      imageUrl: "/lovable-uploads/57514e04-8524-41e5-8cbd-c63693884459.png",
+      imageUrl: "/lovable-uploads/lovable-uploads/best_free_coding_courses_for_women_in_london_women_who_code.jpg",
       currentAmount: 8750,
       goalAmount: 15000,
       suggestedAmount: 50
@@ -33,7 +33,7 @@ const Donate: React.FC = () => {
       id: 'youth-dev',
       title: "Youth Leadership Program",
       description: "Support workshops that build confidence and leadership skills for underserved youth.",
-      imageUrl: "/lovable-uploads/22a31812-0de9-4dde-9442-b766171923c5.png",
+      imageUrl: "/lovable-uploads/lovable-uploads/BenefitsOfYouthLeadershipPrograms-300x175 (2).png",
       currentAmount: 4200,
       goalAmount: 10000,
       suggestedAmount: 35
@@ -42,7 +42,7 @@ const Donate: React.FC = () => {
       id: 'entrepreneur',
       title: "Small Business Grants",
       description: "Provide seed funding to help local entrepreneurs start sustainable businesses.",
-      imageUrl: "/lovable-uploads/9ccc3dc6-1453-4e2f-8240-babd3b2a121d.png",
+      imageUrl: "/lovable-uploads/lovable-uploads/shutterstock_1931936252-1030x687.jpg",
       currentAmount: 12500,
       goalAmount: 20000,
       suggestedAmount: 75
@@ -60,7 +60,7 @@ const Donate: React.FC = () => {
       id: 'community-center',
       title: "Community Center Renovation",
       description: "Support the renovation of our community center to create more learning spaces.",
-      imageUrl: "/lovable-uploads/fdb57aa4-45f1-4e8d-8cd5-c7f24268e936.png",
+      imageUrl: "/lovable-uploads/lovable-uploads/maple-grove-community-center-rendering.jpg",
       currentAmount: 25000,
       goalAmount: 50000,
       suggestedAmount: 100
@@ -69,7 +69,7 @@ const Donate: React.FC = () => {
       id: 'emergency-aid',
       title: "Emergency Relief Fund",
       description: "Provide immediate assistance to community members facing unexpected hardship.",
-      imageUrl: "/lovable-uploads/47bed620-a187-4c7f-aa12-2920437fa02a.png",
+      imageUrl: "/lovable-uploads/lovable-uploads/Student-Emergency-Relief-Fund-DRAFT.jpg",
       currentAmount: 7500,
       goalAmount: 15000,
       suggestedAmount: 45
