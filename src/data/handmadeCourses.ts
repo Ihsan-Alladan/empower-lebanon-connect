@@ -1,4 +1,3 @@
-
 import { Course } from '@/types/course';
 
 export const handmadeCourses: Course[] = [
@@ -99,7 +98,7 @@ export const handmadeCourses: Course[] = [
     id: 'handmade-2',
     title: 'Natural Soap Making with Lebanese Cedar',
     description: 'Create luxurious handmade soaps using traditional Lebanese ingredients like cedar oil, olive oil, and local herbs. Learn formulation, curing techniques, and packaging to create beautiful artisanal products.',
-    thumbnail: 'https://images.unsplash.com/photo-1607006344380-b6775a0824ce?q=80&w=1000',
+    thumbnail: '/lovable-uploads/lovable-uploads/2.webp', // Updated image
     category: 'handmade',
     level: 'intermediate',
     price: 39.99,

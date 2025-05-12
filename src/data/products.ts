@@ -11,7 +11,7 @@ export const products: Product[] = [
     images: [
       {
         id: "img1",
-        url: "https://images.unsplash.com/photo-1582562124811-c09040d0a901",
+        url: "/lovable-uploads/lovable-uploads/download.jpg", // Updated image
         alt: "Handwoven basket front view"
       },
       {
@@ -67,7 +67,7 @@ export const products: Product[] = [
     images: [
       {
         id: "img1",
-        url: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07",
+        url: "/lovable-uploads/lovable-uploads/61CZQAhkk7L.jpg", // Updated image
         alt: "Embroidered table runner"
       }
     ],
@@ -100,7 +100,7 @@ export const products: Product[] = [
     images: [
       {
         id: "img1",
-        url: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9",
+        url: "/lovable-uploads/Sdaae16c91d874965b4929ed296d51c61Z.avif", // Updated image
         alt: "Ceramic mug set"
       }
     ],
@@ -131,7 +131,7 @@ export const products: Product[] = [
     images: [
       {
         id: "img1",
-        url: "https://images.unsplash.com/photo-1582562124811-c09040d0a901",
+        url: "/lovable-uploads/lovable-uploads/IMG_20230304_111356.jpg", // Updated image
         alt: "Olive wood serving board"
       }
     ],
@@ -162,7 +162,7 @@ export const products: Product[] = [
     images: [
       {
         id: "img1",
-        url: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07",
+        url: "/lovable-uploads/lovable-uploads/il_fullxfull.5562158663_qmfa.webp", // Updated image
         alt: "Crochet throw blanket"
       }
     ],
@@ -195,7 +195,7 @@ export const products: Product[] = [
     images: [
       {
         id: "img1",
-        url: "https://images.unsplash.com/photo-1472396961693-142e6e269027",
+        url: "/lovable-uploads/lovable-uploads/images.jpg", // Updated image
         alt: "Copper Turkish coffee set"
       }
     ],

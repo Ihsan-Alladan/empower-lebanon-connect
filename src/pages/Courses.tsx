@@ -30,9 +30,9 @@ const Courses: React.FC = () => {
   const coursesListRef = useRef<HTMLDivElement>(null);
 
   const slides = [
-    "/lovable-uploads/dccc32b9-798a-4692-9816-6e03d3cfedf2.png", // Crochet workshop
-    "/lovable-uploads/88cb08a3-5df1-4252-b772-5ebb5ed8b0d5.png",  // Technology workshop
-    "/lovable-uploads/47bed620-a187-4c7f-aa12-2920437fa02a.png"   // Another course image
+    "/lovable-uploads/lovable-uploads/signup.jpg",    // Changed image 1
+    "/lovable-uploads/lovable-uploads/skills.jpg",    // Changed image 2
+    "/lovable-uploads/lovable-uploads/b6.webp"       // Changed image 3
   ];
 
   useEffect(() => {
