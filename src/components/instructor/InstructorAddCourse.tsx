@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -31,6 +31,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Upload, ImagePlus, Save, Eye } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { v4 as uuidv4 } from 'uuid';
 
 const courseFormSchema = z.object({
   title: z.string().min(5, {
@@ -58,6 +60,8 @@ const courseFormSchema = z.object({
       message: 'Price must be "free" or a valid number.',
     }
   ),
+  seqNb: z.string().optional(),
+  capacity: z.string().optional(),
 });
 
 const InstructorAddCourse: React.FC = () => {
@@ -65,6 +69,42 @@ const InstructorAddCourse: React.FC = () => {
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [instructors, setInstructors] = useState<{ id: string; name: string }[]>([]);
+  const [selectedInstructorId, setSelectedInstructorId] = useState<string>('');
+  
+  useEffect(() => {
+    // Fetch instructors from database
+    const fetchInstructors = async () => {
+      try {
+        // In a real app, we'd fetch instructors with an instructor role
+        // For now, let's use some sample data
+        const { data, error } = await supabase
+          .from('user_roles')
+          .select('user_id, profiles(first_name, last_name)')
+          .eq('role', 'instructor');
+        
+        if (error) throw error;
+        
+        const formattedInstructors = data.map(item => ({
+          id: item.user_id,
+          name: `${item.profiles?.first_name || ''} ${item.profiles?.last_name || ''}`.trim() || 'Unnamed Instructor'
+        }));
+        
+        setInstructors(formattedInstructors);
+      } catch (error) {
+        console.error('Error fetching instructors:', error);
+        // Fallback to sample data if there's an error
+        setInstructors([
+          { id: '1', name: 'Jane Smith' },
+          { id: '2', name: 'John Doe' },
+          { id: '3', name: 'Emily Johnson' },
+          { id: '4', name: 'Michael Wilson' },
+        ]);
+      }
+    };
+    
+    fetchInstructors();
+  }, []);
   
   const form = useForm<z.infer<typeof courseFormSchema>>({
     resolver: zodResolver(courseFormSchema),
@@ -75,6 +115,8 @@ const InstructorAddCourse: React.FC = () => {
       level: 'beginner',
       instructorBio: '',
       price: '',
+      seqNb: '',
+      capacity: '',
     },
   });
 
@@ -95,16 +137,78 @@ const InstructorAddCourse: React.FC = () => {
     }
   };
 
-  const onSubmit = async (values: z.infer<typeof courseFormSchema>) => {
-    setIsSubmitting(true);
+  const uploadImageToStorage = async (imageFile: File): Promise<string> => {
     try {
-      // In a real application, we would submit the form data to an API
-      console.log('Form values:', values);
-      console.log('Cover image:', coverImage);
-      console.log('Files:', files);
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${uuidv4()}.${fileExt}`;
+      const filePath = `course-thumbnails/${fileName}`;
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Upload file to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('course-media')
+        .upload(filePath, imageFile);
+      
+      if (error) throw error;
+      
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('course-media')
+        .getPublicUrl(filePath);
+      
+      return urlData.publicUrl;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw error;
+    }
+  };
+
+  const onSubmit = async (values: z.infer<typeof courseFormSchema>) => {
+    if (!selectedInstructorId) {
+      toast.error('Please select an instructor');
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      // Extract base64 data and convert to a file object for storage upload
+      let thumbnailUrl = null;
+      if (coverImage && coverImage.startsWith('data:')) {
+        // Convert base64 to file
+        const res = await fetch(coverImage);
+        const blob = await res.blob();
+        const imageFile = new File([blob], "course-thumbnail.jpg", { type: "image/jpeg" });
+        
+        // Upload to storage
+        thumbnailUrl = await uploadImageToStorage(imageFile);
+      }
+      
+      // Calculate price based on input
+      const priceValue = values.price === 'free' ? 0 : parseFloat(values.price);
+      
+      // Prepare course data
+      const courseData = {
+        title: values.title,
+        description: values.description,
+        category: values.category,
+        level: values.level,
+        price: priceValue,
+        instructor_id: selectedInstructorId,
+        thumbnail: thumbnailUrl,
+        sequence_number: values.seqNb ? parseInt(values.seqNb) : null,
+        capacity: values.capacity ? parseInt(values.capacity) : 30,
+        is_published: false,  // Set to draft by default
+        created_at: new Date(),
+        updated_at: new Date()
+      };
+      
+      // Insert into courses table
+      const { data, error } = await supabase
+        .from('courses')
+        .insert([courseData])
+        .select();
+      
+      if (error) throw error;
       
       toast.success('Course created successfully!', {
         description: 'Your course has been created and is now ready for review.',
@@ -269,6 +373,28 @@ const InstructorAddCourse: React.FC = () => {
                 />
               </div>
 
+              {/* Instructor Selection */}
+              <div>
+                <FormLabel>Instructor</FormLabel>
+                <Select 
+                  onValueChange={setSelectedInstructorId}
+                  defaultValue={selectedInstructorId}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select an instructor" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {instructors.map(instructor => (
+                      <SelectItem key={instructor.id} value={instructor.id}>
+                        {instructor.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               {/* Instructor Bio */}
               <FormField
                 control={form.control}
@@ -336,6 +462,37 @@ const InstructorAddCourse: React.FC = () => {
                   </FormItem>
                 )}
               />
+              
+              {/* Sequence Number & Capacity */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="seqNb"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Sequence Number</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="1" min="0" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="capacity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Capacity</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="30" min="1" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               {/* Course Content Files */}
               <div>
