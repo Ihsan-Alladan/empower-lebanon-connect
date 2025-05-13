@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,9 +30,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Upload, ImagePlus, Save, Eye } from 'lucide-react';
+import { Save, Eye } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import { v4 as uuidv4 } from 'uuid';
+
+// Import refactored components
+import CourseImageUploader from './CourseImageUploader';
+import CourseContentUploader from './CourseContentUploader';
+import InstructorSelector from './InstructorSelector';
+import CoursePriceInput from './CoursePriceInput';
+import { useCourseImageUpload } from '@/hooks/useCourseImageUpload';
 
 const courseFormSchema = z.object({
   title: z.string().min(5, {
@@ -69,62 +75,8 @@ const InstructorAddCourse: React.FC = () => {
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [instructors, setInstructors] = useState<{ id: string; name: string }[]>([]);
   const [selectedInstructorId, setSelectedInstructorId] = useState<string>('');
-  
-  useEffect(() => {
-    // Fetch instructors from database
-    const fetchInstructors = async () => {
-      try {
-        // Fetch instructors with an instructor role
-        const { data, error } = await supabase
-          .from('user_roles')
-          .select('user_id, role')
-          .eq('role', 'instructor');
-        
-        if (error) throw error;
-        
-        // If we have instructor users, fetch their profile information
-        if (data && data.length > 0) {
-          const instructorIds = data.map(item => item.user_id);
-          
-          // Fetch profiles for these instructors
-          const { data: profilesData, error: profilesError } = await supabase
-            .from('profiles')
-            .select('id, first_name, last_name')
-            .in('id', instructorIds);
-          
-          if (profilesError) throw profilesError;
-          
-          const formattedInstructors = profilesData.map(profile => ({
-            id: profile.id,
-            name: `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Unnamed Instructor'
-          }));
-          
-          setInstructors(formattedInstructors);
-        } else {
-          // Fallback to sample data if no instructors are found
-          setInstructors([
-            { id: '1', name: 'Jane Smith' },
-            { id: '2', name: 'John Doe' },
-            { id: '3', name: 'Emily Johnson' },
-            { id: '4', name: 'Michael Wilson' },
-          ]);
-        }
-      } catch (error) {
-        console.error('Error fetching instructors:', error);
-        // Fallback to sample data if there's an error
-        setInstructors([
-          { id: '1', name: 'Jane Smith' },
-          { id: '2', name: 'John Doe' },
-          { id: '3', name: 'Emily Johnson' },
-          { id: '4', name: 'Michael Wilson' },
-        ]);
-      }
-    };
-    
-    fetchInstructors();
-  }, []);
+  const { uploadImageToStorage } = useCourseImageUpload();
   
   const form = useForm<z.infer<typeof courseFormSchema>>({
     resolver: zodResolver(courseFormSchema),
@@ -139,48 +91,6 @@ const InstructorAddCourse: React.FC = () => {
       capacity: '',
     },
   });
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCoverImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFiles(Array.from(e.target.files));
-    }
-  };
-
-  const uploadImageToStorage = async (imageFile: File): Promise<string> => {
-    try {
-      const fileExt = imageFile.name.split('.').pop();
-      const fileName = `${uuidv4()}.${fileExt}`;
-      const filePath = `course-thumbnails/${fileName}`;
-      
-      // Upload file to Supabase Storage
-      const { data, error } = await supabase.storage
-        .from('course-media')
-        .upload(filePath, imageFile);
-      
-      if (error) throw error;
-      
-      // Get public URL
-      const { data: urlData } = supabase.storage
-        .from('course-media')
-        .getPublicUrl(filePath);
-      
-      return urlData.publicUrl;
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      throw error;
-    }
-  };
 
   const onSubmit = async (values: z.infer<typeof courseFormSchema>) => {
     if (!selectedInstructorId) {
@@ -269,36 +179,10 @@ const InstructorAddCourse: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Course Cover Image */}
-              <div className="mb-6">
-                <FormLabel>Course Cover Image</FormLabel>
-                <div className="mt-2 flex flex-col items-center">
-                  {coverImage ? (
-                    <div className="w-full aspect-video rounded-md overflow-hidden mb-4">
-                      <img 
-                        src={coverImage} 
-                        alt="Course cover" 
-                        className="w-full h-full object-cover" 
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-full aspect-video bg-slate-100 rounded-md flex items-center justify-center mb-4">
-                      <ImagePlus size={48} className="text-slate-400" />
-                    </div>
-                  )}
-                  <Button type="button" variant="outline" asChild>
-                    <label className="cursor-pointer flex items-center">
-                      <Upload size={16} className="mr-2" />
-                      {coverImage ? 'Change Image' : 'Upload Image'}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="sr-only"
-                        onChange={handleImageChange}
-                      />
-                    </label>
-                  </Button>
-                </div>
-              </div>
+              <CourseImageUploader 
+                coverImage={coverImage} 
+                onImageChange={setCoverImage} 
+              />
 
               {/* Title */}
               <FormField
@@ -392,26 +276,10 @@ const InstructorAddCourse: React.FC = () => {
               </div>
 
               {/* Instructor Selection */}
-              <div>
-                <FormLabel>Instructor</FormLabel>
-                <Select 
-                  onValueChange={setSelectedInstructorId}
-                  defaultValue={selectedInstructorId}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select an instructor" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {instructors.map(instructor => (
-                      <SelectItem key={instructor.id} value={instructor.id}>
-                        {instructor.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <InstructorSelector 
+                selectedInstructorId={selectedInstructorId}
+                onInstructorSelect={setSelectedInstructorId}
+              />
 
               {/* Instructor Bio */}
               <FormField
@@ -433,53 +301,7 @@ const InstructorAddCourse: React.FC = () => {
               />
 
               {/* Price */}
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <div className="flex space-x-4">
-                        <Select 
-                          onValueChange={(value) => {
-                            if (value === 'free') {
-                              field.onChange('free');
-                            } else if (value === 'paid') {
-                              field.onChange('');
-                            }
-                          }}
-                          defaultValue={field.value === 'free' ? 'free' : 'paid'}
-                        >
-                          <SelectTrigger className="w-[100px]">
-                            <SelectValue placeholder="Type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="free">Free</SelectItem>
-                            <SelectItem value="paid">Paid</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        
-                        {field.value !== 'free' && (
-                          <div className="relative flex-1">
-                            <span className="absolute left-3 top-1/2 transform -translate-y-1/2">$</span>
-                            <Input 
-                              type="number" 
-                              className="pl-7" 
-                              placeholder="29.99" 
-                              min="0" 
-                              step="0.01"
-                              value={field.value === 'free' ? '' : field.value}
-                              onChange={(e) => field.onChange(e.target.value)}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <CoursePriceInput control={form.control} />
               
               {/* Sequence Number & Capacity */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -513,40 +335,10 @@ const InstructorAddCourse: React.FC = () => {
               </div>
 
               {/* Course Content Files */}
-              <div>
-                <FormLabel>Course Content (PDFs, Videos, etc.)</FormLabel>
-                <div className="mt-2">
-                  <Button type="button" variant="outline" asChild className="w-full h-24 border-dashed">
-                    <label className="cursor-pointer flex flex-col items-center justify-center h-full">
-                      <Upload size={24} className="mb-2 text-slate-400" />
-                      <span className="text-sm text-slate-600">
-                        {files.length > 0
-                          ? `${files.length} file(s) selected`
-                          : 'Upload course materials'
-                        }
-                      </span>
-                      <input
-                        type="file"
-                        className="sr-only"
-                        multiple
-                        onChange={handleFilesChange}
-                      />
-                    </label>
-                  </Button>
-                  {files.length > 0 && (
-                    <div className="mt-2">
-                      <ul className="text-sm text-slate-600">
-                        {files.slice(0, 3).map((file, i) => (
-                          <li key={i}>{file.name}</li>
-                        ))}
-                        {files.length > 3 && (
-                          <li>...and {files.length - 3} more</li>
-                        )}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              </div>
+              <CourseContentUploader 
+                files={files}
+                onFilesChange={setFiles}
+              />
             </CardContent>
             <CardFooter className="flex justify-between">
               <Button 
