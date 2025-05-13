@@ -76,21 +76,41 @@ const InstructorAddCourse: React.FC = () => {
     // Fetch instructors from database
     const fetchInstructors = async () => {
       try {
-        // In a real app, we'd fetch instructors with an instructor role
-        // For now, let's use some sample data
+        // Fetch instructors with an instructor role
         const { data, error } = await supabase
           .from('user_roles')
-          .select('user_id, profiles(first_name, last_name)')
+          .select('user_id, role')
           .eq('role', 'instructor');
         
         if (error) throw error;
         
-        const formattedInstructors = data.map(item => ({
-          id: item.user_id,
-          name: `${item.profiles?.first_name || ''} ${item.profiles?.last_name || ''}`.trim() || 'Unnamed Instructor'
-        }));
-        
-        setInstructors(formattedInstructors);
+        // If we have instructor users, fetch their profile information
+        if (data && data.length > 0) {
+          const instructorIds = data.map(item => item.user_id);
+          
+          // Fetch profiles for these instructors
+          const { data: profilesData, error: profilesError } = await supabase
+            .from('profiles')
+            .select('id, first_name, last_name')
+            .in('id', instructorIds);
+          
+          if (profilesError) throw profilesError;
+          
+          const formattedInstructors = profilesData.map(profile => ({
+            id: profile.id,
+            name: `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Unnamed Instructor'
+          }));
+          
+          setInstructors(formattedInstructors);
+        } else {
+          // Fallback to sample data if no instructors are found
+          setInstructors([
+            { id: '1', name: 'Jane Smith' },
+            { id: '2', name: 'John Doe' },
+            { id: '3', name: 'Emily Johnson' },
+            { id: '4', name: 'Michael Wilson' },
+          ]);
+        }
       } catch (error) {
         console.error('Error fetching instructors:', error);
         // Fallback to sample data if there's an error
@@ -198,14 +218,12 @@ const InstructorAddCourse: React.FC = () => {
         sequence_number: values.seqNb ? parseInt(values.seqNb) : null,
         capacity: values.capacity ? parseInt(values.capacity) : 30,
         is_published: false,  // Set to draft by default
-        created_at: new Date(),
-        updated_at: new Date()
       };
       
       // Insert into courses table
       const { data, error } = await supabase
         .from('courses')
-        .insert([courseData])
+        .insert(courseData)
         .select();
       
       if (error) throw error;
