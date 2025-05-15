@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -46,13 +47,19 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Label } from '@/components/ui/label';
-import { Calendar as CalendarIcon, Clock, MapPin, Users, UserCheck, Bell, AlertCircle, Search, Plus, Edit2, Trash2, Calendar, Send } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, MapPin, Users, UserCheck, Bell, AlertCircle, Search, Plus, Edit2, Trash2, Calendar, Send, User } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Event, EventCategory, Speaker } from '@/types/event';
 import { z } from 'zod';
@@ -60,6 +67,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarDate, DatePicker } from '@/components/ui/date-picker';
+import { events as mockEvents } from '@/data/events';
 
 // Define the schema for the event form
 const eventFormSchema = z.object({
@@ -75,6 +83,16 @@ const eventFormSchema = z.object({
 
 type EventForm = z.infer<typeof eventFormSchema>;
 
+// Define interface for event registration
+interface EventRegistration {
+  id: string;
+  user_id: string;
+  event_id: string;
+  registered_at: string;
+  user_name?: string;
+  user_email?: string;
+}
+
 const EventsManagement: React.FC = () => {
   const [activeTab, setActiveTab] = useState('upcoming');
   const [events, setEvents] = useState<Event[]>([]);
@@ -86,6 +104,10 @@ const EventsManagement: React.FC = () => {
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [isNotifyDialogOpen, setIsNotifyDialogOpen] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
+  const [eventRegistrations, setEventRegistrations] = useState<{[key: string]: EventRegistration[]}>({});
+  const [selectedAttendees, setSelectedAttendees] = useState<string[]>([]);
+  const [isRegistrationDialogOpen, setIsRegistrationDialogOpen] = useState(false);
+  const [viewingRegistrationsForEvent, setViewingRegistrationsForEvent] = useState<Event | null>(null);
   const navigate = useNavigate();
 
   // Form for creating/editing events
@@ -139,13 +161,14 @@ const EventsManagement: React.FC = () => {
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
+      // Try to fetch from Supabase first
       const { data: eventsData, error } = await supabase
         .from('events')
         .select('*, event_speakers(*), event_images(url), event_highlights(highlight)');
       
       if (error) throw error;
       
-      if (eventsData) {
+      if (eventsData && eventsData.length > 0) {
         const formattedEvents = eventsData.map(event => ({
           id: event.id,
           title: event.title,
@@ -162,12 +185,55 @@ const EventsManagement: React.FC = () => {
           highlights: event.event_highlights?.map((h: { highlight: string }) => h.highlight) || [],
         }));
         setEvents(formattedEvents);
+      } else {
+        // If no data in Supabase or empty result, use mock data
+        setEvents(mockEvents);
       }
+      
+      // Fetch registrations data for all events
+      await fetchAllRegistrations();
     } catch (error) {
       console.error('Error fetching events:', error);
-      toast.error('Failed to load events');
+      toast.error('Failed to load events from database, using mock data');
+      setEvents(mockEvents);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchAllRegistrations = async () => {
+    try {
+      const { data: registrationsData, error } = await supabase
+        .from('event_registrations')
+        .select('*, profiles(first_name, last_name, id, avatar_url)');
+
+      if (error) throw error;
+      
+      if (registrationsData) {
+        // Group registrations by event_id
+        const groupedRegistrations: {[key: string]: EventRegistration[]} = {};
+        
+        registrationsData.forEach((reg: any) => {
+          const registration: EventRegistration = {
+            id: reg.id,
+            user_id: reg.user_id,
+            event_id: reg.event_id,
+            registered_at: reg.registered_at,
+            user_name: reg.profiles ? `${reg.profiles.first_name || ''} ${reg.profiles.last_name || ''}`.trim() : 'Anonymous User',
+            user_email: reg.profiles?.email || 'No Email'
+          };
+          
+          if (!groupedRegistrations[reg.event_id]) {
+            groupedRegistrations[reg.event_id] = [];
+          }
+          groupedRegistrations[reg.event_id].push(registration);
+        });
+        
+        setEventRegistrations(groupedRegistrations);
+      }
+    } catch (error) {
+      console.error('Error fetching registrations:', error);
+      toast.error('Failed to load event registrations');
     }
   };
 
@@ -305,6 +371,7 @@ const EventsManagement: React.FC = () => {
 
   const openNotifyDialog = (id: string) => {
     setSelectedEventId(id);
+    setSelectedAttendees([]);
     setIsNotifyDialogOpen(true);
   };
 
@@ -312,15 +379,25 @@ const EventsManagement: React.FC = () => {
     if (!selectedEventId || !notificationMessage) return;
     
     try {
+      // Get the event details
+      const event = events.find(e => e.id === selectedEventId);
+      if (!event) throw new Error('Event not found');
+
       // In a real application, this would connect to a notification service
       // For now, we'll simulate success
-      toast.success('Notification sent to all registered attendees');
+      toast.success(`Notification sent to ${selectedAttendees.length > 0 ? selectedAttendees.length : 'all'} registered attendees`);
       setNotificationMessage('');
       setIsNotifyDialogOpen(false);
+      setSelectedAttendees([]);
     } catch (error) {
       console.error('Error sending notification:', error);
       toast.error('Failed to send notification');
     }
+  };
+
+  const openRegistrationsDialog = (event: Event) => {
+    setViewingRegistrationsForEvent(event);
+    setIsRegistrationDialogOpen(true);
   };
 
   const handleSubmit = (data: EventForm) => {
@@ -335,6 +412,14 @@ const EventsManagement: React.FC = () => {
   const formatEventDate = (dateString: string) => {
     const date = new Date(dateString);
     return format(date, 'MMMM d, yyyy');
+  };
+
+  const handleAttendeeSelection = (userId: string) => {
+    if (selectedAttendees.includes(userId)) {
+      setSelectedAttendees(selectedAttendees.filter(id => id !== userId));
+    } else {
+      setSelectedAttendees([...selectedAttendees, userId]);
+    }
   };
   
   // Analytics data
@@ -378,7 +463,7 @@ const EventsManagement: React.FC = () => {
               </DialogHeader>
               
               <Form {...eventForm}>
-                <form onSubmit={eventForm.handleSubmit(handleSubmit)} className="space-y-4">
+                <form onSubmit={eventForm.handleSubmit(handleSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
                   <FormField
                     control={eventForm.control}
                     name="title"
@@ -678,6 +763,9 @@ const EventsManagement: React.FC = () => {
                     <Button variant="outline" size="sm" onClick={() => openNotifyDialog(event.id)}>
                       <Bell className="mr-2 h-3 w-3" /> Notify
                     </Button>
+                    <Button variant="outline" size="sm" onClick={() => openRegistrationsDialog(event)}>
+                      <Users className="mr-2 h-3 w-3" /> Attendees
+                    </Button>
                     <Button 
                       variant="destructive" 
                       size="sm"
@@ -760,8 +848,11 @@ const EventsManagement: React.FC = () => {
                     </div>
                   </div>
                   <div className="p-4 md:col-span-1 flex flex-col justify-center gap-2 bg-gray-50">
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => handleEditEvent(event)}>
                       <Edit2 className="mr-2 h-3 w-3" /> Edit
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => openRegistrationsDialog(event)}>
+                      <Users className="mr-2 h-3 w-3" /> Attendees
                     </Button>
                     <Button variant="secondary" size="sm">
                       Report
@@ -775,6 +866,24 @@ const EventsManagement: React.FC = () => {
                     </Button>
                   </div>
                 </div>
+                
+                {/* Event highlights for past events */}
+                {event.highlights && event.highlights.length > 0 && (
+                  <div className="p-4 bg-gray-50 border-t">
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem value="highlights">
+                        <AccordionTrigger className="text-sm">View Event Highlights</AccordionTrigger>
+                        <AccordionContent>
+                          <ul className="list-disc pl-5 space-y-1 text-sm">
+                            {event.highlights.map((highlight, idx) => (
+                              <li key={idx}>{highlight}</li>
+                            ))}
+                          </ul>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  </div>
+                )}
               </Card>
             ))
           )}
@@ -801,34 +910,37 @@ const EventsManagement: React.FC = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow>
-                    <TableCell>Women's Coding Workshop</TableCell>
-                    <TableCell>June 1, 2025</TableCell>
-                    <TableCell>Sarah Johnson</TableCell>
-                    <TableCell>May 15, 2025</TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="bg-green-50 text-green-700">Confirmed</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="ghost" size="sm">
-                        <Send className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Entrepreneur Networking</TableCell>
-                    <TableCell>June 15, 2025</TableCell>
-                    <TableCell>Michael Brown</TableCell>
-                    <TableCell>May 10, 2025</TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="bg-yellow-50 text-yellow-700">Pending</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="ghost" size="sm">
-                        <Send className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                  {Object.keys(eventRegistrations).length > 0 ? (
+                    Object.entries(eventRegistrations).flatMap(([eventId, registrations]) => {
+                      const event = events.find(e => e.id === eventId);
+                      if (!event) return [];
+                      
+                      return registrations.map(registration => (
+                        <TableRow key={registration.id}>
+                          <TableCell>{event.title}</TableCell>
+                          <TableCell>{formatEventDate(event.date)}</TableCell>
+                          <TableCell>{registration.user_name || 'Anonymous'}</TableCell>
+                          <TableCell>{format(new Date(registration.registered_at), 'MMM d, yyyy')}</TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="bg-green-50 text-green-700">Confirmed</Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Button variant="ghost" size="sm" onClick={() => {
+                              setSelectedEventId(eventId);
+                              setSelectedAttendees([registration.user_id]);
+                              setIsNotifyDialogOpen(true);
+                            }}>
+                              <Send className="h-4 w-4" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ));
+                    })
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-4">No registrations found</TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </CardContent>
@@ -866,14 +978,34 @@ const EventsManagement: React.FC = () => {
       
       {/* Notification Dialog */}
       <Dialog open={isNotifyDialogOpen} onOpenChange={setIsNotifyDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>Send Notification</DialogTitle>
             <DialogDescription>
-              Send a notification to all registered attendees for this event.
+              Send a notification to {selectedAttendees.length > 0 
+                ? `${selectedAttendees.length} selected attendee(s)`
+                : 'all registered attendees'} for this event.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
+            {selectedEventId && eventRegistrations[selectedEventId] && eventRegistrations[selectedEventId].length > 0 && selectedAttendees.length === 0 && (
+              <div className="space-y-2">
+                <Label>Recipients</Label>
+                <div className="border rounded-md p-2 max-h-32 overflow-y-auto">
+                  <div className="flex flex-wrap gap-1">
+                    {eventRegistrations[selectedEventId].map((reg) => (
+                      <Badge key={reg.id} variant="outline" className="cursor-pointer hover:bg-accent" onClick={() => handleAttendeeSelection(reg.user_id)}>
+                        {reg.user_name || 'Anonymous'}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Click on attendees to select specific recipients or leave empty to notify all
+                </p>
+              </div>
+            )}
+            
             <div className="space-y-2">
               <Label htmlFor="message">Notification Message</Label>
               <Textarea
@@ -881,6 +1013,7 @@ const EventsManagement: React.FC = () => {
                 placeholder="Enter your message to attendees"
                 value={notificationMessage}
                 onChange={(e) => setNotificationMessage(e.target.value)}
+                className="h-32"
               />
             </div>
           </div>
@@ -888,7 +1021,10 @@ const EventsManagement: React.FC = () => {
             <Button
               type="button"
               variant="secondary"
-              onClick={() => setIsNotifyDialogOpen(false)}
+              onClick={() => {
+                setIsNotifyDialogOpen(false);
+                setSelectedAttendees([]);
+              }}
             >
               Cancel
             </Button>
@@ -901,6 +1037,78 @@ const EventsManagement: React.FC = () => {
               Send Notification
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Registrations Dialog */}
+      <Dialog open={isRegistrationDialogOpen} onOpenChange={setIsRegistrationDialogOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Event Registrations</DialogTitle>
+            <DialogDescription>
+              {viewingRegistrationsForEvent && (
+                <>
+                  People registered for <span className="font-medium">{viewingRegistrationsForEvent.title}</span> on {formatEventDate(viewingRegistrationsForEvent.date)}
+                </>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            {viewingRegistrationsForEvent && eventRegistrations[viewingRegistrationsForEvent.id] && eventRegistrations[viewingRegistrationsForEvent.id].length > 0 ? (
+              <div className="max-h-[50vh] overflow-y-auto pr-2">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Attendee</TableHead>
+                      <TableHead>Registration Date</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {eventRegistrations[viewingRegistrationsForEvent.id].map((registration) => (
+                      <TableRow key={registration.id}>
+                        <TableCell className="flex items-center gap-2">
+                          <User className="h-4 w-4 text-muted-foreground" />
+                          {registration.user_name || 'Anonymous'}
+                        </TableCell>
+                        <TableCell>{format(new Date(registration.registered_at), 'MMM d, yyyy')}</TableCell>
+                        <TableCell>
+                          <Button variant="ghost" size="sm" onClick={() => {
+                            setIsRegistrationDialogOpen(false);
+                            setSelectedEventId(viewingRegistrationsForEvent.id);
+                            setSelectedAttendees([registration.user_id]);
+                            setIsNotifyDialogOpen(true);
+                          }}>
+                            <Send className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            ) : (
+              <p className="text-center py-6 text-muted-foreground">No registrations found for this event</p>
+            )}
+            
+            {viewingRegistrationsForEvent && (
+              <div className="flex justify-between items-center pt-2 border-t">
+                <p className="text-sm text-muted-foreground">
+                  Total registrations: {eventRegistrations[viewingRegistrationsForEvent.id]?.length || 0} / {viewingRegistrationsForEvent.capacity}
+                </p>
+                <Button onClick={() => {
+                  if (!viewingRegistrationsForEvent) return;
+                  setIsRegistrationDialogOpen(false);
+                  setSelectedEventId(viewingRegistrationsForEvent.id);
+                  setSelectedAttendees([]);
+                  setIsNotifyDialogOpen(true);
+                }} disabled={!viewingRegistrationsForEvent || !eventRegistrations[viewingRegistrationsForEvent.id]?.length}>
+                  <Bell className="mr-2 h-4 w-4" /> Notify All
+                </Button>
+              </div>
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </div>
