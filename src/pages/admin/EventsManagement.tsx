@@ -171,7 +171,7 @@ const EventsManagement: React.FC = () => {
     }
   };
 
-  // Fixed handleCreateEvent function to properly chain promises with finally
+  // Fixed handleCreateEvent function to properly chain promises
   const handleCreateEvent = (data: EventForm) => {
     // Implementation for creating a new event
     setIsSubmitting(true);
@@ -188,10 +188,13 @@ const EventsManagement: React.FC = () => {
       registered_attendees: 0,
     };
     
-    supabase
-      .from('events')
-      .insert(newEvent)
-      .select()
+    // Create a Promise wrapper to ensure we have access to catch and finally
+    Promise.resolve(
+      supabase
+        .from('events')
+        .insert(newEvent)
+        .select()
+    )
       .then(({ data, error }) => {
         if (error) {
           toast.error('Failed to create event');
@@ -228,7 +231,7 @@ const EventsManagement: React.FC = () => {
     setSelectedEventId(event.id);
   };
 
-  // Fixed handleUpdateEvent function to properly chain promises with finally
+  // Fixed handleUpdateEvent function to properly chain promises
   const handleUpdateEvent = (data: EventForm) => {
     if (!selectedEventId) return;
     
@@ -245,10 +248,13 @@ const EventsManagement: React.FC = () => {
       image_url: data.imageUrl,
     };
     
-    supabase
-      .from('events')
-      .update(updatedEvent)
-      .eq('id', selectedEventId)
+    // Create a Promise wrapper to ensure we have access to catch and finally
+    Promise.resolve(
+      supabase
+        .from('events')
+        .update(updatedEvent)
+        .eq('id', selectedEventId)
+    )
       .then(({ error }) => {
         if (error) {
           toast.error('Failed to update event');
