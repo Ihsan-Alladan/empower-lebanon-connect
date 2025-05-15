@@ -59,7 +59,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Label } from '@/components/ui/label';
-import { Calendar as CalendarIcon, Clock, MapPin, Users, UserCheck, Bell, AlertCircle, Search, Plus, Edit2, Trash2, Calendar, Send, User } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { CalendarIcon, Clock, MapPin, Users, UserCheck, Bell, AlertCircle, Search, Plus, Edit2, Trash2, Calendar, Send, User, Undo } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Event, EventCategory, Speaker } from '@/types/event';
 import { z } from 'zod';
@@ -79,6 +80,7 @@ const eventFormSchema = z.object({
   capacity: z.number().min(1, 'Capacity must be at least 1'),
   category: z.string(),
   imageUrl: z.string().min(1, 'Image URL is required'),
+  highlights: z.array(z.string()).optional(),
 });
 
 type EventForm = z.infer<typeof eventFormSchema>;
@@ -91,6 +93,9 @@ interface EventRegistration {
   registered_at: string;
   user_name?: string;
   user_email?: string;
+  profile?: {
+    avatar_url?: string;
+  };
 }
 
 const EventsManagement: React.FC = () => {
@@ -106,8 +111,14 @@ const EventsManagement: React.FC = () => {
   const [notificationMessage, setNotificationMessage] = useState('');
   const [eventRegistrations, setEventRegistrations] = useState<{[key: string]: EventRegistration[]}>({});
   const [selectedAttendees, setSelectedAttendees] = useState<string[]>([]);
+  const [selectAllAttendees, setSelectAllAttendees] = useState(false);
   const [isRegistrationDialogOpen, setIsRegistrationDialogOpen] = useState(false);
   const [viewingRegistrationsForEvent, setViewingRegistrationsForEvent] = useState<Event | null>(null);
+  const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
+  const [reportingEvent, setReportingEvent] = useState<Event | null>(null);
+  const [eventHighlights, setEventHighlights] = useState<string[]>([]);
+  const [newHighlight, setNewHighlight] = useState('');
+  const [undoEventData, setUndoEventData] = useState<Event | null>(null);
   const navigate = useNavigate();
 
   // Form for creating/editing events
@@ -122,6 +133,7 @@ const EventsManagement: React.FC = () => {
       capacity: 50,
       category: 'educational',
       imageUrl: '',
+      highlights: [],
     },
   });
 
@@ -205,7 +217,7 @@ const EventsManagement: React.FC = () => {
     try {
       const { data: registrationsData, error } = await supabase
         .from('event_registrations')
-        .select('*, profiles(first_name, last_name, id, avatar_url)');
+        .select('*, profiles(first_name, last_name, id, avatar_url, email)');
 
       if (error) throw error;
       
@@ -220,7 +232,10 @@ const EventsManagement: React.FC = () => {
             event_id: reg.event_id,
             registered_at: reg.registered_at,
             user_name: reg.profiles ? `${reg.profiles.first_name || ''} ${reg.profiles.last_name || ''}`.trim() : 'Anonymous User',
-            user_email: reg.profiles?.email || 'No Email'
+            user_email: reg.profiles?.email || 'No Email',
+            profile: {
+              avatar_url: reg.profiles?.avatar_url
+            }
           };
           
           if (!groupedRegistrations[reg.event_id]) {
@@ -237,9 +252,8 @@ const EventsManagement: React.FC = () => {
     }
   };
 
-  // Fixed handleCreateEvent function to properly chain promises
+  // Fixed handleCreateEvent function with Promise chaining
   const handleCreateEvent = (data: EventForm) => {
-    // Implementation for creating a new event
     setIsSubmitting(true);
     
     const newEvent = {
@@ -268,10 +282,30 @@ const EventsManagement: React.FC = () => {
           return;
         }
         
-        if (data) {
-          toast.success('Event created successfully');
-          fetchEvents();
-          eventForm.reset();
+        if (data && data.length > 0 && data[0].id && data[0].highlights) {
+          const eventId = data[0].id;
+          // If there are highlights, add them
+          if (data.highlights && data.highlights.length > 0) {
+            const highlightsToInsert = data.highlights.map(highlight => ({
+              event_id: eventId,
+              highlight
+            }));
+            
+            return Promise.resolve(
+              supabase
+                .from('event_highlights')
+                .insert(highlightsToInsert)
+            )
+            .then(() => {
+              toast.success('Event created successfully');
+              fetchEvents();
+              eventForm.reset();
+            });
+          } else {
+            toast.success('Event created successfully');
+            fetchEvents();
+            eventForm.reset();
+          }
         }
       })
       .catch(error => {
@@ -284,7 +318,8 @@ const EventsManagement: React.FC = () => {
   };
 
   const handleEditEvent = (event: Event) => {
-    // Implementation for editing an event
+    setEventHighlights(event.highlights || []);
+    
     eventForm.setValue('title', event.title);
     eventForm.setValue('description', event.description);
     eventForm.setValue('date', new Date(event.date));
@@ -293,11 +328,12 @@ const EventsManagement: React.FC = () => {
     eventForm.setValue('capacity', event.capacity);
     eventForm.setValue('category', event.category);
     eventForm.setValue('imageUrl', event.imageUrl);
+    eventForm.setValue('highlights', event.highlights || []);
     
     setSelectedEventId(event.id);
   };
 
-  // Fixed handleUpdateEvent function to properly chain promises
+  // Fixed handleUpdateEvent function with Promise chaining
   const handleUpdateEvent = (data: EventForm) => {
     if (!selectedEventId) return;
     
@@ -328,10 +364,50 @@ const EventsManagement: React.FC = () => {
           return;
         }
         
-        toast.success('Event updated successfully');
-        fetchEvents();
-        eventForm.reset();
-        setSelectedEventId(null);
+        // Update highlights if needed
+        if (eventHighlights && eventHighlights.length > 0) {
+          // First delete existing highlights
+          return Promise.resolve(
+            supabase
+              .from('event_highlights')
+              .delete()
+              .eq('event_id', selectedEventId)
+          )
+          .then(({ error: deleteError }) => {
+            if (deleteError) {
+              throw deleteError;
+            }
+            
+            // Then insert new highlights
+            const highlightsToInsert = eventHighlights.map(highlight => ({
+              event_id: selectedEventId,
+              highlight
+            }));
+            
+            return Promise.resolve(
+              supabase
+                .from('event_highlights')
+                .insert(highlightsToInsert)
+            );
+          })
+          .then(({ error: insertError }) => {
+            if (insertError) {
+              throw insertError;
+            }
+            
+            toast.success('Event updated successfully');
+            fetchEvents();
+            eventForm.reset();
+            setEventHighlights([]);
+            setSelectedEventId(null);
+          });
+        } else {
+          toast.success('Event updated successfully');
+          fetchEvents();
+          eventForm.reset();
+          setEventHighlights([]);
+          setSelectedEventId(null);
+        }
       })
       .catch(error => {
         console.error('Error updating event:', error);
@@ -351,6 +427,12 @@ const EventsManagement: React.FC = () => {
     if (!selectedEventId) return;
     
     try {
+      // Save event before deletion for undo functionality
+      const eventToDelete = events.find(e => e.id === selectedEventId);
+      if (eventToDelete) {
+        setUndoEventData(eventToDelete);
+      }
+      
       const { error } = await supabase
         .from('events')
         .delete()
@@ -358,7 +440,13 @@ const EventsManagement: React.FC = () => {
       
       if (error) throw error;
       
-      toast.success('Event deleted successfully');
+      toast.success('Event deleted successfully', {
+        action: {
+          label: "Undo",
+          onClick: () => handleUndoDelete(),
+        }
+      });
+      
       fetchEvents();
     } catch (error) {
       console.error('Error deleting event:', error);
@@ -368,10 +456,61 @@ const EventsManagement: React.FC = () => {
       setSelectedEventId(null);
     }
   };
+  
+  const handleUndoDelete = async () => {
+    if (!undoEventData) return;
+    
+    try {
+      setIsSubmitting(true);
+      
+      const eventToRestore = {
+        id: undoEventData.id,
+        title: undoEventData.title,
+        description: undoEventData.description,
+        date: undoEventData.date,
+        time: undoEventData.time,
+        location: undoEventData.location,
+        capacity: undoEventData.capacity,
+        category: undoEventData.category,
+        image_url: undoEventData.imageUrl,
+        registered_attendees: undoEventData.registeredAttendees
+      };
+      
+      const { error } = await supabase
+        .from('events')
+        .insert(eventToRestore);
+        
+      if (error) throw error;
+      
+      // Restore highlights if there were any
+      if (undoEventData.highlights && undoEventData.highlights.length > 0) {
+        const highlightsToRestore = undoEventData.highlights.map(highlight => ({
+          event_id: undoEventData.id,
+          highlight
+        }));
+        
+        const { error: highlightError } = await supabase
+          .from('event_highlights')
+          .insert(highlightsToRestore);
+          
+        if (highlightError) throw highlightError;
+      }
+      
+      toast.success('Event restored successfully');
+      setUndoEventData(null);
+      fetchEvents();
+    } catch (error) {
+      console.error('Error restoring event:', error);
+      toast.error('Failed to restore event');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const openNotifyDialog = (id: string) => {
     setSelectedEventId(id);
     setSelectedAttendees([]);
+    setSelectAllAttendees(false);
     setIsNotifyDialogOpen(true);
   };
 
@@ -382,13 +521,26 @@ const EventsManagement: React.FC = () => {
       // Get the event details
       const event = events.find(e => e.id === selectedEventId);
       if (!event) throw new Error('Event not found');
+      
+      // Get attendees
+      const attendeesToNotify = selectAllAttendees 
+        ? eventRegistrations[selectedEventId] || []
+        : (eventRegistrations[selectedEventId] || []).filter(reg => 
+            selectedAttendees.includes(reg.user_id)
+          );
+
+      if (attendeesToNotify.length === 0) {
+        toast.error('No attendees selected to notify');
+        return;
+      }
 
       // In a real application, this would connect to a notification service
       // For now, we'll simulate success
-      toast.success(`Notification sent to ${selectedAttendees.length > 0 ? selectedAttendees.length : 'all'} registered attendees`);
+      toast.success(`Notification sent to ${attendeesToNotify.length} attendee(s)`);
       setNotificationMessage('');
       setIsNotifyDialogOpen(false);
       setSelectedAttendees([]);
+      setSelectAllAttendees(false);
     } catch (error) {
       console.error('Error sending notification:', error);
       toast.error('Failed to send notification');
@@ -400,6 +552,23 @@ const EventsManagement: React.FC = () => {
     setIsRegistrationDialogOpen(true);
   };
 
+  const openReportDialog = (event: Event) => {
+    setReportingEvent(event);
+    setIsReportDialogOpen(true);
+  };
+
+  const handleAddHighlight = () => {
+    if (newHighlight.trim() === '') return;
+    setEventHighlights([...eventHighlights, newHighlight]);
+    setNewHighlight('');
+  };
+
+  const handleRemoveHighlight = (index: number) => {
+    const updatedHighlights = [...eventHighlights];
+    updatedHighlights.splice(index, 1);
+    setEventHighlights(updatedHighlights);
+  };
+
   const handleSubmit = (data: EventForm) => {
     if (selectedEventId) {
       handleUpdateEvent(data);
@@ -408,18 +577,38 @@ const EventsManagement: React.FC = () => {
     }
   };
 
-  // Format date for display
-  const formatEventDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return format(date, 'MMMM d, yyyy');
+  const handleToggleAllAttendees = () => {
+    const newSelectAll = !selectAllAttendees;
+    setSelectAllAttendees(newSelectAll);
+    
+    if (newSelectAll && selectedEventId && eventRegistrations[selectedEventId]) {
+      setSelectedAttendees(eventRegistrations[selectedEventId].map(reg => reg.user_id));
+    } else {
+      setSelectedAttendees([]);
+    }
   };
 
   const handleAttendeeSelection = (userId: string) => {
     if (selectedAttendees.includes(userId)) {
       setSelectedAttendees(selectedAttendees.filter(id => id !== userId));
+      if (selectAllAttendees) {
+        setSelectAllAttendees(false);
+      }
     } else {
       setSelectedAttendees([...selectedAttendees, userId]);
+      // Check if all attendees are now selected
+      if (selectedEventId && eventRegistrations[selectedEventId] && 
+          eventRegistrations[selectedEventId].every(reg => 
+            selectedAttendees.includes(reg.user_id) || reg.user_id === userId)) {
+        setSelectAllAttendees(true);
+      }
     }
+  };
+  
+  // Format date for display
+  const formatEventDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return format(date, 'MMMM d, yyyy');
   };
   
   // Analytics data
@@ -452,7 +641,7 @@ const EventsManagement: React.FC = () => {
                 <Plus className="mr-2 h-4 w-4" /> New Event
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[625px]">
+            <DialogContent className="sm:max-w-[625px] max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{selectedEventId ? 'Edit Event' : 'Create New Event'}</DialogTitle>
                 <DialogDescription>
@@ -463,7 +652,7 @@ const EventsManagement: React.FC = () => {
               </DialogHeader>
               
               <Form {...eventForm}>
-                <form onSubmit={eventForm.handleSubmit(handleSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
+                <form onSubmit={eventForm.handleSubmit(handleSubmit)} className="space-y-4">
                   <FormField
                     control={eventForm.control}
                     name="title"
@@ -555,6 +744,7 @@ const EventsManagement: React.FC = () => {
                           <Select 
                             onValueChange={field.onChange} 
                             defaultValue={field.value}
+                            value={field.value}
                           >
                             <FormControl>
                               <SelectTrigger>
@@ -608,6 +798,50 @@ const EventsManagement: React.FC = () => {
                       </FormItem>
                     )}
                   />
+                  
+                  {/* Event Highlights Section */}
+                  <div>
+                    <Label>Event Highlights</Label>
+                    <p className="text-xs text-muted-foreground mb-2">
+                      Add key highlights or achievements for this event (especially useful for past events)
+                    </p>
+                    
+                    <div className="flex gap-2 mb-2">
+                      <Input 
+                        placeholder="Add a highlight" 
+                        value={newHighlight}
+                        onChange={(e) => setNewHighlight(e.target.value)}
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline"
+                        onClick={handleAddHighlight}
+                      >
+                        Add
+                      </Button>
+                    </div>
+                    
+                    {eventHighlights.length > 0 && (
+                      <div className="border rounded-md p-3 max-h-[150px] overflow-y-auto">
+                        <ul className="space-y-2">
+                          {eventHighlights.map((highlight, index) => (
+                            <li key={index} className="flex items-center justify-between text-sm">
+                              <span>• {highlight}</span>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleRemoveHighlight(index)}
+                                className="h-6 w-6 p-0"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
                   
                   <DialogFooter>
                     <Button 
@@ -854,7 +1088,11 @@ const EventsManagement: React.FC = () => {
                     <Button variant="outline" size="sm" onClick={() => openRegistrationsDialog(event)}>
                       <Users className="mr-2 h-3 w-3" /> Attendees
                     </Button>
-                    <Button variant="secondary" size="sm">
+                    <Button 
+                      variant="secondary" 
+                      size="sm"
+                      onClick={() => openReportDialog(event)}
+                    >
                       Report
                     </Button>
                     <Button 
@@ -919,7 +1157,18 @@ const EventsManagement: React.FC = () => {
                         <TableRow key={registration.id}>
                           <TableCell>{event.title}</TableCell>
                           <TableCell>{formatEventDate(event.date)}</TableCell>
-                          <TableCell>{registration.user_name || 'Anonymous'}</TableCell>
+                          <TableCell className="flex items-center gap-2">
+                            {registration.profile?.avatar_url ? (
+                              <img 
+                                src={registration.profile.avatar_url} 
+                                alt={registration.user_name} 
+                                className="h-6 w-6 rounded-full object-cover"
+                              />
+                            ) : (
+                              <User className="h-4 w-4 text-muted-foreground" />
+                            )}
+                            {registration.user_name || 'Anonymous'}
+                          </TableCell>
                           <TableCell>{format(new Date(registration.registered_at), 'MMM d, yyyy')}</TableCell>
                           <TableCell>
                             <Badge variant="outline" className="bg-green-50 text-green-700">Confirmed</Badge>
@@ -982,27 +1231,48 @@ const EventsManagement: React.FC = () => {
           <DialogHeader>
             <DialogTitle>Send Notification</DialogTitle>
             <DialogDescription>
-              Send a notification to {selectedAttendees.length > 0 
-                ? `${selectedAttendees.length} selected attendee(s)`
-                : 'all registered attendees'} for this event.
+              Select attendees to notify for this event.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
-            {selectedEventId && eventRegistrations[selectedEventId] && eventRegistrations[selectedEventId].length > 0 && selectedAttendees.length === 0 && (
+            {selectedEventId && eventRegistrations[selectedEventId] && eventRegistrations[selectedEventId].length > 0 && (
               <div className="space-y-2">
-                <Label>Recipients</Label>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="select-all" 
+                    checked={selectAllAttendees}
+                    onCheckedChange={handleToggleAllAttendees}
+                  />
+                  <Label htmlFor="select-all" className="font-medium cursor-pointer">
+                    Select All Attendees
+                  </Label>
+                </div>
+                
                 <div className="border rounded-md p-2 max-h-32 overflow-y-auto">
-                  <div className="flex flex-wrap gap-1">
+                  <div className="space-y-2">
                     {eventRegistrations[selectedEventId].map((reg) => (
-                      <Badge key={reg.id} variant="outline" className="cursor-pointer hover:bg-accent" onClick={() => handleAttendeeSelection(reg.user_id)}>
-                        {reg.user_name || 'Anonymous'}
-                      </Badge>
+                      <div key={reg.id} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`attendee-${reg.id}`}
+                          checked={selectedAttendees.includes(reg.user_id)}
+                          onCheckedChange={() => handleAttendeeSelection(reg.user_id)}
+                        />
+                        <Label htmlFor={`attendee-${reg.id}`} className="cursor-pointer flex items-center gap-2 text-sm">
+                          {reg.profile?.avatar_url ? (
+                            <img 
+                              src={reg.profile.avatar_url}
+                              alt={reg.user_name}
+                              className="h-5 w-5 rounded-full object-cover"
+                            />
+                          ) : (
+                            <User className="h-4 w-4 text-muted-foreground" />
+                          )}
+                          {reg.user_name || 'Anonymous'}
+                        </Label>
+                      </div>
                     ))}
                   </div>
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Click on attendees to select specific recipients or leave empty to notify all
-                </p>
               </div>
             )}
             
@@ -1016,6 +1286,10 @@ const EventsManagement: React.FC = () => {
                 className="h-32"
               />
             </div>
+            
+            <div className="text-xs text-muted-foreground">
+              <p>Selected {selectedAttendees.length} out of {selectedEventId && eventRegistrations[selectedEventId] ? eventRegistrations[selectedEventId].length : 0} attendees</p>
+            </div>
           </div>
           <DialogFooter>
             <Button
@@ -1024,6 +1298,7 @@ const EventsManagement: React.FC = () => {
               onClick={() => {
                 setIsNotifyDialogOpen(false);
                 setSelectedAttendees([]);
+                setSelectAllAttendees(false);
               }}
             >
               Cancel
@@ -1031,7 +1306,7 @@ const EventsManagement: React.FC = () => {
             <Button
               type="button"
               onClick={handleSendNotification}
-              disabled={!notificationMessage}
+              disabled={!notificationMessage || (selectedAttendees.length === 0 && !selectAllAttendees)}
             >
               <Bell className="mr-2 h-4 w-4" />
               Send Notification
@@ -1061,6 +1336,7 @@ const EventsManagement: React.FC = () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Attendee</TableHead>
+                      <TableHead>Email</TableHead>
                       <TableHead>Registration Date</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
@@ -1069,9 +1345,18 @@ const EventsManagement: React.FC = () => {
                     {eventRegistrations[viewingRegistrationsForEvent.id].map((registration) => (
                       <TableRow key={registration.id}>
                         <TableCell className="flex items-center gap-2">
-                          <User className="h-4 w-4 text-muted-foreground" />
+                          {registration.profile?.avatar_url ? (
+                            <img 
+                              src={registration.profile.avatar_url}
+                              alt={registration.user_name}
+                              className="h-6 w-6 rounded-full object-cover"
+                            />
+                          ) : (
+                            <User className="h-4 w-4 text-muted-foreground" />
+                          )}
                           {registration.user_name || 'Anonymous'}
                         </TableCell>
+                        <TableCell>{registration.user_email}</TableCell>
                         <TableCell>{format(new Date(registration.registered_at), 'MMM d, yyyy')}</TableCell>
                         <TableCell>
                           <Button variant="ghost" size="sm" onClick={() => {
@@ -1102,6 +1387,7 @@ const EventsManagement: React.FC = () => {
                   setIsRegistrationDialogOpen(false);
                   setSelectedEventId(viewingRegistrationsForEvent.id);
                   setSelectedAttendees([]);
+                  setSelectAllAttendees(true);
                   setIsNotifyDialogOpen(true);
                 }} disabled={!viewingRegistrationsForEvent || !eventRegistrations[viewingRegistrationsForEvent.id]?.length}>
                   <Bell className="mr-2 h-4 w-4" /> Notify All
@@ -1109,6 +1395,120 @@ const EventsManagement: React.FC = () => {
               </div>
             )}
           </div>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Event Report Dialog */}
+      <Dialog open={isReportDialogOpen} onOpenChange={setIsReportDialogOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Event Report</DialogTitle>
+            <DialogDescription>
+              {reportingEvent && (
+                <>
+                  Performance report for <span className="font-medium">{reportingEvent.title}</span>
+                </>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          
+          {reportingEvent && (
+            <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
+              {/* Overall Stats */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <div className="bg-gray-50 p-3 rounded-md text-center">
+                  <p className="text-sm text-muted-foreground">Attendance Rate</p>
+                  <p className="text-xl font-bold">
+                    {Math.round((reportingEvent.registeredAttendees / reportingEvent.capacity) * 100)}%
+                  </p>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-md text-center">
+                  <p className="text-sm text-muted-foreground">Total Attendees</p>
+                  <p className="text-xl font-bold">{reportingEvent.registeredAttendees}</p>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-md text-center">
+                  <p className="text-sm text-muted-foreground">Capacity Used</p>
+                  <p className="text-xl font-bold">{reportingEvent.registeredAttendees}/{reportingEvent.capacity}</p>
+                </div>
+              </div>
+              
+              {/* Highlights */}
+              <div>
+                <h3 className="text-lg font-medium mb-2">Event Highlights</h3>
+                {reportingEvent.highlights && reportingEvent.highlights.length > 0 ? (
+                  <div className="bg-gray-50 p-4 rounded-md">
+                    <ul className="list-disc pl-5 space-y-1">
+                      {reportingEvent.highlights.map((highlight, idx) => (
+                        <li key={idx}>{highlight}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground">No highlights recorded for this event.</p>
+                )}
+              </div>
+              
+              {/* Speaker Information */}
+              {reportingEvent.speakers && reportingEvent.speakers.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-medium mb-2">Featured Speakers</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {reportingEvent.speakers.map((speaker, idx) => (
+                      <div key={idx} className="flex items-center gap-3 p-3 border rounded-md">
+                        {speaker.imageUrl ? (
+                          <img 
+                            src={speaker.imageUrl} 
+                            alt={speaker.name} 
+                            className="h-12 w-12 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center">
+                            <User className="h-6 w-6 text-gray-500" />
+                          </div>
+                        )}
+                        <div>
+                          <p className="font-medium">{speaker.name}</p>
+                          <p className="text-sm text-muted-foreground">{speaker.title}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Photos Grid */}
+              {reportingEvent.images && reportingEvent.images.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-medium mb-2">Event Photos</h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {reportingEvent.images.map((img, idx) => (
+                      <img 
+                        key={idx} 
+                        src={img} 
+                        alt={`Event photo ${idx + 1}`} 
+                        className="w-full h-24 object-cover rounded-md"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Actions */}
+              <div className="flex justify-end gap-2 pt-4 border-t">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIsReportDialogOpen(false);
+                  }}
+                >
+                  Close
+                </Button>
+                <Button>
+                  Download Report
+                </Button>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>

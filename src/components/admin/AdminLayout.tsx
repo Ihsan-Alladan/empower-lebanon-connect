@@ -73,20 +73,22 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       {/* Mobile sidebar overlay */}
       {isMobile && sidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-20"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={() => setSidebarOpen(false)}
         />
       )}
       
-      {/* Header */}
-      <AdminHeader 
-        toggleSidebar={toggleSidebar} 
-        breadcrumbs={breadcrumbs}
-      />
+      {/* Header - fixed at top */}
+      <div className="sticky top-0 z-30">
+        <AdminHeader 
+          toggleSidebar={toggleSidebar} 
+          breadcrumbs={breadcrumbs}
+        />
+      </div>
       
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar - always visible on desktop */}
-        <div className={`${isMobile ? 'fixed' : 'sticky'} top-0 z-20 h-screen`}>
+        {/* Sidebar - fixed to left */}
+        <div className={`${isMobile ? 'fixed' : 'sticky'} top-16 z-30 h-[calc(100vh-4rem)]`}>
           <AdminSidebar 
             collapsed={collapsed} 
             toggleCollapsed={toggleSidebar} 
@@ -98,7 +100,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         {/* Main content */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Page content */}
-          <main className="flex-1 overflow-auto p-4 md:p-6">
+          <main className="flex-1 overflow-auto p-4 md:p-6 pt-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -109,8 +111,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             </motion.div>
           </main>
           
-          {/* Footer */}
-          <AdminFooter />
+          {/* Footer - fixed at bottom */}
+          <div className="sticky bottom-0 z-20 bg-white border-t">
+            <AdminFooter />
+          </div>
         </div>
       </div>
     </div>
