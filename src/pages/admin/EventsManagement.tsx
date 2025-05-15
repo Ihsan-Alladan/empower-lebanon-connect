@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -52,6 +51,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Label } from '@/components/ui/label';
 import { Calendar as CalendarIcon, Clock, MapPin, Users, UserCheck, Bell, AlertCircle, Search, Plus, Edit2, Trash2, Calendar, Send } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Event, EventCategory, Speaker } from '@/types/event';
@@ -171,6 +171,7 @@ const EventsManagement: React.FC = () => {
     }
   };
 
+  // Fixed handleCreateEvent function to properly chain promises with finally
   const handleCreateEvent = (data: EventForm) => {
     // Implementation for creating a new event
     setIsSubmitting(true);
@@ -204,6 +205,10 @@ const EventsManagement: React.FC = () => {
           eventForm.reset();
         }
       })
+      .catch(error => {
+        console.error('Error creating event:', error);
+        toast.error('An unexpected error occurred');
+      })
       .finally(() => {
         setIsSubmitting(false);
       });
@@ -223,6 +228,7 @@ const EventsManagement: React.FC = () => {
     setSelectedEventId(event.id);
   };
 
+  // Fixed handleUpdateEvent function to properly chain promises with finally
   const handleUpdateEvent = (data: EventForm) => {
     if (!selectedEventId) return;
     
@@ -254,6 +260,10 @@ const EventsManagement: React.FC = () => {
         fetchEvents();
         eventForm.reset();
         setSelectedEventId(null);
+      })
+      .catch(error => {
+        console.error('Error updating event:', error);
+        toast.error('An unexpected error occurred');
       })
       .finally(() => {
         setIsSubmitting(false);
