@@ -1,45 +1,45 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { motion } from 'framer-motion';
+import { 
+  Calendar,
+  Download,
+  Filter,
+  Mail,
+  Flag,
+  RefreshCcw,
+  ArrowUpDown,
+  ChevronDown,
+  Check,
+  ChevronsUpDown,
+  Plus,
+  Trash,
+  PieChart,
+  BarChart,
+  DollarSign,
+  Users,
+  Settings,
+  Edit,
+  ChevronRight,
+  X,
+  Save
+} from 'lucide-react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -48,1437 +48,1478 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from '@/components/ui/dialog';
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { toast } from 'sonner';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Switch } from '@/components/ui/switch';
 import { format } from 'date-fns';
-import { CalendarIcon, Download, Mail, RefreshCw, Search, Flag, PieChart, TrendingUp, DollarSign, CreditCard, Users, Plus, Edit2, Trash2, Send, AlertCircle, FileText, Undo } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { PieChart as RechartsPieChart, Pie, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { cn } from '@/lib/utils';
-import { getAdminAuthenticated } from '@/utils/adminAuth';
+import { Donation, DonationCause, DonationStatistics, Currency, PaymentMethod, DonationStatus } from '@/types/donation';
 
-// Define interfaces for our data
-interface Donation {
-  id: string;
-  donor_name: string;
-  donor_email: string;
-  amount: number;
-  currency: string;
-  payment_method: string;
-  cause: string;
-  date: string;
-  is_anonymous: boolean;
-  status: 'completed' | 'refunded' | 'flagged';
-  message?: string;
-}
+import {
+  ResponsiveContainer,
+  PieChart as RechartPieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend
+} from 'recharts';
 
-interface DonationCause {
-  id: string;
-  name: string;
-  description: string;
-  target_amount: number;
-  current_amount: number;
-  image_url: string;
-  is_active: boolean;
-}
+// Sample data - in a real application, this would come from an API
+const SAMPLE_DONATIONS: Donation[] = [
+  {
+    id: "1",
+    donor_name: "Alice Smith",
+    donor_email: "alice@example.com",
+    amount: 50,
+    currency: "USD",
+    payment_method: "Credit Card",
+    cause: "Women's Education Fund",
+    date: "2025-05-01",
+    is_anonymous: false,
+    status: "completed",
+    created_at: "2025-05-01T10:30:00Z"
+  },
+  {
+    id: "2",
+    donor_name: "Anonymous",
+    donor_email: "bob@example.com",
+    amount: 100,
+    currency: "USD",
+    payment_method: "PayPal",
+    cause: "Community Garden Project",
+    date: "2025-05-05",
+    is_anonymous: true,
+    status: "completed",
+    created_at: "2025-05-05T14:22:00Z"
+  },
+  {
+    id: "3",
+    donor_name: "Charlie Brown",
+    donor_email: "charlie@example.com",
+    amount: 25,
+    currency: "EUR",
+    payment_method: "Bank Transfer",
+    cause: "Tech Education for Girls",
+    date: "2025-05-08",
+    is_anonymous: false,
+    status: "pending",
+    created_at: "2025-05-08T09:45:00Z"
+  },
+  {
+    id: "4",
+    donor_name: "Diana Prince",
+    donor_email: "diana@example.com",
+    amount: 200,
+    currency: "USD",
+    payment_method: "Credit Card",
+    cause: "Women's Education Fund",
+    date: "2025-05-10",
+    is_anonymous: false,
+    status: "completed",
+    created_at: "2025-05-10T16:15:00Z"
+  },
+  {
+    id: "5",
+    donor_name: "Anonymous",
+    donor_email: "emma@example.com",
+    amount: 75,
+    currency: "GBP",
+    payment_method: "PayPal",
+    cause: "Community Garden Project",
+    date: "2025-05-12",
+    is_anonymous: true,
+    status: "completed",
+    created_at: "2025-05-12T11:30:00Z"
+  },
+  {
+    id: "6",
+    donor_name: "Frank Castle",
+    donor_email: "frank@example.com",
+    amount: 35,
+    currency: "USD",
+    payment_method: "Credit Card",
+    cause: "Tech Education for Girls",
+    date: "2025-05-14",
+    is_anonymous: false,
+    status: "flagged",
+    created_at: "2025-05-14T13:20:00Z"
+  },
+  {
+    id: "7",
+    donor_name: "George Banks",
+    donor_email: "george@example.com",
+    amount: 150,
+    currency: "CAD",
+    payment_method: "Bank Transfer",
+    cause: "Women's Education Fund",
+    date: "2025-04-25",
+    is_anonymous: false,
+    status: "completed",
+    created_at: "2025-04-25T10:10:00Z"
+  },
+  {
+    id: "8",
+    donor_name: "Helen Troy",
+    donor_email: "helen@example.com",
+    amount: 65,
+    currency: "USD",
+    payment_method: "Credit Card",
+    cause: "Community Garden Project",
+    date: "2025-04-20",
+    is_anonymous: false,
+    status: "refunded",
+    created_at: "2025-04-20T09:30:00Z",
+    message: "Supporting the community!"
+  },
+  {
+    id: "9",
+    donor_name: "Anonymous",
+    donor_email: "ian@example.com",
+    amount: 120,
+    currency: "AUD",
+    payment_method: "PayPal",
+    cause: "Tech Education for Girls",
+    date: "2025-04-15",
+    is_anonymous: true,
+    status: "completed",
+    created_at: "2025-04-15T14:45:00Z",
+    message: "Keep up the great work!"
+  },
+  {
+    id: "10",
+    donor_name: "Julia Roberts",
+    donor_email: "julia@example.com",
+    amount: 250,
+    currency: "USD",
+    payment_method: "Credit Card",
+    cause: "Women's Education Fund",
+    date: "2025-04-10",
+    is_anonymous: false,
+    status: "completed",
+    created_at: "2025-04-10T16:00:00Z",
+    message: "Education is empowerment!"
+  }
+];
 
-interface EmailFormData {
-  to: string;
-  subject: string;
-  message: string;
-}
+const SAMPLE_CAUSES: DonationCause[] = [
+  {
+    id: "1",
+    name: "Women's Education Fund",
+    description: "Supporting educational opportunities for women in underserved communities.",
+    target_amount: 10000,
+    current_amount: 5250,
+    image_url: "/lovable-uploads/main5.jpg",
+    is_active: true
+  },
+  {
+    id: "2",
+    name: "Community Garden Project",
+    description: "Creating sustainable community gardens in urban areas.",
+    target_amount: 5000,
+    current_amount: 2890,
+    image_url: "/lovable-uploads/handmade2.png",
+    is_active: true
+  },
+  {
+    id: "3",
+    name: "Tech Education for Girls",
+    description: "Providing resources for girls interested in STEM fields.",
+    target_amount: 7500,
+    current_amount: 3450,
+    image_url: "/lovable-uploads/technologyW.jpg",
+    is_active: true
+  }
+];
 
-interface DonationStats {
-  totalThisMonth: number;
-  totalAllTime: number;
-  donorCount: number;
-  averageDonation: number;
-}
-
-// Create schema for email form
-const emailFormSchema = z.object({
-  to: z.string().email({ message: "Please enter a valid email address" }),
-  subject: z.string().min(1, { message: "Subject is required" }),
-  message: z.string().min(10, { message: "Message must be at least 10 characters" }),
-});
-
-// Create schema for cause form
-const causeFormSchema = z.object({
-  name: z.string().min(3, { message: "Name must be at least 3 characters" }),
-  description: z.string().min(10, { message: "Description must be at least 10 characters" }),
-  target_amount: z.number().min(1, { message: "Target amount must be greater than 0" }),
-  image_url: z.string().url({ message: "Please enter a valid URL" }),
-  is_active: z.boolean().default(true),
-});
-
-// Payment settings form schema
-const paymentSettingsSchema = z.object({
-  stripe_public_key: z.string().optional(),
-  stripe_secret_key: z.string().optional(),
-  paypal_client_id: z.string().optional(),
-  paypal_secret: z.string().optional(),
-  suggested_amounts: z.string().transform(val => 
-    val.split(',').map(v => parseFloat(v.trim())).filter(v => !isNaN(v))
-  ),
-});
-
-// Email template form schema
-const emailTemplateSchema = z.object({
-  subject_template: z.string().min(5, { message: "Subject template is required" }),
-  body_template: z.string().min(20, { message: "Body template is required" }),
-});
-
-const DonationManagement: React.FC = () => {
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('overview');
-  const [donations, setDonations] = useState<Donation[]>([]);
-  const [filteredDonations, setFilteredDonations] = useState<Donation[]>([]);
-  const [causes, setCauses] = useState<DonationCause[]>([]);
-  const [stats, setStats] = useState<DonationStats>({
-    totalThisMonth: 0,
-    totalAllTime: 0,
-    donorCount: 0,
-    averageDonation: 0
+// Statistics sample data
+const getStatistics = (donations: Donation[]): DonationStatistics => {
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+  
+  const thisMonthDonations = donations.filter(donation => {
+    const donationDate = new Date(donation.date);
+    return donationDate.getMonth() === currentMonth && 
+           donationDate.getFullYear() === currentYear &&
+           donation.status === "completed";
   });
-  const [searchTerm, setSearchTerm] = useState('');
-  const [dateFilter, setDateFilter] = useState<Date | undefined>(undefined);
-  const [selectedCause, setSelectedCause] = useState<string>('all');
-  const [isLoading, setIsLoading] = useState(true);
-  const [showEmailDialog, setShowEmailDialog] = useState(false);
-  const [selectedDonorEmail, setSelectedDonorEmail] = useState('');
-  const [showCauseDialog, setShowCauseDialog] = useState(false);
-  const [selectedCause2, setSelectedCause2] = useState<DonationCause | null>(null);
-  const [showSettingsDialog, setShowSettingsDialog] = useState(false);
-  const [showEmailTemplateDialog, setShowEmailTemplateDialog] = useState(false);
-  const [lastDeletedDonation, setLastDeletedDonation] = useState<Donation | null>(null);
-  const [showReassignDialog, setShowReassignDialog] = useState(false);
-  const [selectedDonation, setSelectedDonation] = useState<Donation | null>(null);
-  const [newCause, setNewCause] = useState<string>('');
-
-  // Email form
-  const emailForm = useForm<EmailFormData>({
-    resolver: zodResolver(emailFormSchema),
-    defaultValues: {
-      to: '',
-      subject: '',
-      message: ''
-    }
-  });
-
-  // Cause form
-  const causeForm = useForm<DonationCause>({
-    resolver: zodResolver(causeFormSchema),
-    defaultValues: {
-      id: '',
-      name: '',
-      description: '',
-      target_amount: 1000,
-      current_amount: 0,
-      image_url: '',
-      is_active: true
-    }
-  });
-
-  // Payment settings form
-  const settingsForm = useForm({
-    resolver: zodResolver(paymentSettingsSchema),
-    defaultValues: {
-      stripe_public_key: '',
-      stripe_secret_key: '',
-      paypal_client_id: '',
-      paypal_secret: '',
-      suggested_amounts: '10,25,50,100',
-    }
-  });
-
-  // Email template form
-  const emailTemplateForm = useForm({
-    resolver: zodResolver(emailTemplateSchema),
-    defaultValues: {
-      subject_template: 'Thank you for your donation to {{cause}}',
-      body_template: 'Dear {{name}},\n\nThank you for your generous donation of {{amount}} {{currency}} to {{cause}}. Your support helps us make a difference.\n\nBest regards,\nThe Team'
-    }
-  });
-
-  useEffect(() => {
-    // Check if admin is authenticated
-    if (!getAdminAuthenticated()) {
-      toast.error('Please login as admin to access this page');
-      navigate('/login');
-      return;
-    }
+  
+  const totalThisMonth = thisMonthDonations.reduce((sum, donation) => sum + donation.amount, 0);
+  const totalAllTime = donations
+    .filter(donation => donation.status === "completed")
+    .reduce((sum, donation) => sum + donation.amount, 0);
+  
+  const uniqueDonors = new Set(donations
+    .filter(donation => donation.status === "completed")
+    .map(donation => donation.donor_email)
+  );
+  
+  const donorCount = uniqueDonors.size;
+  
+  const averageDonation = totalAllTime / donations.filter(d => d.status === "completed").length;
+  
+  // Monthly trends (last 6 months)
+  const monthlyTrends: { month: string, amount: number }[] = [];
+  for (let i = 5; i >= 0; i--) {
+    const monthDate = new Date(currentYear, currentMonth - i, 1);
+    const monthName = format(monthDate, 'MMM');
     
-    // Fetch donations, causes, and stats
-    fetchData();
-  }, [navigate]);
-
-  useEffect(() => {
-    filterDonations();
-  }, [searchTerm, dateFilter, selectedCause, donations]);
-
-  const fetchData = async () => {
-    setIsLoading(true);
-    
-    // In a real app, fetch from Supabase
-    // For demo purposes, we'll use mock data
-    
-    // Mock Donations
-    const mockDonations: Donation[] = [
-      {
-        id: '1',
-        donor_name: 'John Smith',
-        donor_email: 'john@example.com',
-        amount: 100,
-        currency: 'USD',
-        payment_method: 'Credit Card',
-        cause: 'Education Fund',
-        date: '2025-05-01T10:30:00',
-        is_anonymous: false,
-        status: 'completed'
-      },
-      {
-        id: '2',
-        donor_name: 'Anonymous',
-        donor_email: 'jane@example.com',
-        amount: 50,
-        currency: 'USD',
-        payment_method: 'PayPal',
-        cause: 'Community Center',
-        date: '2025-05-05T14:20:00',
-        is_anonymous: true,
-        status: 'completed'
-      },
-      {
-        id: '3',
-        donor_name: 'Robert Johnson',
-        donor_email: 'robert@example.com',
-        amount: 200,
-        currency: 'USD',
-        payment_method: 'Bank Transfer',
-        cause: 'Education Fund',
-        date: '2025-05-10T09:15:00',
-        is_anonymous: false,
-        status: 'completed'
-      },
-      {
-        id: '4',
-        donor_name: 'Maria Garcia',
-        donor_email: 'maria@example.com',
-        amount: 75,
-        currency: 'EUR',
-        payment_method: 'Credit Card',
-        cause: 'Women Empowerment',
-        date: '2025-05-12T11:45:00',
-        is_anonymous: false,
-        status: 'flagged',
-        message: 'Verification needed'
-      },
-      {
-        id: '5',
-        donor_name: 'Anonymous',
-        donor_email: 'michael@example.com',
-        amount: 150,
-        currency: 'USD',
-        payment_method: 'PayPal',
-        cause: 'Community Center',
-        date: '2025-05-15T16:30:00',
-        is_anonymous: true,
-        status: 'completed'
-      }
-    ];
-    
-    // Mock Causes
-    const mockCauses: DonationCause[] = [
-      {
-        id: '1',
-        name: 'Education Fund',
-        description: 'Supporting educational programs and scholarships for underprivileged students.',
-        target_amount: 10000,
-        current_amount: 6500,
-        image_url: '/lovable-uploads/57514e04-8524-41e5-8cbd-c63693884459.png',
-        is_active: true
-      },
-      {
-        id: '2',
-        name: 'Community Center',
-        description: 'Building a new community center with facilities for education, healthcare, and recreation.',
-        target_amount: 25000,
-        current_amount: 12000,
-        image_url: '/lovable-uploads/22a31812-0de9-4dde-9442-b766171923c5.png',
-        is_active: true
-      },
-      {
-        id: '3',
-        name: 'Women Empowerment',
-        description: 'Supporting programs that provide skills training and economic opportunities for women.',
-        target_amount: 15000,
-        current_amount: 8000,
-        image_url: '/lovable-uploads/9ccc3dc6-1453-4e2f-8240-babd3b2a121d.png',
-        is_active: true
-      }
-    ];
-    
-    // Calculate stats
-    const currentDate = new Date();
-    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    
-    const donationsThisMonth = mockDonations.filter(donation => 
-      new Date(donation.date) >= firstDayOfMonth && donation.status === 'completed'
-    );
-    
-    const totalThisMonth = donationsThisMonth.reduce((total, donation) => 
-      total + donation.amount, 0
-    );
-    
-    const totalAllTime = mockDonations
-      .filter(donation => donation.status === 'completed')
-      .reduce((total, donation) => total + donation.amount, 0);
-    
-    const uniqueDonors = new Set(
-      mockDonations
-        .filter(donation => donation.status === 'completed')
-        .map(donation => donation.donor_email)
-    );
-    
-    const completedDonations = mockDonations.filter(
-      donation => donation.status === 'completed'
-    );
-    
-    const avgDonation = completedDonations.length > 0 
-      ? Math.round((totalAllTime / completedDonations.length) * 100) / 100
-      : 0;
-    
-    const stats: DonationStats = {
-      totalThisMonth,
-      totalAllTime,
-      donorCount: uniqueDonors.size,
-      averageDonation: avgDonation
-    };
-    
-    setDonations(mockDonations);
-    setCauses(mockCauses);
-    setStats(stats);
-    setFilteredDonations(mockDonations);
-    setIsLoading(false);
-  };
-
-  const filterDonations = () => {
-    let filtered = [...donations];
-    
-    // Filter by search term
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      filtered = filtered.filter(donation => 
-        donation.donor_name.toLowerCase().includes(term) ||
-        donation.donor_email.toLowerCase().includes(term) ||
-        donation.cause.toLowerCase().includes(term)
-      );
-    }
-    
-    // Filter by date
-    if (dateFilter) {
-      const filterDate = new Date(dateFilter);
-      filtered = filtered.filter(donation => {
-        const donationDate = new Date(donation.date);
-        return donationDate.getDate() === filterDate.getDate() &&
-               donationDate.getMonth() === filterDate.getMonth() &&
-               donationDate.getFullYear() === filterDate.getFullYear();
-      });
-    }
-    
-    // Filter by cause
-    if (selectedCause !== 'all') {
-      filtered = filtered.filter(donation => donation.cause === selectedCause);
-    }
-    
-    setFilteredDonations(filtered);
-  };
-
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleDateSelect = (date: Date | undefined) => {
-    setDateFilter(date);
-  };
-
-  const handleCauseSelect = (cause: string) => {
-    setSelectedCause(cause);
-  };
-
-  const handleContactDonor = (email: string) => {
-    setSelectedDonorEmail(email);
-    emailForm.setValue('to', email);
-    setShowEmailDialog(true);
-  };
-
-  const handleSendEmail = (data: EmailFormData) => {
-    toast.success(`Email sent to ${data.to}`);
-    setShowEmailDialog(false);
-    emailForm.reset();
-  };
-
-  const handleStatusChange = (donation: Donation, status: 'completed' | 'refunded' | 'flagged') => {
-    const updatedDonations = donations.map(d => 
-      d.id === donation.id ? { ...d, status } : d
-    );
-    setDonations(updatedDonations);
-    
-    const statusMap = {
-      'completed': 'Donation approved',
-      'refunded': 'Donation refunded',
-      'flagged': 'Donation flagged for review'
-    };
-    
-    toast.success(statusMap[status]);
-  };
-
-  const handleAddEditCause = (cause: DonationCause | null = null) => {
-    if (cause) {
-      causeForm.reset({
-        id: cause.id,
-        name: cause.name,
-        description: cause.description,
-        target_amount: cause.target_amount,
-        current_amount: cause.current_amount,
-        image_url: cause.image_url,
-        is_active: cause.is_active
-      });
-      setSelectedCause2(cause);
-    } else {
-      causeForm.reset({
-        id: '',
-        name: '',
-        description: '',
-        target_amount: 1000,
-        current_amount: 0,
-        image_url: '',
-        is_active: true
-      });
-      setSelectedCause2(null);
-    }
-    setShowCauseDialog(true);
-  };
-
-  const handleSubmitCause = (data: DonationCause) => {
-    if (selectedCause2) {
-      // Edit existing cause
-      const updatedCauses = causes.map(c => 
-        c.id === selectedCause2.id ? { ...data, id: selectedCause2.id } : c
-      );
-      setCauses(updatedCauses);
-      toast.success('Cause updated successfully');
-    } else {
-      // Add new cause
-      const newCause = {
-        ...data,
-        id: Date.now().toString(),
-        current_amount: 0
-      };
-      setCauses([...causes, newCause]);
-      toast.success('New cause added successfully');
-    }
-    setShowCauseDialog(false);
-  };
-
-  const handleDeleteCause = (id: string) => {
-    setCauses(causes.filter(c => c.id !== id));
-    toast.success('Cause deleted successfully');
-  };
-
-  const handleToggleCauseStatus = (id: string) => {
-    const updatedCauses = causes.map(c => 
-      c.id === id ? { ...c, is_active: !c.is_active } : c
-    );
-    setCauses(updatedCauses);
-    
-    const cause = causes.find(c => c.id === id);
-    toast.success(`Cause ${cause?.is_active ? 'deactivated' : 'activated'} successfully`);
-  };
-
-  const handleSavePaymentSettings = (data: any) => {
-    console.log('Payment settings saved:', data);
-    toast.success('Payment settings updated successfully');
-    setShowSettingsDialog(false);
-  };
-
-  const handleSaveEmailTemplate = (data: any) => {
-    console.log('Email template updated:', data);
-    toast.success('Email template updated successfully');
-    setShowEmailTemplateDialog(false);
-  };
-
-  const handleDeleteDonation = (donation: Donation) => {
-    setLastDeletedDonation(donation);
-    setDonations(donations.filter(d => d.id !== donation.id));
-    toast('Donation deleted', {
-      description: 'This action can be undone for the next 10 seconds.',
-      action: {
-        label: "Undo",
-        onClick: () => handleUndoDelete(),
-      },
-      duration: 10000,
+    const monthDonations = donations.filter(donation => {
+      const donationDate = new Date(donation.date);
+      return donationDate.getMonth() === monthDate.getMonth() && 
+             donationDate.getFullYear() === monthDate.getFullYear() &&
+             donation.status === "completed";
     });
     
-    // After 10 seconds, clear the lastDeletedDonation state
-    setTimeout(() => {
-      if (lastDeletedDonation?.id === donation.id) {
-        setLastDeletedDonation(null);
-      }
-    }, 10000);
+    const monthTotal = monthDonations.reduce((sum, donation) => sum + donation.amount, 0);
+    monthlyTrends.push({ month: monthName, amount: monthTotal });
+  }
+  
+  // Cause distribution
+  const causeDistribution = SAMPLE_CAUSES.map(cause => {
+    const causeTotal = donations
+      .filter(donation => donation.cause === cause.name && donation.status === "completed")
+      .reduce((sum, donation) => sum + donation.amount, 0);
+    
+    return { cause: cause.name, amount: causeTotal };
+  });
+  
+  // Anonymous percentage
+  const anonymousDonations = donations.filter(d => d.is_anonymous && d.status === "completed").length;
+  const completedDonations = donations.filter(d => d.status === "completed").length;
+  const anonymousPercentage = completedDonations > 0 ? (anonymousDonations / completedDonations) * 100 : 0;
+  
+  return {
+    totalThisMonth,
+    totalAllTime,
+    donorCount,
+    averageDonation,
+    monthlyTrends,
+    causeDistribution,
+    anonymousPercentage
   };
+};
 
-  const handleUndoDelete = () => {
-    if (lastDeletedDonation) {
-      setDonations(prev => [...prev, lastDeletedDonation]);
-      setLastDeletedDonation(null);
-      toast.success('Donation restored');
+const COLORS = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
+
+interface ContactDonorFormProps {
+  donor: Donation;
+  onClose: () => void;
+}
+
+const ContactDonorForm: React.FC<ContactDonorFormProps> = ({ donor, onClose }) => {
+  const [subject, setSubject] = useState(`Thank you for your donation to ${donor.cause}`);
+  const [message, setMessage] = useState(`Dear ${donor.is_anonymous ? 'Donor' : donor.donor_name},\n\nThank you for your generous donation of ${donor.currency} ${donor.amount} to our ${donor.cause} initiative. Your support makes a real difference.\n\nBest regards,\nEmpowEra Team`);
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success(`Email sent to ${donor.donor_email}`);
+    onClose();
+  };
+  
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="recipient">To</Label>
+        <Input id="recipient" value={donor.donor_email} disabled />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="subject">Subject</Label>
+        <Input id="subject" value={subject} onChange={(e) => setSubject(e.target.value)} />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="message">Message</Label>
+        <Textarea 
+          id="message" 
+          value={message} 
+          onChange={(e) => setMessage(e.target.value)}
+          className="min-h-[200px]"
+        />
+      </div>
+      <div className="flex justify-end space-x-2">
+        <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
+        <Button type="submit">Send Email</Button>
+      </div>
+    </form>
+  );
+};
+
+interface CauseFormProps {
+  cause?: DonationCause;
+  onSave: (cause: Partial<DonationCause>) => void;
+  onClose: () => void;
+}
+
+const CauseForm: React.FC<CauseFormProps> = ({ cause, onSave, onClose }) => {
+  const isEditing = !!cause;
+  const [formData, setFormData] = useState({
+    name: cause?.name || '',
+    description: cause?.description || '',
+    target_amount: cause?.target_amount || 0,
+    image_url: cause?.image_url || '',
+    is_active: cause?.is_active ?? true
+  });
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    
+    if (type === 'number') {
+      setFormData(prev => ({ ...prev, [name]: parseFloat(value) }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
-
-  const handleReassignDonation = (donation: Donation) => {
-    setSelectedDonation(donation);
-    setNewCause('');
-    setShowReassignDialog(true);
+  
+  const handleSwitchChange = (checked: boolean) => {
+    setFormData(prev => ({ ...prev, is_active: checked }));
   };
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave({
+      ...formData,
+      id: cause?.id || `new-${Date.now()}`
+    });
+  };
+  
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="name">Cause Name</Label>
+        <Input 
+          id="name" 
+          name="name"
+          value={formData.name} 
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="description">Description</Label>
+        <Textarea 
+          id="description"
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="target_amount">Target Amount</Label>
+        <Input 
+          id="target_amount"
+          name="target_amount"
+          type="number"
+          min="0"
+          step="0.01"
+          value={formData.target_amount} 
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="image_url">Image URL</Label>
+        <Input 
+          id="image_url"
+          name="image_url"
+          value={formData.image_url} 
+          onChange={handleChange}
+          placeholder="/images/your-image.jpg"
+        />
+      </div>
+      <div className="flex items-center space-x-2">
+        <Switch 
+          id="is_active"
+          checked={formData.is_active}
+          onCheckedChange={handleSwitchChange}
+        />
+        <Label htmlFor="is_active">Active</Label>
+      </div>
+      <div className="flex justify-end space-x-2">
+        <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
+        <Button type="submit">{isEditing ? 'Update' : 'Create'}</Button>
+      </div>
+    </form>
+  );
+};
 
-  const handleConfirmReassign = () => {
-    if (selectedDonation && newCause) {
-      const updatedDonations = donations.map(d => 
-        d.id === selectedDonation.id ? { ...d, cause: newCause } : d
-      );
-      setDonations(updatedDonations);
-      toast.success(`Donation reassigned to ${newCause}`);
-      setShowReassignDialog(false);
+const DonationManagement: React.FC = () => {
+  const [activeTab, setActiveTab] = useState("overview");
+  const [donations, setDonations] = useState<Donation[]>(SAMPLE_DONATIONS);
+  const [causes, setCauses] = useState<DonationCause[]>(SAMPLE_CAUSES);
+  const [selectedDonation, setSelectedDonation] = useState<Donation | null>(null);
+  const [selectedCause, setSelectedCause] = useState<DonationCause | null>(null);
+  const [showContactDialog, setShowContactDialog] = useState(false);
+  const [showCauseDialog, setShowCauseDialog] = useState(false);
+  const [sortColumn, setSortColumn] = useState<keyof Donation>('date');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [dateRange, setDateRange] = useState<{ start: string, end: string }>({
+    start: '',
+    end: ''
+  });
+  const [statusFilter, setStatusFilter] = useState<DonationStatus | 'all'>('all');
+  const [causeFilter, setCauseFilter] = useState<string>('all');
+  
+  const statistics = getStatistics(donations);
+  
+  // Sort and filter donations
+  const filteredDonations = donations.filter(donation => {
+    // Search query filter
+    const matchesSearch = searchQuery === '' || 
+      donation.donor_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      donation.donor_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      donation.cause.toLowerCase().includes(searchQuery.toLowerCase());
+      
+    // Date range filter
+    let withinDateRange = true;
+    if (dateRange.start && dateRange.end) {
+      const donationDate = new Date(donation.date);
+      const startDate = new Date(dateRange.start);
+      const endDate = new Date(dateRange.end);
+      endDate.setHours(23, 59, 59); // Include the entire end day
+      
+      withinDateRange = donationDate >= startDate && donationDate <= endDate;
+    }
+    
+    // Status filter
+    const matchesStatus = statusFilter === 'all' || donation.status === statusFilter;
+    
+    // Cause filter
+    const matchesCause = causeFilter === 'all' || donation.cause === causeFilter;
+    
+    return matchesSearch && withinDateRange && matchesStatus && matchesCause;
+  });
+  
+  const sortedDonations = [...filteredDonations].sort((a, b) => {
+    let valueA: string | number | boolean = a[sortColumn];
+    let valueB: string | number | boolean = b[sortColumn];
+    
+    if (typeof valueA === 'string' && typeof valueB === 'string') {
+      valueA = valueA.toLowerCase();
+      valueB = valueB.toLowerCase();
+    }
+    
+    if (valueA < valueB) return sortDirection === 'asc' ? -1 : 1;
+    if (valueA > valueB) return sortDirection === 'asc' ? 1 : -1;
+    return 0;
+  });
+  
+  const handleSort = (column: keyof Donation) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortDirection('asc');
     }
   };
-
+  
+  const resetFilters = () => {
+    setSearchQuery('');
+    setDateRange({ start: '', end: '' });
+    setStatusFilter('all');
+    setCauseFilter('all');
+  };
+  
+  const handleRefundDonation = (donationId: string) => {
+    setDonations(donations.map(donation => 
+      donation.id === donationId 
+        ? { ...donation, status: 'refunded' as DonationStatus } 
+        : donation
+    ));
+    toast.success("Donation has been refunded");
+  };
+  
+  const handleFlagDonation = (donationId: string) => {
+    setDonations(donations.map(donation => 
+      donation.id === donationId 
+        ? { ...donation, status: 'flagged' as DonationStatus } 
+        : donation
+    ));
+    toast.success("Donation has been flagged for review");
+  };
+  
+  const handleChangeCause = (donationId: string, newCause: string) => {
+    setDonations(donations.map(donation => 
+      donation.id === donationId 
+        ? { ...donation, cause: newCause } 
+        : donation
+    ));
+    toast.success("Donation cause has been updated");
+  };
+  
+  const handleDeleteCause = (causeId: string) => {
+    setCauses(causes.filter(cause => cause.id !== causeId));
+    toast.success("Cause has been deleted");
+  };
+  
+  const handleSaveCause = (causeData: Partial<DonationCause>) => {
+    if (!causeData.id) return;
+    
+    const existingIndex = causes.findIndex(c => c.id === causeData.id);
+    
+    if (existingIndex >= 0) {
+      // Update existing cause
+      const updatedCauses = [...causes];
+      updatedCauses[existingIndex] = { ...updatedCauses[existingIndex], ...causeData } as DonationCause;
+      setCauses(updatedCauses);
+      toast.success("Cause has been updated");
+    } else {
+      // Add new cause
+      setCauses([...causes, causeData as DonationCause]);
+      toast.success("New cause has been created");
+    }
+    
+    setShowCauseDialog(false);
+  };
+  
   const handleExportCSV = () => {
-    // Convert donations to CSV format
-    const headers = ['ID', 'Donor Name', 'Email', 'Amount', 'Currency', 'Payment Method', 'Cause', 'Date', 'Anonymous', 'Status'];
-    const csvData = [
+    const headers = ['ID', 'Donor Name', 'Email', 'Amount', 'Currency', 'Payment Method', 
+      'Cause', 'Date', 'Anonymous', 'Status', 'Message'];
+    
+    const csvContent = [
       headers.join(','),
-      ...filteredDonations.map(d => [
+      ...sortedDonations.map(d => [
         d.id,
-        d.donor_name,
+        `"${d.donor_name}"`,
         d.donor_email,
         d.amount,
         d.currency,
-        d.payment_method,
-        d.cause,
-        new Date(d.date).toLocaleDateString(),
-        d.is_anonymous ? 'Yes' : 'No',
-        d.status
+        `"${d.payment_method}"`,
+        `"${d.cause}"`,
+        d.date,
+        d.is_anonymous,
+        d.status,
+        d.message ? `"${d.message.replace(/"/g, '""')}"` : ''
       ].join(','))
     ].join('\n');
     
-    // Create a blob and download link
-    const blob = new Blob([csvData], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('hidden', '');
-    a.setAttribute('href', url);
-    a.setAttribute('download', `donations_export_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `donations-export-${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     
-    toast.success('Donations exported to CSV');
+    toast.success("CSV export started");
   };
 
-  const handleGenerateReport = () => {
-    toast.success('Monthly financial report downloaded');
-  };
-
-  // Chart data preparation
-  const preparePieChartData = () => {
-    const causeData = causes.map(cause => {
-      const amount = donations
-        .filter(d => d.cause === cause.name && d.status === 'completed')
-        .reduce((sum, d) => sum + d.amount, 0);
+  // Overview statistics section
+  const renderOverviewTab = () => (
+    <div className="space-y-8">
+      {/* Stats cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              This Month
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center">
+              <DollarSign className="mr-2 h-4 w-4 text-muted-foreground" />
+              <span className="text-2xl font-bold">
+                ${statistics.totalThisMonth.toLocaleString()}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              All Time
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center">
+              <DollarSign className="mr-2 h-4 w-4 text-muted-foreground" />
+              <span className="text-2xl font-bold">
+                ${statistics.totalAllTime.toLocaleString()}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Donors
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center">
+              <Users className="mr-2 h-4 w-4 text-muted-foreground" />
+              <span className="text-2xl font-bold">
+                {statistics.donorCount}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Average Donation
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center">
+              <DollarSign className="mr-2 h-4 w-4 text-muted-foreground" />
+              <span className="text-2xl font-bold">
+                ${statistics.averageDonation.toFixed(2)}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
       
-      return {
-        name: cause.name,
-        value: amount
-      };
-    });
-    return causeData;
-  };
-
-  const prepareAnonymousPieData = () => {
-    const anonymousAmount = donations
-      .filter(d => d.is_anonymous && d.status === 'completed')
-      .reduce((sum, d) => sum + d.amount, 0);
-    
-    const namedAmount = donations
-      .filter(d => !d.is_anonymous && d.status === 'completed')
-      .reduce((sum, d) => sum + d.amount, 0);
-    
-    return [
-      { name: 'Anonymous', value: anonymousAmount },
-      { name: 'Named', value: namedAmount }
-    ];
-  };
-
-  const prepareTrendData = () => {
-    const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
-    
-    return months.map(month => {
-      // In a real app, this would calculate actual donations per month
-      // For demo purposes, using random values
-      return {
-        name: month,
-        amount: Math.floor(Math.random() * 5000) + 1000
-      };
-    });
-  };
-
-  // Format date for display
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return format(date, 'PPP');
-  };
-
-  // COLORS for charts
-  const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#0088FE'];
-
-  const totalUnallocated = stats.totalAllTime - causes.reduce((sum, cause) => sum + cause.current_amount, 0);
-
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-        <h1 className="text-2xl font-bold text-empower-brown">Donation Management</h1>
-        <div className="flex space-x-2">
-          <Button onClick={handleExportCSV} variant="outline" className="hidden md:flex">
-            <Download className="mr-2 h-4 w-4" />
-            Export Data
-          </Button>
-          <Button onClick={() => setShowSettingsDialog(true)} variant="outline">
-            <CreditCard className="mr-2 h-4 w-4" />
-            Payment Settings
-          </Button>
-        </div>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">This Month</p>
-                <p className="text-2xl font-bold">${stats.totalThisMonth.toLocaleString()}</p>
-              </div>
-              <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-                <DollarSign className="h-6 w-6 text-blue-600" />
-              </div>
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="col-span-1">
+          <CardHeader>
+            <CardTitle>Monthly Trends</CardTitle>
+            <CardDescription>Donation amounts over the last 6 months</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={statistics.monthlyTrends}
+                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip 
+                    formatter={(value) => [`$${Number(value).toLocaleString()}`, 'Amount']}
+                  />
+                  <Legend />
+                  <Line 
+                    type="monotone" 
+                    dataKey="amount" 
+                    name="Donations" 
+                    stroke="#8884d8" 
+                    activeDot={{ r: 8 }} 
+                  />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">All Time</p>
-                <p className="text-2xl font-bold">${stats.totalAllTime.toLocaleString()}</p>
-              </div>
-              <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
-                <TrendingUp className="h-6 w-6 text-green-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Donors</p>
-                <p className="text-2xl font-bold">{stats.donorCount}</p>
-              </div>
-              <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
-                <Users className="h-6 w-6 text-purple-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Average Donation</p>
-                <p className="text-2xl font-bold">${stats.averageDonation.toFixed(2)}</p>
-              </div>
-              <div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center">
-                <PieChart className="h-6 w-6 text-amber-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Tabs */}
-      <Tabs defaultValue="overview" onValueChange={setActiveTab} value={activeTab}>
-        <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:w-[600px]">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="donations">Donations</TabsTrigger>
-          <TabsTrigger value="causes">Causes</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
-        </TabsList>
-
-        {/* Overview Tab */}
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Donation Trends Chart */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Donation Trends</CardTitle>
-                <CardDescription>Monthly donation amounts for the current year</CardDescription>
-              </CardHeader>
-              <CardContent className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart
-                    data={prepareTrendData()}
-                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line 
-                      type="monotone" 
-                      dataKey="amount" 
-                      name="Donation Amount" 
-                      stroke="#8884d8" 
-                      activeDot={{ r: 8 }} 
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-
-            <div className="grid grid-cols-1 gap-6">
-              {/* Distribution by Cause */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Distribution by Cause</CardTitle>
-                  <CardDescription>Percentage of donations by cause</CardDescription>
-                </CardHeader>
-                <CardContent className="h-72">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RechartsPieChart>
-                      <Pie
-                        data={preparePieChartData()}
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                      >
-                        {preparePieChartData().map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </RechartsPieChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-
-              {/* Anonymous vs. Named */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Anonymous vs. Named Donations</CardTitle>
-                  <CardDescription>Comparison of donation types</CardDescription>
-                </CardHeader>
-                <CardContent className="h-40">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RechartsPieChart>
-                      <Pie
-                        data={prepareAnonymousPieData()}
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={60}
-                        fill="#8884d8"
-                        dataKey="value"
-                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                      >
-                        <Cell fill="#82ca9d" />
-                        <Cell fill="#8884d8" />
-                      </Pie>
-                      <Tooltip />
-                    </RechartsPieChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          {/* Financial Summary */}
+        
+        <div className="grid grid-rows-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle>Financial Summary</CardTitle>
-              <CardDescription>Overview of fundraising status and goals</CardDescription>
+              <CardTitle>Cause Distribution</CardTitle>
+              <CardDescription>Breakdown by donation cause</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6">
-                {causes.map((cause) => (
-                  <div key={cause.id} className="space-y-2">
-                    <div className="flex justify-between">
-                      <div>
-                        <span className="font-medium">{cause.name}</span>
-                        <Badge className={`ml-2 ${cause.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                          {cause.is_active ? 'Active' : 'Inactive'}
-                        </Badge>
-                      </div>
-                      <span className="text-sm font-medium">
-                        ${cause.current_amount.toLocaleString()} of ${cause.target_amount.toLocaleString()}
-                      </span>
-                    </div>
-                    <Progress value={(cause.current_amount / cause.target_amount) * 100} className="h-2" />
-                  </div>
-                ))}
-
-                <div className="pt-4 border-t">
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">Unallocated Funds</span>
-                    <span className="font-medium">${totalUnallocated.toLocaleString()}</span>
-                  </div>
+              <div className="h-52">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RechartPieChart>
+                    <Pie
+                      data={statistics.causeDistribution}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="amount"
+                      nameKey="cause"
+                      label={({ cause, percent }) => `${cause}: ${(percent * 100).toFixed(0)}%`}
+                    >
+                      {statistics.causeDistribution?.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      formatter={(value, name, props) => [
+                        `$${Number(value).toLocaleString()}`, 
+                        props.payload.cause
+                      ]} 
+                    />
+                  </RechartPieChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Anonymous vs. Named</CardTitle>
+              <CardDescription>Percentage of anonymous donations</CardDescription>
+            </CardHeader>
+            <CardContent className="flex justify-center items-center h-52">
+              <div className="relative flex items-center justify-center w-40 h-40">
+                <svg className="w-full h-full" viewBox="0 0 100 100">
+                  {/* Background circle */}
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="45"
+                    fill="none"
+                    stroke="#e6e6e6"
+                    strokeWidth="10"
+                  />
+                  {/* Progress circle */}
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="45"
+                    fill="none"
+                    stroke="#FF6384"
+                    strokeWidth="10"
+                    strokeDasharray={`${statistics.anonymousPercentage ? statistics.anonymousPercentage * 2.83 : 0} 283`}
+                    strokeDashoffset="0"
+                    transform="rotate(-90 50 50)"
+                  />
+                </svg>
+                <div className="absolute flex flex-col items-center">
+                  <span className="text-4xl font-bold">{statistics.anonymousPercentage?.toFixed(0)}%</span>
+                  <span className="text-sm text-muted-foreground">Anonymous</span>
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-end">
-              <Button variant="outline" onClick={handleGenerateReport}>
-                <FileText className="mr-2 h-4 w-4" />
-                Generate Monthly Report
-              </Button>
-            </CardFooter>
           </Card>
-        </TabsContent>
-
-        {/* Donations Tab */}
-        <TabsContent value="donations" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Donation Records</CardTitle>
-              <CardDescription>View and manage all donation transactions</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col md:flex-row gap-4 mb-6">
-                <div className="relative flex-1">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        </div>
+      </div>
+      
+      {/* Recent donations */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Donations</CardTitle>
+          <CardDescription>Latest 5 donations received</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {donations.slice(0, 5).map(donation => (
+              <div 
+                key={donation.id} 
+                className="flex items-center justify-between p-4 border rounded-lg"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                    {donation.is_anonymous ? 
+                      <Users className="h-5 w-5 text-gray-500" /> : 
+                      <span className="font-medium text-lg">{donation.donor_name.charAt(0)}</span>
+                    }
+                  </div>
+                  <div>
+                    <p className="font-medium">{donation.is_anonymous ? "Anonymous" : donation.donor_name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {donation.cause} • {format(new Date(donation.date), 'MMM d, yyyy')}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <Badge className={
+                    donation.status === "completed" ? "bg-green-500" :
+                    donation.status === "pending" ? "bg-yellow-500" :
+                    donation.status === "refunded" ? "bg-red-500" :
+                    "bg-gray-500"
+                  }>
+                    {donation.status}
+                  </Badge>
+                  <span className="ml-4 font-semibold">
+                    {donation.currency} {donation.amount}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button variant="outline" className="w-full" onClick={() => setActiveTab('donations')}>
+            View All Donations
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+  
+  // Donations list and management
+  const renderDonationsTab = () => (
+    <Card>
+      <CardHeader className="pb-3">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <CardTitle>All Donations</CardTitle>
+            <CardDescription>Manage and filter donation records</CardDescription>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button onClick={handleExportCSV} variant="outline" size="sm">
+              <Download className="h-4 w-4 mr-2" />
+              Export CSV
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Filter className="h-4 w-4 mr-2" />
+                  Filters
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>Filter Options</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                
+                <div className="px-2 py-1.5">
+                  <Label htmlFor="startDate" className="text-xs">Start Date</Label>
                   <Input
-                    type="search"
-                    placeholder="Search donations..."
-                    className="pl-8"
-                    value={searchTerm}
-                    onChange={handleSearch}
+                    id="startDate"
+                    type="date"
+                    value={dateRange.start}
+                    onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
+                    className="h-8 mt-1"
                   />
                 </div>
-                <div className="flex gap-2">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-[240px] justify-start text-left font-normal">
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {dateFilter ? format(dateFilter, 'PPP') : <span>Filter by date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={dateFilter}
-                        onSelect={handleDateSelect}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-
-                  <Select value={selectedCause} onValueChange={handleCauseSelect}>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Filter by cause" />
+                
+                <div className="px-2 py-1.5">
+                  <Label htmlFor="endDate" className="text-xs">End Date</Label>
+                  <Input
+                    id="endDate"
+                    type="date"
+                    value={dateRange.end}
+                    onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
+                    className="h-8 mt-1"
+                  />
+                </div>
+                
+                <DropdownMenuSeparator />
+                
+                <div className="px-2 py-1.5">
+                  <Label htmlFor="statusFilter" className="text-xs">Status</Label>
+                  <Select 
+                    value={statusFilter} 
+                    onValueChange={(value) => setStatusFilter(value as DonationStatus | 'all')}
+                  >
+                    <SelectTrigger id="statusFilter" className="h-8 mt-1">
+                      <SelectValue placeholder="All Statuses" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Statuses</SelectItem>
+                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="refunded">Refunded</SelectItem>
+                      <SelectItem value="flagged">Flagged</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="px-2 py-1.5">
+                  <Label htmlFor="causeFilter" className="text-xs">Cause</Label>
+                  <Select 
+                    value={causeFilter} 
+                    onValueChange={(value) => setCauseFilter(value)}
+                  >
+                    <SelectTrigger id="causeFilter" className="h-8 mt-1">
+                      <SelectValue placeholder="All Causes" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Causes</SelectItem>
                       {causes.map(cause => (
-                        <SelectItem key={cause.id} value={cause.name}>{cause.name}</SelectItem>
+                        <SelectItem key={cause.id} value={cause.name}>
+                          {cause.name}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-
-                  {(dateFilter || selectedCause !== 'all') && (
-                    <Button variant="ghost" onClick={() => {
-                      setDateFilter(undefined);
-                      setSelectedCause('all');
-                    }}>
-                      <RefreshCw className="h-4 w-4" />
-                      <span className="sr-only">Reset filters</span>
-                    </Button>
-                  )}
                 </div>
-              </div>
-
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Donor</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead className="hidden md:table-cell">Cause</TableHead>
-                      <TableHead className="hidden md:table-cell">Date</TableHead>
-                      <TableHead className="hidden lg:table-cell">Payment Method</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {isLoading ? (
-                      <TableRow>
-                        <TableCell colSpan={7} className="text-center py-4">
-                          Loading donations...
-                        </TableCell>
-                      </TableRow>
-                    ) : filteredDonations.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={7} className="text-center py-4">
-                          No donations found.
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      filteredDonations.map((donation) => (
-                        <TableRow key={donation.id}>
-                          <TableCell>
-                            <div className="font-medium">
-                              {donation.is_anonymous ? 'Anonymous' : donation.donor_name}
-                            </div>
-                            <div className="text-sm text-muted-foreground">{donation.donor_email}</div>
-                          </TableCell>
-                          <TableCell className="font-medium">
-                            {donation.currency} {donation.amount.toLocaleString()}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">{donation.cause}</TableCell>
-                          <TableCell className="hidden md:table-cell">{formatDate(donation.date)}</TableCell>
-                          <TableCell className="hidden lg:table-cell">{donation.payment_method}</TableCell>
-                          <TableCell>
-                            <Badge className={`${
-                              donation.status === 'completed' ? 'bg-green-100 text-green-800' : 
-                              donation.status === 'refunded' ? 'bg-red-100 text-red-800' : 
-                              'bg-yellow-100 text-yellow-800'
-                            }`}>
-                              {donation.status.charAt(0).toUpperCase() + donation.status.slice(1)}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                  <span className="sr-only">Open menu</span>
-                                  <MoreVerticalIcon className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                <DropdownMenuItem onClick={() => handleContactDonor(donation.donor_email)}>
-                                  <Mail className="mr-2 h-4 w-4" />
-                                  Contact Donor
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => handleReassignDonation(donation)}>
-                                  <Edit2 className="mr-2 h-4 w-4" />
-                                  Reassign Cause
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem 
-                                  onClick={() => handleStatusChange(donation, 'completed')}
-                                  disabled={donation.status === 'completed'}
-                                >
-                                  <CheckIcon className="mr-2 h-4 w-4" />
-                                  Mark as Completed
-                                </DropdownMenuItem>
-                                <DropdownMenuItem 
-                                  onClick={() => handleStatusChange(donation, 'flagged')}
-                                  disabled={donation.status === 'flagged'}
-                                >
-                                  <Flag className="mr-2 h-4 w-4" />
-                                  Flag for Review
-                                </DropdownMenuItem>
-                                <DropdownMenuItem 
-                                  onClick={() => handleStatusChange(donation, 'refunded')}
-                                  disabled={donation.status === 'refunded'}
-                                >
-                                  <RefreshCw className="mr-2 h-4 w-4" />
-                                  Mark as Refunded
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem
-                                  onClick={() => handleDeleteDonation(donation)}
-                                  className="text-red-600"
-                                >
-                                  <Trash2 className="mr-2 h-4 w-4" />
-                                  Delete
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <div className="text-sm text-muted-foreground">
-                Showing {filteredDonations.length} of {donations.length} donations
-              </div>
-              <Button variant="outline" className="md:hidden" onClick={handleExportCSV}>
-                <Download className="mr-2 h-4 w-4" />
-                Export
-              </Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-
-        {/* Causes Tab */}
-        <TabsContent value="causes" className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Donation Causes</h2>
-            <Button onClick={() => handleAddEditCause()}>
+                
+                <DropdownMenuSeparator />
+                
+                <div className="px-2 py-1.5">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={resetFilters}
+                    className="w-full"
+                  >
+                    Reset Filters
+                  </Button>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+        <div className="mt-3">
+          <Input 
+            placeholder="Search donations..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="max-w-sm"
+          />
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="rounded-md border">
+          <div className="relative w-full overflow-auto">
+            <table className="w-full caption-bottom text-sm">
+              <thead>
+                <tr className="border-b bg-muted/50">
+                  <th 
+                    className="h-10 px-4 text-left align-middle font-medium cursor-pointer"
+                    onClick={() => handleSort('donor_name')}
+                  >
+                    <div className="flex items-center space-x-1">
+                      <span>Donor</span>
+                      {sortColumn === 'donor_name' && (
+                        <ArrowUpDown className="h-4 w-4" />
+                      )}
+                    </div>
+                  </th>
+                  <th 
+                    className="h-10 px-4 text-left align-middle font-medium cursor-pointer"
+                    onClick={() => handleSort('amount')}
+                  >
+                    <div className="flex items-center space-x-1">
+                      <span>Amount</span>
+                      {sortColumn === 'amount' && (
+                        <ArrowUpDown className="h-4 w-4" />
+                      )}
+                    </div>
+                  </th>
+                  <th 
+                    className="h-10 px-4 text-left align-middle font-medium cursor-pointer"
+                    onClick={() => handleSort('cause')}
+                  >
+                    <div className="flex items-center space-x-1">
+                      <span>Cause</span>
+                      {sortColumn === 'cause' && (
+                        <ArrowUpDown className="h-4 w-4" />
+                      )}
+                    </div>
+                  </th>
+                  <th 
+                    className="h-10 px-4 text-left align-middle font-medium cursor-pointer"
+                    onClick={() => handleSort('date')}
+                  >
+                    <div className="flex items-center space-x-1">
+                      <span>Date</span>
+                      {sortColumn === 'date' && (
+                        <ArrowUpDown className="h-4 w-4" />
+                      )}
+                    </div>
+                  </th>
+                  <th 
+                    className="h-10 px-4 text-left align-middle font-medium cursor-pointer"
+                    onClick={() => handleSort('status')}
+                  >
+                    <div className="flex items-center space-x-1">
+                      <span>Status</span>
+                      {sortColumn === 'status' && (
+                        <ArrowUpDown className="h-4 w-4" />
+                      )}
+                    </div>
+                  </th>
+                  <th className="h-10 px-4 text-right align-middle font-medium">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="[&_tr:last-child]:border-0">
+                {sortedDonations.length > 0 ? (
+                  sortedDonations.map(donation => (
+                    <tr 
+                      key={donation.id}
+                      className="border-b transition-colors hover:bg-muted/50"
+                    >
+                      <td className="p-4 align-middle">
+                        <div>
+                          <p className="font-medium">
+                            {donation.is_anonymous ? "Anonymous" : donation.donor_name}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {donation.donor_email}
+                          </p>
+                        </div>
+                      </td>
+                      <td className="p-4 align-middle">
+                        <div>
+                          <p className="font-medium">
+                            {donation.currency} {donation.amount}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {donation.payment_method}
+                          </p>
+                        </div>
+                      </td>
+                      <td className="p-4 align-middle">
+                        {donation.cause}
+                      </td>
+                      <td className="p-4 align-middle">
+                        {format(new Date(donation.date), 'MMM d, yyyy')}
+                      </td>
+                      <td className="p-4 align-middle">
+                        <Badge className={
+                          donation.status === "completed" ? "bg-green-500" :
+                          donation.status === "pending" ? "bg-yellow-500" :
+                          donation.status === "refunded" ? "bg-red-500" :
+                          "bg-gray-500"
+                        }>
+                          {donation.status}
+                        </Badge>
+                      </td>
+                      <td className="p-4 align-middle text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm">
+                              <MoreVerticalIcon className="h-4 w-4" />
+                              <span className="sr-only">Open menu</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setSelectedDonation(donation);
+                                setShowContactDialog(true);
+                              }}
+                            >
+                              <Mail className="mr-2 h-4 w-4" />
+                              <span>Contact Donor</span>
+                            </DropdownMenuItem>
+                            
+                            <DropdownMenuItem disabled={donation.status !== 'completed'}
+                              onClick={() => donation.status === 'completed' && handleRefundDonation(donation.id)}
+                            >
+                              <RefreshCcw className="mr-2 h-4 w-4" />
+                              <span>Refund</span>
+                            </DropdownMenuItem>
+                            
+                            <DropdownMenuItem disabled={donation.status !== 'completed'}
+                              onClick={() => donation.status === 'completed' && handleFlagDonation(donation.id)}
+                            >
+                              <Flag className="mr-2 h-4 w-4" />
+                              <span>Flag as Suspicious</span>
+                            </DropdownMenuItem>
+                            
+                            <DropdownMenuSeparator />
+                            
+                            <DropdownMenuLabel>Change Cause</DropdownMenuLabel>
+                            {causes.map(cause => (
+                              <DropdownMenuItem 
+                                key={cause.id}
+                                onClick={() => handleChangeCause(donation.id, cause.name)}
+                              >
+                                {donation.cause === cause.name && (
+                                  <Check className="mr-2 h-4 w-4" />
+                                )}
+                                <span className={donation.cause !== cause.name ? "ml-6" : ""}>
+                                  {cause.name}
+                                </span>
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="h-24 text-center">
+                      No donations found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <div className="text-xs text-muted-foreground">
+          Showing {sortedDonations.length} of {donations.length} donations
+        </div>
+        {/* Simple pagination could go here */}
+      </CardFooter>
+    </Card>
+  );
+  
+  // Causes management
+  const renderCausesTab = () => (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Donation Causes</h2>
+        <Dialog open={showCauseDialog} onOpenChange={setShowCauseDialog}>
+          <DialogTrigger asChild>
+            <Button>
               <Plus className="mr-2 h-4 w-4" />
               Add New Cause
             </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {causes.map((cause) => (
-              <Card key={cause.id} className={`overflow-hidden ${!cause.is_active && 'opacity-75'}`}>
-                <div className="h-48 overflow-hidden">
-                  <img 
-                    src={cause.image_url} 
-                    alt={cause.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <CardTitle>{cause.name}</CardTitle>
-                    <Badge className={cause.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
-                      {cause.is_active ? 'Active' : 'Inactive'}
-                    </Badge>
-                  </div>
-                  <CardDescription className="line-clamp-3">{cause.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Progress</span>
-                      <span>${cause.current_amount.toLocaleString()} of ${cause.target_amount.toLocaleString()}</span>
-                    </div>
-                    <Progress value={(cause.current_amount / cause.target_amount) * 100} className="h-2" />
-                  </div>
-                </CardContent>
-                <CardFooter className="flex justify-between">
-                  <Button variant="outline" onClick={() => handleToggleCauseStatus(cause.id)}>
-                    {cause.is_active ? 'Deactivate' : 'Activate'}
-                  </Button>
-                  <div className="flex space-x-2">
-                    <Button variant="ghost" onClick={() => handleAddEditCause(cause)}>
-                      <Edit2 className="h-4 w-4" />
-                      <span className="sr-only">Edit</span>
-                    </Button>
-                    <Button variant="ghost" className="text-red-600" onClick={() => handleDeleteCause(cause.id)}>
-                      <Trash2 className="h-4 w-4" />
-                      <span className="sr-only">Delete</span>
-                    </Button>
-                  </div>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-
-        {/* Settings Tab */}
-        <TabsContent value="settings" className="space-y-6">
-          <Card>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[550px]">
+            <DialogHeader>
+              <DialogTitle>
+                {selectedCause ? 'Edit Donation Cause' : 'Create New Donation Cause'}
+              </DialogTitle>
+              <DialogDescription>
+                {selectedCause ? 'Update the details for this donation cause' : 'Add a new cause for donations'}
+              </DialogDescription>
+            </DialogHeader>
+            <CauseForm 
+              cause={selectedCause || undefined}
+              onSave={handleSaveCause}
+              onClose={() => {
+                setSelectedCause(null);
+                setShowCauseDialog(false);
+              }}
+            />
+          </DialogContent>
+        </Dialog>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {causes.map(cause => (
+          <Card key={cause.id} className="overflow-hidden">
+            <div className="aspect-video w-full overflow-hidden">
+              <img 
+                src={cause.image_url || '/placeholder.svg'} 
+                alt={cause.name}
+                className="object-cover w-full h-full"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = '/placeholder.svg';
+                }}
+              />
+            </div>
             <CardHeader>
-              <CardTitle>Payment Integration Settings</CardTitle>
-              <CardDescription>Configure your payment gateways and donation options</CardDescription>
+              <div className="flex justify-between items-start">
+                <CardTitle className="text-lg">{cause.name}</CardTitle>
+                {cause.is_active ? (
+                  <Badge>Active</Badge>
+                ) : (
+                  <Badge variant="outline">Inactive</Badge>
+                )}
+              </div>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">Stripe Integration</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="stripe_public_key">Stripe Public Key</Label>
-                    <Input 
-                      id="stripe_public_key" 
-                      type="text" 
-                      placeholder="pk_test_..."
-                      value="pk_test_51ABCD..."
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="stripe_secret_key">Stripe Secret Key</Label>
-                    <Input 
-                      id="stripe_secret_key" 
-                      type="password" 
-                      placeholder="sk_test_..."
-                      value="••••••••••••••••••••"
-                    />
-                  </div>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground line-clamp-3">
+                {cause.description}
+              </p>
+              
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Progress</span>
+                  <span className="font-medium">
+                    ${cause.current_amount.toLocaleString()} of ${cause.target_amount.toLocaleString()}
+                  </span>
                 </div>
-              </div>
-
-              <Separator />
-
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">PayPal Integration</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="paypal_client_id">PayPal Client ID</Label>
-                    <Input 
-                      id="paypal_client_id" 
-                      type="text" 
-                      placeholder="Client ID"
-                      value="AQj3C0LX92AE..."
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="paypal_secret">PayPal Secret</Label>
-                    <Input 
-                      id="paypal_secret" 
-                      type="password" 
-                      placeholder="Secret"
-                      value="••••••••••••••••••••"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <Separator />
-
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">Donation Settings</h3>
-                <div className="space-y-2">
-                  <Label htmlFor="suggested_amounts">Suggested Donation Amounts</Label>
-                  <Input 
-                    id="suggested_amounts" 
-                    type="text" 
-                    placeholder="10, 25, 50, 100"
-                    value="10, 25, 50, 100"
+                <div className="w-full bg-muted rounded-full h-2.5">
+                  <div 
+                    className="bg-primary h-2.5 rounded-full" 
+                    style={{ width: `${Math.min(100, Math.round((cause.current_amount / cause.target_amount) * 100))}%` }}
                   />
-                  <p className="text-sm text-muted-foreground">Comma-separated list of suggested donation amounts</p>
+                </div>
+                <div className="text-xs text-right text-muted-foreground">
+                  {Math.round((cause.current_amount / cause.target_amount) * 100)}%
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button variant="outline" onClick={() => setShowEmailTemplateDialog(true)}>
-                Edit Email Templates
+            <CardFooter className="flex justify-end gap-2">
+              <Button variant="outline" size="sm"
+                onClick={() => {
+                  setSelectedCause(cause);
+                  setShowCauseDialog(true);
+                }}
+              >
+                <Edit className="h-4 w-4 mr-1" />
+                Edit
               </Button>
-              <Button>Save Settings</Button>
+              <Button variant="outline" size="sm" 
+                onClick={() => handleDeleteCause(cause.id)}
+              >
+                <Trash className="h-4 w-4 mr-1" />
+                Delete
+              </Button>
             </CardFooter>
           </Card>
+        ))}
+      </div>
+      
+      {causes.length === 0 && (
+        <div className="text-center py-10">
+          <div className="text-muted-foreground mb-4">No causes found</div>
+          <Button 
+            variant="outline"
+            onClick={() => {
+              setSelectedCause(null);
+              setShowCauseDialog(true);
+            }}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Add Your First Cause
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+  
+  // Settings tab
+  const renderSettingsTab = () => (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Payment Integrations</CardTitle>
+          <CardDescription>Configure payment gateways for donation processing</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-10 h-10 flex items-center justify-center rounded-md bg-muted">
+                  <svg className="w-6 h-6" viewBox="0 0 24 24">
+                    <path 
+                      fill="currentColor" 
+                      d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-medium">Stripe</h3>
+                  <p className="text-sm text-muted-foreground">Credit card and direct debit processing</p>
+                </div>
+              </div>
+              <Switch id="stripe" defaultChecked />
+            </div>
+            
+            <div>
+              <Label htmlFor="stripe_key">API Key</Label>
+              <div className="flex gap-2 mt-1.5">
+                <Input id="stripe_key" type="password" value="sk_test_•••••••••••••••••••••••••" readOnly className="flex-1" />
+                <Button variant="outline" size="sm">Change</Button>
+              </div>
+            </div>
+            
+            <div>
+              <Label htmlFor="stripe_webhook">Webhook Secret</Label>
+              <div className="flex gap-2 mt-1.5">
+                <Input id="stripe_webhook" type="password" value="whsec_••••••••••••••••••••••" readOnly className="flex-1" />
+                <Button variant="outline" size="sm">Change</Button>
+              </div>
+            </div>
+          </div>
+          
+          <Separator />
+          
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-10 h-10 flex items-center justify-center rounded-md bg-muted">
+                  <svg className="w-6 h-6" viewBox="0 0 24 24">
+                    <path 
+                      fill="currentColor" 
+                      d="M12.001 4c-2.761 0-5 2.24-5 5v3h-2v7c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-7h-2V9c0-2.761-2.238-5-5-5zm0 2a3 3 0 0 1 3 3v3h-6V9a3 3 0 0 1 3-3z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-medium">PayPal</h3>
+                  <p className="text-sm text-muted-foreground">PayPal Express Checkout</p>
+                </div>
+              </div>
+              <Switch id="paypal" />
+            </div>
+            
+            <div>
+              <Label htmlFor="paypal_client">Client ID</Label>
+              <div className="flex gap-2 mt-1.5">
+                <Input id="paypal_client" placeholder="PayPal Client ID" className="flex-1" />
+                <Button variant="outline" size="sm">Verify</Button>
+              </div>
+            </div>
+            
+            <div>
+              <Label htmlFor="paypal_secret">Client Secret</Label>
+              <div className="flex gap-2 mt-1.5">
+                <Input id="paypal_secret" type="password" placeholder="PayPal Client Secret" className="flex-1" />
+                <Button variant="outline" size="sm">Verify</Button>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="border-t px-6 py-4">
+          <Button>Save Payment Settings</Button>
+        </CardFooter>
+      </Card>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Donation Page Configuration</CardTitle>
+          <CardDescription>Customize your donation collection process</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-4">
+            <h3 className="font-medium">Suggested Donation Amounts</h3>
+            <p className="text-sm text-muted-foreground">Set predefined donation amount options for donors</p>
+            
+            <div className="flex flex-wrap gap-2">
+              {[10, 25, 50, 100, 250].map(amount => (
+                <div key={amount} className="flex items-center">
+                  <Badge className="flex items-center gap-1">
+                    ${amount}
+                    <X className="h-3 w-3 cursor-pointer" />
+                  </Badge>
+                </div>
+              ))}
+              <Badge variant="outline" className="cursor-pointer">
+                <Plus className="h-3 w-3 mr-1" />
+                Add
+              </Badge>
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            <h3 className="font-medium">Email Templates</h3>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <Label>Donation Receipt</Label>
+                <Button variant="ghost" size="sm">Edit</Button>
+              </div>
+              <div className="flex justify-between items-center">
+                <Label>Thank You Email</Label>
+                <Button variant="ghost" size="sm">Edit</Button>
+              </div>
+              <div className="flex justify-between items-center">
+                <Label>Monthly Summary</Label>
+                <Button variant="ghost" size="sm">Edit</Button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium">Allow Anonymous Donations</h3>
+                <p className="text-sm text-muted-foreground">Let donors hide their identity</p>
+              </div>
+              <Switch id="anonymous" defaultChecked />
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium">Allow Monthly Recurring</h3>
+                <p className="text-sm text-muted-foreground">Enable monthly subscription donations</p>
+              </div>
+              <Switch id="recurring" defaultChecked />
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium">Allow Donor Comments</h3>
+                <p className="text-sm text-muted-foreground">Let donors leave messages with their donations</p>
+              </div>
+              <Switch id="comments" defaultChecked />
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium">Display Donor Wall</h3>
+                <p className="text-sm text-muted-foreground">Show list of recent donors on donation page</p>
+              </div>
+              <Switch id="donor_wall" defaultChecked />
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="border-t px-6 py-4">
+          <div className="flex gap-2">
+            <Button>Save Settings</Button>
+            <Button variant="outline">Preview Donation Page</Button>
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="space-y-6"
+    >
+      <div className="flex flex-col md:flex-row justify-between md:items-center space-y-4 md:space-y-0">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Donation Management</h1>
+          <p className="text-muted-foreground">
+            Monitor donation activities and manage fundraising causes.
+          </p>
+        </div>
+      </div>
+      
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid grid-cols-4 md:w-fit">
+          <TabsTrigger value="overview">
+            <BarChart className="h-4 w-4 mr-2 hidden md:inline-block" />
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="donations">
+            <DollarSign className="h-4 w-4 mr-2 hidden md:inline-block" />
+            Donations
+          </TabsTrigger>
+          <TabsTrigger value="causes">
+            <PieChart className="h-4 w-4 mr-2 hidden md:inline-block" />
+            Causes
+          </TabsTrigger>
+          <TabsTrigger value="settings">
+            <Settings className="h-4 w-4 mr-2 hidden md:inline-block" />
+            Settings
+          </TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="overview" className="space-y-4">
+          {renderOverviewTab()}
+        </TabsContent>
+        
+        <TabsContent value="donations" className="space-y-4">
+          {renderDonationsTab()}
+        </TabsContent>
+        
+        <TabsContent value="causes" className="space-y-4">
+          {renderCausesTab()}
+        </TabsContent>
+        
+        <TabsContent value="settings" className="space-y-4">
+          {renderSettingsTab()}
         </TabsContent>
       </Tabs>
-
+      
       {/* Contact Donor Dialog */}
-      <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
-        <DialogContent className="sm:max-w-[500px]">
+      <Dialog open={showContactDialog} onOpenChange={setShowContactDialog}>
+        <DialogContent className="sm:max-w-[550px]">
           <DialogHeader>
             <DialogTitle>Contact Donor</DialogTitle>
             <DialogDescription>
               Send an email to the donor regarding their donation.
             </DialogDescription>
           </DialogHeader>
-          <Form {...emailForm}>
-            <form onSubmit={emailForm.handleSubmit(handleSendEmail)} className="space-y-4">
-              <FormField
-                control={emailForm.control}
-                name="to"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>To</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={emailForm.control}
-                name="subject"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Subject</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Thank you for your donation" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={emailForm.control}
-                name="message"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Message</FormLabel>
-                    <FormControl>
-                      <Textarea 
-                        {...field} 
-                        placeholder="Enter your message here..." 
-                        className="min-h-[150px]"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <DialogFooter>
-                <Button type="submit">
-                  <Send className="mr-2 h-4 w-4" />
-                  Send Email
-                </Button>
-              </DialogFooter>
-            </form>
-          </Form>
+          {selectedDonation && (
+            <ContactDonorForm 
+              donor={selectedDonation} 
+              onClose={() => {
+                setSelectedDonation(null);
+                setShowContactDialog(false);
+              }} 
+            />
+          )}
         </DialogContent>
       </Dialog>
-
-      {/* Add/Edit Cause Dialog */}
-      <Dialog open={showCauseDialog} onOpenChange={setShowCauseDialog}>
-        <DialogContent className="sm:max-w-[600px]">
-          <DialogHeader>
-            <DialogTitle>{selectedCause2 ? 'Edit Cause' : 'Add New Cause'}</DialogTitle>
-            <DialogDescription>
-              {selectedCause2 
-                ? 'Update the details for this donation cause.' 
-                : 'Create a new donation cause for your organization.'}
-            </DialogDescription>
-          </DialogHeader>
-          <Form {...causeForm}>
-            <form onSubmit={causeForm.handleSubmit(handleSubmitCause)} className="space-y-4">
-              <FormField
-                control={causeForm.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Education Fund" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={causeForm.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea 
-                        {...field} 
-                        placeholder="Describe this cause..." 
-                        className="min-h-[100px]"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  control={causeForm.control}
-                  name="target_amount"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Target Amount ($)</FormLabel>
-                      <FormControl>
-                        <Input 
-                          type="number" 
-                          {...field}
-                          onChange={e => field.onChange(parseFloat(e.target.value))}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={causeForm.control}
-                  name="image_url"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Image URL</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="https://example.com/image.jpg" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <FormField
-                control={causeForm.control}
-                name="is_active"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>Active</FormLabel>
-                      <FormDescription>
-                        This cause will be visible to users and accept donations
-                      </FormDescription>
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setShowCauseDialog(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit">
-                  {selectedCause2 ? 'Update Cause' : 'Create Cause'}
-                </Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-
-      {/* Reassign Dialog */}
-      <Dialog open={showReassignDialog} onOpenChange={setShowReassignDialog}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Reassign Donation</DialogTitle>
-            <DialogDescription>
-              Move this donation to a different cause.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4">
-            {selectedDonation && (
-              <div className="mb-4 p-3 bg-gray-50 rounded-md">
-                <p className="text-sm font-medium">Original donation details:</p>
-                <p className="text-sm">Donor: {selectedDonation.donor_name}</p>
-                <p className="text-sm">Amount: {selectedDonation.currency} {selectedDonation.amount}</p>
-                <p className="text-sm">Current Cause: {selectedDonation.cause}</p>
-              </div>
-            )}
-            <div className="space-y-2">
-              <Label htmlFor="new-cause">Select New Cause</Label>
-              <Select value={newCause} onValueChange={setNewCause}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a cause" />
-                </SelectTrigger>
-                <SelectContent>
-                  {causes.map(cause => (
-                    <SelectItem key={cause.id} value={cause.name}>{cause.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowReassignDialog(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleConfirmReassign} disabled={!newCause}>
-              Reassign Donation
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Email Template Dialog */}
-      <Dialog open={showEmailTemplateDialog} onOpenChange={setShowEmailTemplateDialog}>
-        <DialogContent className="sm:max-w-[600px]">
-          <DialogHeader>
-            <DialogTitle>Edit Email Templates</DialogTitle>
-            <DialogDescription>
-              Customize the email templates sent to donors
-            </DialogDescription>
-          </DialogHeader>
-          <Form {...emailTemplateForm}>
-            <form onSubmit={emailTemplateForm.handleSubmit(handleSaveEmailTemplate)} className="space-y-4">
-              <div className="space-y-2">
-                <FormField
-                  control={emailTemplateForm.control}
-                  name="subject_template"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Donation Receipt Subject</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Available variables: {{'{{'}}name{{'}}'}}, {{'{{'}}amount{{'}}'}}, {{'{{'}}currency{{'}}'}}, {{'{{'}}cause{{'}}'}}
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="space-y-2">
-                <FormField
-                  control={emailTemplateForm.control}
-                  name="body_template"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Donation Receipt Email Body</FormLabel>
-                      <FormControl>
-                        <Textarea {...field} className="min-h-[200px]" />
-                      </FormControl>
-                      <FormDescription>
-                        Available variables: {{'{{'}}name{{'}}'}}, {{'{{'}}amount{{'}}'}}, {{'{{'}}currency{{'}}'}}, {{'{{'}}cause{{'}}'}}, {{'{{'}}date{{'}}'}}
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <DialogFooter>
-                <Button type="submit">Save Template</Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-    </div>
+    </motion.div>
   );
 };
 
