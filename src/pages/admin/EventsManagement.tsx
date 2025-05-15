@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -62,7 +61,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CalendarIcon, Clock, MapPin, Users, UserCheck, Bell, AlertCircle, Search, Plus, Edit2, Trash2, Calendar, Send, User, Undo } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import { Event, EventCategory, Speaker } from '@/types/event';
+import { Event, EventCategory, Speaker, SupabaseEvent } from '@/types/event';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -181,7 +180,7 @@ const EventsManagement: React.FC = () => {
       if (error) throw error;
       
       if (eventsData && eventsData.length > 0) {
-        const formattedEvents = eventsData.map(event => ({
+        const formattedEvents = eventsData.map((event: SupabaseEvent) => ({
           id: event.id,
           title: event.title,
           description: event.description,
@@ -282,11 +281,11 @@ const EventsManagement: React.FC = () => {
           return;
         }
         
-        if (data && data.length > 0 && data[0].id && data[0].highlights) {
+        if (data && data.length > 0 && data[0].id) {
           const eventId = data[0].id;
           // If there are highlights, add them
-          if (data.highlights && data.highlights.length > 0) {
-            const highlightsToInsert = data.highlights.map(highlight => ({
+          if (eventHighlights && eventHighlights.length > 0) {
+            const highlightsToInsert = eventHighlights.map(highlight => ({
               event_id: eventId,
               highlight
             }));

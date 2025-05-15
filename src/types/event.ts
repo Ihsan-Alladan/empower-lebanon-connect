@@ -23,3 +23,21 @@ export interface Event {
   speakers: Speaker[];
   highlights?: string[];
 }
+
+// Interface for event data coming from Supabase
+export interface SupabaseEvent {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  time: string;
+  location: string;
+  capacity: number;
+  registered_attendees: number;
+  category: string;
+  image_url: string;
+  event_images?: { url: string }[];
+  event_speakers?: Speaker[];
+  event_highlights?: { highlight: string }[];
+  created_at?: string;
+}
