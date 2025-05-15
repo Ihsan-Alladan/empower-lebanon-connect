@@ -326,7 +326,15 @@ export type Database = {
           title?: string
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "courses_instructor_id_fkey1"
+            columns: ["instructor_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       donations: {
         Row: {
@@ -877,6 +885,38 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["user_role"]
           user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          created_at: string
+          email: string | null
+          fname: string | null
+          id: string
+          lname: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          fname?: string | null
+          id?: string
+          lname?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          fname?: string | null
+          id?: string
+          lname?: string | null
         }
         Relationships: []
       }
