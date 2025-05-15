@@ -1,18 +1,65 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-import { 
-  LayoutDashboard, 
-  Users, 
-  ShoppingBag, 
-  FileText, 
-  Mail, 
-  BarChart, 
+import { Link, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import {
+  Users,
+  BookOpen,
+  Package,
+  Calendar,
+  PieChart,
+  Mail,
   Settings,
+  LogOut,
+  ChevronRight,
+  Home,
+  Palette,
   Heart,
-  Calendar
+  Layout
 } from 'lucide-react';
+
+import { Button } from "@/components/ui/button";
+import { logoutAdmin } from '@/utils/adminAuth';
+import { useNavigate } from 'react-router-dom';
+import { cn } from '@/lib/utils';
+
+interface SidebarItemProps {
+  icon: React.ReactNode;
+  text: string;
+  to: string;
+  active: boolean;
+  collapsed: boolean;
+}
+
+const SidebarItem: React.FC<SidebarItemProps> = ({ icon, text, to, active, collapsed }) => {
+  return (
+    <Link to={to} className="w-full">
+      <motion.div 
+        className={`flex items-center p-3 rounded-md mb-1 transition-all group ${active 
+          ? 'bg-empower-terracotta text-white shadow-lg shadow-empower-terracotta/20' 
+          : 'text-gray-600 hover:bg-empower-terracotta/10'}`}
+        whileHover={{ scale: 1.02, boxShadow: active ? '' : '0 4px 12px rgba(0, 0, 0, 0.05)' }}
+        whileTap={{ scale: 0.98 }}
+      >
+        <div className={cn("text-inherit transition-all", 
+          active ? "text-white" : "text-gray-500 group-hover:text-empower-terracotta"
+        )}>
+          {icon}
+        </div>
+        {!collapsed && (
+          <span className={cn("ml-3 font-medium text-sm transition-colors", 
+            active ? "text-white" : "text-gray-600 group-hover:text-empower-terracotta"
+          )}>
+            {text}
+          </span>
+        )}
+        {active && !collapsed && (
+          <ChevronRight className="ml-auto text-white" size={16} />
+        )}
+      </motion.div>
+    </Link>
+  );
+};
 
 interface AdminSidebarProps {
   collapsed: boolean;
@@ -21,118 +68,84 @@ interface AdminSidebarProps {
   currentPath: string;
 }
 
-type AdminNavItem = {
-  title: string;
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
-};
-
-const adminNavItems: AdminNavItem[] = [
-  {
-    title: 'Dashboard',
-    href: '/admin',
-    icon: LayoutDashboard,
-  },
-  {
-    title: 'Events',
-    href: '/admin/events',
-    icon: Calendar,
-  },
-  {
-    title: 'Users',
-    href: '/admin/users',
-    icon: Users,
-  },
-  {
-    title: 'Shop',
-    href: '/admin/shop',
-    icon: ShoppingBag,
-  },
-  {
-    title: 'Content',
-    href: '/admin/content',
-    icon: FileText,
-  },
-  {
-    title: 'Newsletter',
-    href: '/admin/newsletter',
-    icon: Mail,
-  },
-  {
-    title: 'Donations',
-    href: '/admin/donations',
-    icon: Heart,
-  },
-  {
-    title: 'Analytics',
-    href: '/admin/analytics',
-    icon: BarChart,
-  },
-  {
-    title: 'Settings',
-    href: '/admin/settings',
-    icon: Settings,
-  },
-];
-
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ 
   collapsed, 
   toggleCollapsed, 
   isOpen,
   currentPath
 }) => {
-  // Only mobile sidebar should have a backdrop and close on item click
-  const isMobile = !collapsed && isOpen;
-
-  const handleItemClick = () => {
-    if (isMobile) {
-      toggleCollapsed();
-    }
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    logoutAdmin();
+    navigate('/login');
   };
-
+  
   if (!isOpen) return null;
+  
+  const menuItems = [
+    { icon: <Home size={20} />, text: 'Dashboard', to: '/admin' },
+    { icon: <Users size={20} />, text: 'Manage Users', to: '/admin/users' },
+    { icon: <BookOpen size={20} />, text: 'Manage Courses', to: '/admin/content' },
+    { icon: <Calendar size={20} />, text: 'Manage Events', to: '/admin/events' },
+    { icon: <Heart size={20} />, text: 'Manage Donations', to: '/admin/donations' },
+    { icon: <Package size={20} />, text: 'Manage Sellers & Products', to: '/admin/shop' },
+    { icon: <Palette size={20} />, text: 'Home Design', to: '/admin/home-design' },
+    { icon: <Mail size={20} />, text: 'Newsletter Control', to: '/admin/newsletter' },
+    { icon: <Layout size={20} />, text: 'Analytics', to: '/admin/analytics' },
+    { icon: <Settings size={20} />, text: 'Settings', to: '/admin/settings' },
+  ];
 
   return (
-    <div className={cn(
-      "h-full bg-white border-r transition-all duration-300",
-      collapsed ? "w-[70px]" : "w-[250px]"
-    )}>
-      <div className="h-16 border-b flex items-center justify-center">
-        <h1 className={cn(
-          "font-bold text-empower-terracotta transition-opacity",
-          collapsed ? "opacity-0 w-0" : "opacity-100"
-        )}>
-          Admin Portal
-        </h1>
-        {collapsed && (
-          <span className="text-empower-terracotta text-xl font-bold">A</span>
-        )}
+    <motion.div 
+      className={`h-screen bg-white shadow-md transition-all duration-300 flex flex-col ${collapsed ? 'w-16' : 'w-64'}`}
+      initial={{ width: collapsed ? 64 : 256, x: isOpen ? 0 : -256 }}
+      animate={{ width: collapsed ? 64 : 256, x: isOpen ? 0 : -256 }}
+      transition={{ duration: 0.3 }}
+    >
+      <div className="flex items-center justify-between h-16 border-b px-4">
+        <motion.div 
+          className="font-bold text-empower-brown truncate"
+          animate={{ opacity: collapsed ? 0 : 1 }}
+          transition={{ duration: 0.2 }}
+        >
+          {!collapsed && "EmpowEra Admin"}
+        </motion.div>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={toggleCollapsed}
+          className="text-gray-500"
+        >
+          <ChevronRight className={`transform transition-transform ${collapsed ? 'rotate-180' : ''}`} />
+        </Button>
       </div>
-
-      <nav className="p-2">
-        <ul className="space-y-2">
-          {adminNavItems.map((item) => (
-            <li key={item.href}>
-              <Link
-                to={item.href}
-                className={cn(
-                  "flex items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors",
-                  currentPath === item.href && "bg-gray-100 text-gray-900 font-medium",
-                  collapsed ? "justify-center" : "justify-start"
-                )}
-                onClick={handleItemClick}
-              >
-                <item.icon className={cn(
-                  "flex-shrink-0",
-                  collapsed ? "w-5 h-5" : "w-5 h-5 mr-3"
-                )} />
-                {!collapsed && <span>{item.title}</span>}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </div>
+      
+      <div className="flex-1 overflow-y-auto p-2">
+        {menuItems.map((item, index) => (
+          <SidebarItem
+            key={index}
+            icon={item.icon}
+            text={item.text}
+            to={item.to}
+            active={currentPath === item.to || currentPath.startsWith(`${item.to}/`)}
+            collapsed={collapsed}
+          />
+        ))}
+      </div>
+      
+      <div className="p-2 border-t">
+        <Button 
+          onClick={handleLogout}
+          variant="ghost" 
+          className="w-full flex items-center p-3 text-gray-600 hover:bg-red-50 hover:text-red-600 group"
+        >
+          <LogOut size={20} className="text-gray-500 group-hover:text-red-600" />
+          {!collapsed && <span className="ml-3 font-medium text-sm">Logout</span>}
+        </Button>
+      </div>
+    </motion.div>
   );
 };
 
