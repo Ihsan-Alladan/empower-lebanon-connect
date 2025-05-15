@@ -1,161 +1,145 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from '@/contexts/AuthContext';
-import { CartProvider } from '@/hooks/useCart';
-import { FavoritesProvider } from '@/hooks/useFavorites';
-import Index from '@/pages/Index';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { authService } from '@/services/authService';
+import { toast } from 'sonner';
+
+// Import components
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+
+// Import pages
+import Home from '@/pages/Home';
+import About from '@/pages/About';
+import Contact from '@/pages/Contact';
 import Shop from '@/pages/Shop';
-import ProductDetail from '@/pages/ProductDetail';
-import SellerShop from '@/pages/SellerShop';
-import SellerDashboard from '@/pages/SellerDashboard';
-import Cart from '@/pages/Cart';
-import Favorites from '@/pages/Favorites';
-import Courses from '@/pages/Courses';
-import CourseDetail from '@/pages/CourseDetail';
+import ProductDetails from '@/pages/ProductDetails';
+import Events from '@/pages/Events';
+import EventDetails from '@/pages/EventDetails';
 import Login from '@/pages/Login';
-import SignUp from '@/pages/SignUp';
-import SellerSignup from '@/pages/SellerSignup';
-import LearnerSignup from '@/pages/LearnerSignup';
-import InstructorSignup from '@/pages/InstructorSignup';
-import InstructorDashboard from '@/pages/InstructorDashboard';
-import CustomerSignup from '@/pages/CustomerSignup';
-import CustomerProfile from '@/pages/CustomerProfile';
-import LearnerDashboard from '@/pages/LearnerDashboard';
-import LearnerClassroom from '@/pages/LearnerClassroom';
+import Register from '@/pages/Register';
+import Profile from '@/pages/Profile';
+import NotFound from '@/pages/NotFound';
+import TermsOfService from '@/pages/TermsOfService';
+import PrivacyPolicy from '@/pages/PrivacyPolicy';
+import ForgotPassword from '@/pages/ForgotPassword';
+import ResetPassword from '@/pages/ResetPassword';
+import SellerDashboard from '@/pages/seller/SellerDashboard';
+import CreateProduct from '@/pages/seller/CreateProduct';
+import EditProduct from '@/pages/seller/EditProduct';
+import InstructorDashboard from '@/pages/instructor/InstructorDashboard';
+import CreateCourse from '@/pages/instructor/CreateCourse';
+import EditCourse from '@/pages/instructor/EditCourse';
+import Courses from '@/pages/Courses';
+import CourseDetails from '@/pages/CourseDetails';
+import LearnerDashboard from '@/pages/learner/LearnerDashboard';
+import Cart from '@/pages/Cart';
+import Checkout from '@/pages/Checkout';
+import Success from '@/pages/Success';
+import Cancel from '@/pages/Cancel';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
-import ContentManagement from '@/pages/admin/ContentManagement';
+import EventsManagement from '@/pages/admin/EventsManagement';
 import UserManagement from '@/pages/admin/UserManagement';
 import ShopManagement from '@/pages/admin/ShopManagement';
-import EventsManagement from '@/pages/admin/EventsManagement';
+import ContentManagement from '@/pages/admin/ContentManagement';
 import Newsletter from '@/pages/admin/Newsletter';
 import Analytics from '@/pages/admin/Analytics';
 import Settings from '@/pages/admin/Settings';
-import HomeDesign from '@/pages/admin/HomeDesign';
-import NotFound from '@/pages/NotFound';
-import Donate from '@/pages/Donate';
-import DonationCheckout from '@/pages/DonationCheckout';
-import Workshops from '@/pages/Workshops';
-import Events from '@/pages/Events';
-import NewsletterPage from '@/pages/Newsletter';
-import './App.css';
-import { supabase } from '@/integrations/supabase/client';
+import AdminLayout from '@/components/admin/AdminLayout';
 
-// Protected route component
-const ProtectedRoute: React.FC<{ element: React.ReactNode; role?: string }> = ({ 
-  element, 
-  role
-}) => {
-  // Get user from localStorage directly to avoid issues with context not being ready
-  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : null;
-  const isAuthenticated = user !== null;
-  const userRole = user?.role;
+// Import the DonationManagement component
+import DonationManagement from '@/pages/admin/DonationManagement';
+
+const App: React.FC = () => {
+  const { loading, isAuthenticated } = useAuth();
   
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+  useEffect(() => {
+    // Check if user is already logged in
+    if (authService.isAuthenticated()) {
+      console.log("App: User is authenticated");
+    } else {
+      console.log("App: User is not authenticated");
+    }
+  }, [isAuthenticated]);
+  
+  if (loading) {
+    return <div>Loading...</div>;
   }
   
-  if (role && userRole !== role) {
-    return <Navigate to="/" />;
-  }
-  
-  return <>{element}</>;
-};
-
-function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <FavoritesProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              
-              {/* Shop Routes */}
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/shop/product/:id" element={<ProductDetail />} />
-              <Route path="/shop/seller/:id" element={<SellerShop />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/favorites" element={<Favorites />} />
-              
-              {/* Seller Routes */}
-              <Route path="/seller-signup" element={<SellerSignup />} />
-              <Route 
-                path="/seller-dashboard/*" 
-                element={
-                  <ProtectedRoute element={<SellerDashboard />} role="seller" />
-                } 
-              />
-              
-              {/* Customer Routes */}
-              <Route 
-                path="/profile" 
-                element={
-                  <ProtectedRoute element={<CustomerProfile />} role="customer" />
-                } 
-              />
-              
-              {/* Instructor Routes */}
-              <Route 
-                path="/instructor-dashboard/*" 
-                element={
-                  <ProtectedRoute element={<InstructorDashboard />} role="instructor" />
-                } 
-              />
-              
-              {/* Course Routes */}
-              <Route path="/courses" element={<Courses />} />
-              <Route path="/courses/:id" element={<CourseDetail />} />
-              
-              {/* Learner Routes */}
-              <Route 
-                path="/learner-dashboard" 
-                element={
-                  <ProtectedRoute element={<LearnerDashboard />} role="learner" />
-                }
-              />
-              <Route 
-                path="/learner-classroom" 
-                element={
-                  <ProtectedRoute element={<LearnerClassroom />} role="learner" />
-                }
-              />
-              
-              {/* Workshop & Event Routes */}
-              <Route path="/workshops" element={<Workshops />} />
-              <Route path="/events" element={<Events />} />
-              <Route path="/newsletter" element={<NewsletterPage />} />
-              
-              {/* Authentication Routes */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/signup/learner" element={<LearnerSignup />} />
-              <Route path="/signup/instructor" element={<InstructorSignup />} />
-              <Route path="/signup/customer" element={<CustomerSignup />} />
-              
-              {/* Admin Routes */}
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/content" element={<ContentManagement />} />
-              <Route path="/admin/users" element={<UserManagement />} />
-              <Route path="/admin/shop" element={<ShopManagement />} />
-              <Route path="/admin/events" element={<EventsManagement />} />
-              <Route path="/admin/newsletter" element={<Newsletter />} />
-              <Route path="/admin/analytics" element={<Analytics />} />
-              <Route path="/admin/settings" element={<Settings />} />
-              <Route path="/admin/home-design" element={<HomeDesign />} />
-              <Route path="/admin/*" element={<Navigate to="/admin" />} />
-              
-              {/* Donation Routes */}
-              <Route path="/donate" element={<Donate />} />
-              <Route path="/donate/checkout/:causeId" element={<DonationCheckout />} />
-              
-              {/* Other Routes */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </FavoritesProvider>
-      </CartProvider>
-    </AuthProvider>
+    <Router>
+      <Navbar />
+      <main className="container mx-auto py-8">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/event/:id" element={<EventDetails />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/course/:id" element={<CourseDetails />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/success" element={<Success />} />
+          <Route path="/cancel" element={<Cancel />} />
+          
+          {/* Seller Routes */}
+          <Route path="/seller/dashboard" element={
+            authService.isSeller() ? <SellerDashboard /> : <Navigate to="/login" replace />
+          } />
+          <Route path="/seller/product/create" element={
+            authService.isSeller() ? <CreateProduct /> : <Navigate to="/login" replace />
+          } />
+          <Route path="/seller/product/edit/:id" element={
+            authService.isSeller() ? <EditProduct /> : <Navigate to="/login" replace />
+          } />
+          
+          {/* Instructor Routes */}
+          <Route path="/instructor/dashboard" element={
+            authService.isInstructor() ? <InstructorDashboard /> : <Navigate to="/login" replace />
+          } />
+          <Route path="/instructor/course/create" element={
+            authService.isInstructor() ? <CreateCourse /> : <Navigate to="/login" replace />
+          } />
+          <Route path="/instructor/course/edit/:id" element={
+            authService.isInstructor() ? <EditCourse /> : <Navigate to="/login" replace />
+          } />
+          
+          {/* Learner Routes */}
+          <Route path="/learner/dashboard" element={
+            authService.isLearner() ? <LearnerDashboard /> : <Navigate to="/login" replace />
+          } />
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminLayout><AdminDashboard /></AdminLayout>} />
+          <Route path="/admin/events" element={<AdminLayout><EventsManagement /></AdminLayout>} />
+          <Route path="/admin/users" element={<AdminLayout><UserManagement /></AdminLayout>} />
+          <Route path="/admin/shop" element={<AdminLayout><ShopManagement /></AdminLayout>} />
+          <Route path="/admin/content" element={<AdminLayout><ContentManagement /></AdminLayout>} />
+          <Route path="/admin/newsletter" element={<AdminLayout><Newsletter /></AdminLayout>} />
+          <Route path="/admin/analytics" element={<AdminLayout><Analytics /></AdminLayout>} />
+          <Route path="/admin/donations" element={<AdminLayout><DonationManagement /></AdminLayout>} />
+          <Route path="/admin/settings" element={<AdminLayout><Settings /></AdminLayout>} />
+
+          {/* Profile Route - accessible to authenticated users */}
+          <Route path="/profile" element={
+            isAuthenticated ? <Profile /> : <Navigate to="/login" replace />
+          } />
+          
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+      <Footer />
+    </Router>
   );
-}
+};
 
 export default App;
