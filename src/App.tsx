@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -9,7 +10,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 // Import pages
-import Home from '@/pages/Home';
+import Home from '@/pages/Index';  // Updated to correct path
 import About from '@/pages/About';
 import Contact from '@/pages/Contact';
 import Shop from '@/pages/Shop';
