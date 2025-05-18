@@ -14,15 +14,16 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { fetchTrendingCourses } from '@/services/courseService';
+import { getTrendingCourses } from '@/services/courseService'; // Fixed: Use the correct function name
 import { toast } from 'sonner';
+import { Course } from '@/types/course';
 
 const TrendingCourses: React.FC = () => {
   const navigate = useNavigate();
   
   const { data: trendingCourses = [], isLoading, error } = useQuery({
     queryKey: ['trendingCourses'],
-    queryFn: fetchTrendingCourses
+    queryFn: getTrendingCourses
   });
 
   React.useEffect(() => {
@@ -61,7 +62,7 @@ const TrendingCourses: React.FC = () => {
               </CarouselItem>
             ))
           ) : (
-            trendingCourses.map((course) => (
+            (trendingCourses as Course[]).map((course) => ( // Fixed: Add explicit type cast
               <CarouselItem key={course.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
                 <Card className="overflow-hidden shadow-md hover-zoom">
                   <div className="relative">

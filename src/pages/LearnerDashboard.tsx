@@ -1,171 +1,111 @@
-
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { getUserCourses } from '@/services/courseService'; // Fixed: Use correct function name
 import { useAuth } from '@/contexts/AuthContext';
-import { motion } from 'framer-motion';
+import { Course } from '@/types/course';
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Star } from "lucide-react";
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { GraduationCap, Book, Clock, Calendar, ChevronRight } from 'lucide-react';
-import { toast } from 'sonner';
-import PageTransition from '@/components/PageTransition';
-import { getEnrolledCourses } from '@/services/courseService';
 
-const LearnerDashboard = () => {
-  const { user, isAuthenticated } = useAuth();
-  const navigate = useNavigate();
+const LearnerDashboard: React.FC = () => {
+  const { user } = useAuth();
+  const userId = user?.id || '';
   
-  const { data: enrolledCourses = [], isLoading, error } = useQuery({
-    queryKey: ['enrolledCourses'],
-    queryFn: getEnrolledCourses,
-    enabled: isAuthenticated && user?.role === 'learner',
-    retry: false,
-    meta: {
-      onError: (err: Error) => {
-        console.error("Failed to fetch enrolled courses:", err);
-        toast.error("Failed to load your courses. Please try again later.");
-      }
-    }
+  const { data: enrolledCourses, isLoading } = useQuery({
+    queryKey: ['enrolledCourses', userId],
+    queryFn: () => getUserCourses(userId),
+    enabled: !!userId
   });
 
-  useEffect(() => {
-    // Redirect if not authenticated or not a learner
-    if (!isAuthenticated) {
-      navigate('/login');
-      return;
-    }
-    
-    if (user?.role !== 'learner') {
-      navigate('/');
-      return;
-    }
-  }, [isAuthenticated, user, navigate]);
-
-  useEffect(() => {
-    if (error) {
-      console.error("Error loading enrolled courses:", error);
-      toast.error("Failed to load your courses. Please try again later.");
-    }
-  }, [error]);
-
-  const handleCourseClick = (courseId: string) => {
-    // Navigate to the classroom with the selected course
-    navigate('/learner-classroom', { state: { courseId } });
-  };
-
+  const coursesArray = (enrolledCourses as Course[]) || [];
+  const hasEnrolledCourses = coursesArray.length > 0;
+  
   return (
-    <PageTransition>
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
+    <div className="min-h-screen flex flex-col bg-empower-ivory">
+      <Navbar />
+      
+      <main className="flex-1 container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-6 text-empower-brown">My Courses</h1>
         
-        <main className="flex-1 container mx-auto px-4 py-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-empower-brown">
-              My Learning Dashboard
-            </h1>
-            <p className="text-gray-600 mt-2">
-              Welcome back, {user?.name}! Continue your learning journey.
-            </p>
-          </div>
-          
-          <section className="mb-12">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-semibold flex items-center gap-2">
-                <Book className="text-empower-terracotta" />
-                My Enrolled Courses
-              </h2>
-              <Button 
-                variant="outline" 
-                onClick={() => navigate('/courses')}
-                className="text-empower-terracotta border-empower-terracotta hover:bg-empower-terracotta/10"
-              >
-                Explore More Courses
-              </Button>
-            </div>
-            
-            {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[1, 2, 3].map((_, index) => (
-                  <Card key={index} className="bg-gray-100 animate-pulse h-64">
-                    <div className="h-full"></div>
-                  </Card>
-                ))}
-              </div>
-            ) : enrolledCourses.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {enrolledCourses.map((course) => (
-                  <motion.div
-                    key={course.id}
-                    whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                    onClick={() => handleCourseClick(course.id)}
-                  >
-                    <Card className="cursor-pointer hover:shadow-lg transition-shadow">
-                      <div className="h-40 overflow-hidden">
-                        <img 
-                          src={course.thumbnail} 
-                          alt={course.title} 
-                          className="w-full h-full object-cover"
-                        />
+        {isLoading ? (
+          <p className="text-center text-gray-500">Loading enrolled courses...</p>
+        ) : (
+          hasEnrolledCourses ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {coursesArray.map((course) => (
+                <Card key={course.id} className="bg-white shadow-md rounded-md overflow-hidden hover-zoom">
+                  <div className="relative h-48 overflow-hidden">
+                    <img 
+                      src={course.thumbnail} 
+                      alt={course.title} 
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                    />
+                  </div>
+                  
+                  <CardHeader className="pb-2">
+                    <div className="flex justify-between items-start">
+                      <h3 className="text-xl font-bold line-clamp-2">{course.title}</h3>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Avatar className="h-6 w-6">
+                        <AvatarImage src={course.instructor.avatar} alt={course.instructor.name} />
+                        <AvatarFallback>{course.instructor.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      <span>{course.instructor.name}</span>
+                    </div>
+                  </CardHeader>
+                  
+                  <CardContent className="pb-4">
+                    <div className="flex justify-between items-center text-sm">
+                      <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star 
+                            key={i} 
+                            size={16} 
+                            className={i < course.rating ? "fill-empower-gold text-empower-gold" : "text-muted"}
+                          />
+                        ))}
+                        <span className="text-xs text-muted-foreground ml-1">({course.reviews} reviews)</span>
                       </div>
-                      <CardHeader className="pb-2">
-                        <h3 className="font-semibold text-lg">{course.title}</h3>
-                        <p className="text-sm text-gray-500">Instructor: {course.instructor.name}</p>
-                      </CardHeader>
-                      <CardContent className="pb-3">
-                        <div className="flex justify-between text-sm text-gray-600">
-                          <div className="flex items-center gap-1">
-                            <Clock size={14} />
-                            <span>Last accessed: {course.lastAccessed ? new Date(course.lastAccessed).toLocaleString() : 'Never'}</span>
-                          </div>
-                        </div>
-                        <div className="mt-2">
-                          <div className="w-full bg-gray-200 rounded-full h-2.5">
-                            <div 
-                              className="bg-empower-terracotta h-2.5 rounded-full" 
-                              style={{ width: `${course.progress || 0}%` }}
-                            ></div>
-                          </div>
-                          <p className="text-xs text-right mt-1">{course.progress || 0}% complete</p>
-                        </div>
-                      </CardContent>
-                      <CardFooter className="pt-0">
-                        <Button 
-                          className="w-full bg-empower-terracotta hover:bg-empower-terracotta/90"
-                          onClick={(e) => {
-                            e.stopPropagation(); 
-                            handleCourseClick(course.id);
-                          }}
-                        >
-                          Continue Learning <ChevronRight className="ml-2 h-4 w-4" />
+                      <div className="font-semibold">
+                        {course.price === 0 ? (
+                          <span className="text-green-600">Free</span>
+                        ) : (
+                          <span>${course.price}</span>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between items-center mt-3">
+                      <Link to={`/learner-classroom`} state={{ courseId: course.id }}>
+                        <Button className="bg-empower-terracotta hover:bg-empower-terracotta/90 transition-all duration-300">
+                          Go to Classroom
                         </Button>
-                      </CardFooter>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-            ) : (
-              <div className="bg-gray-50 border rounded-lg p-8 text-center">
-                <GraduationCap className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No courses yet</h3>
-                <p className="text-gray-500 mb-6">
-                  You haven't enrolled in any courses yet. Explore our catalog to find courses that interest you.
-                </p>
-                <Button 
-                  onClick={() => navigate('/courses')}
-                  className="bg-empower-terracotta hover:bg-empower-terracotta/90"
-                >
-                  Browse Courses
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-10 text-gray-500">
+              <p>You are not enrolled in any courses yet.</p>
+              <Link to="/courses">
+                <Button className="mt-4 bg-empower-terracotta hover:bg-empower-terracotta/90 text-white">
+                  Explore Courses
                 </Button>
-              </div>
-            )}
-          </section>
-        </main>
-        
-        <Footer />
-      </div>
-    </PageTransition>
+              </Link>
+            </div>
+          )
+        )}
+      </main>
+      
+      <Footer />
+    </div>
   );
 };
 

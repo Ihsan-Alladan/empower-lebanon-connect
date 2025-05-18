@@ -47,7 +47,8 @@ export const getRecentDonations = async (limit: number = 10): Promise<any[]> => 
         message,
         is_anonymous,
         created_at,
-        profiles:user_id (first_name, last_name)
+        user_id,
+        profiles (first_name, last_name)
       `)
       .order('created_at', { ascending: false })
       .limit(limit);
@@ -61,20 +62,11 @@ export const getRecentDonations = async (limit: number = 10): Promise<any[]> => 
       let donorName = 'Anonymous';
       
       if (!donation.is_anonymous && donation.profiles) {
-        if (!donation.profiles) {
-          return {
-            id: donation.id,
-            amount: donation.amount,
-            currency: donation.currency,
-            message: donation.message,
-            isAnonymous: donation.is_anonymous,
-            donorName: 'Anonymous',
-            date: donation.created_at
-          };
-        }
+        // Safely access profile data
+        const profile = donation.profiles || {};
         
-        const firstName = donation.profiles.first_name || '';
-        const lastName = donation.profiles.last_name || '';
+        const firstName = profile.first_name || '';
+        const lastName = profile.last_name || '';
         if (firstName || lastName) {
           donorName = `${firstName} ${lastName}`.trim();
         }

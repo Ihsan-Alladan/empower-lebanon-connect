@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -466,7 +465,7 @@ const ProductDetail: React.FC = () => {
             </TabsContent>
             
             <TabsContent value="reviews" className="animate-fade-in">
-              <ProductReviewSection product={product} />
+              <ProductReviewSection productId={product.id} />
             </TabsContent>
           </Tabs>
         </div>

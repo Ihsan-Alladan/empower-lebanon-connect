@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { Course, Instructor } from '@/types/course';
 
@@ -9,7 +8,8 @@ export const getAllCourses = async (): Promise<Course[]> => {
       .from('courses')
       .select(`
         *,
-        profiles:instructor_id (
+        profiles (
+          id,
           first_name, 
           last_name, 
           avatar_url
@@ -24,10 +24,13 @@ export const getAllCourses = async (): Promise<Course[]> => {
     }
 
     const courses = data.map((course) => {
+      // Safely access profile data
+      const profile = course.profiles || {};
+      
       const instructor: Instructor = {
-        id: course.instructor_id,
-        name: `${course.profiles?.first_name || ''} ${course.profiles?.last_name || ''}`.trim(),
-        avatar: course.profiles?.avatar_url || '',
+        id: profile.id || course.instructor_id || '',
+        name: `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Instructor',
+        avatar: profile.avatar_url || '',
         title: 'Instructor',
         coursesCount: 0,
         studentsCount: 0,
@@ -38,7 +41,7 @@ export const getAllCourses = async (): Promise<Course[]> => {
         id: course.id,
         title: course.title,
         description: course.description,
-        thumbnail: course.thumbnail,
+        thumbnail: course.thumbnail || '',
         category: course.category,
         level: course.level,
         price: course.price,
@@ -65,7 +68,8 @@ export const getCoursesByCategory = async (category: string): Promise<Course[]> 
       .from('courses')
       .select(`
         *,
-        profiles:instructor_id (
+        profiles (
+          id,
           first_name, 
           last_name, 
           avatar_url
@@ -81,10 +85,13 @@ export const getCoursesByCategory = async (category: string): Promise<Course[]> 
     }
 
     const courses = data.map((course) => {
+      // Safely access profile data
+      const profile = course.profiles || {};
+      
       const instructor: Instructor = {
-        id: course.instructor_id,
-        name: `${course.profiles?.first_name || ''} ${course.profiles?.last_name || ''}`.trim(),
-        avatar: course.profiles?.avatar_url || '',
+        id: profile.id || course.instructor_id || '',
+        name: `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Instructor',
+        avatar: profile.avatar_url || '',
         title: 'Instructor',
         coursesCount: 0,
         studentsCount: 0,
@@ -95,7 +102,7 @@ export const getCoursesByCategory = async (category: string): Promise<Course[]> 
         id: course.id,
         title: course.title,
         description: course.description,
-        thumbnail: course.thumbnail,
+        thumbnail: course.thumbnail || '',
         category: course.category,
         level: course.level,
         price: course.price,
@@ -122,7 +129,8 @@ export const getTrendingCourses = async (): Promise<Course[]> => {
       .from('courses')
       .select(`
         *,
-        profiles:instructor_id (
+        profiles (
+          id,
           first_name, 
           last_name, 
           avatar_url
@@ -138,10 +146,13 @@ export const getTrendingCourses = async (): Promise<Course[]> => {
     }
 
     const courses = data.map((course) => {
+      // Safely access profile data
+      const profile = course.profiles || {};
+      
       const instructor: Instructor = {
-        id: course.instructor_id,
-        name: `${course.profiles?.first_name || ''} ${course.profiles?.last_name || ''}`.trim(),
-        avatar: course.profiles?.avatar_url || '',
+        id: profile.id || course.instructor_id || '',
+        name: `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Instructor',
+        avatar: profile.avatar_url || '',
         title: 'Instructor',
         coursesCount: 0,
         studentsCount: 0,
@@ -152,7 +163,7 @@ export const getTrendingCourses = async (): Promise<Course[]> => {
         id: course.id,
         title: course.title,
         description: course.description,
-        thumbnail: course.thumbnail,
+        thumbnail: course.thumbnail || '',
         category: course.category,
         level: course.level,
         price: course.price,
@@ -179,7 +190,8 @@ export const getCourseById = async (id: string): Promise<Course | null> => {
       .from('courses')
       .select(`
         *,
-        profiles:instructor_id (
+        profiles (
+          id,
           first_name, 
           last_name, 
           avatar_url
@@ -232,16 +244,19 @@ export const getCourseById = async (id: string): Promise<Course | null> => {
       reviewsCount = data.course_reviews.length;
       
       const totalRating = data.course_reviews.reduce((sum: number, review: any) => {
-        return sum + (review.rating || 0);
+        return sum + (review?.rating || 0);
       }, 0);
       
       averageRating = reviewsCount > 0 ? totalRating / reviewsCount : 0;
     }
 
+    // Safely access profile data
+    const profile = data.profiles || {};
+
     const instructor: Instructor = {
-      id: data.instructor_id,
-      name: `${data.profiles?.first_name || ''} ${data.profiles?.last_name || ''}`.trim(),
-      avatar: data.profiles?.avatar_url || '',
+      id: profile.id || data.instructor_id || '',
+      name: `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Instructor',
+      avatar: profile.avatar_url || '',
       title: 'Instructor',
       coursesCount: 0,
       studentsCount: 0,
@@ -282,20 +297,23 @@ export const getCourseById = async (id: string): Promise<Course | null> => {
 
     // Map student reviews
     const studentReviews = data.course_reviews
-      ? data.course_reviews.map((review: any) => ({
-          name: `${review.profiles?.first_name || ''} ${review.profiles?.last_name || ''}`.trim(),
-          avatar: review.profiles?.avatar_url || '',
-          rating: review.rating,
-          comment: review.comment,
-          date: review.created_at
-        }))
+      ? data.course_reviews.map((review: any) => {
+          const reviewProfile = review.profiles || {};
+          return {
+            name: `${reviewProfile.first_name || ''} ${reviewProfile.last_name || ''}`.trim() || 'Student',
+            avatar: reviewProfile.avatar_url || '',
+            rating: review.rating,
+            comment: review.comment,
+            date: review.created_at
+          };
+        })
       : [];
 
     return {
       id: data.id,
       title: data.title,
       description: data.description,
-      thumbnail: data.thumbnail,
+      thumbnail: data.thumbnail || '',
       category: data.category,
       level: data.level,
       price: data.price,
@@ -382,7 +400,8 @@ export const getUserCourses = async (userId: string): Promise<Course[]> => {
         last_accessed_at,
         courses:course_id (
           *,
-          profiles:instructor_id (
+          profiles (
+            id,
             first_name, 
             last_name, 
             avatar_url
@@ -396,38 +415,43 @@ export const getUserCourses = async (userId: string): Promise<Course[]> => {
       return [];
     }
 
-    const courses = data.map((enrollment) => {
-      const course = enrollment.courses;
-      if (!course) return null;
+    const courses = data
+      .filter(enrollment => enrollment.courses) // Filter out any null courses
+      .map((enrollment) => {
+        const course = enrollment.courses;
+        if (!course) return null;
 
-      const instructor: Instructor = {
-        id: course.instructor_id,
-        name: `${course.profiles?.first_name || ''} ${course.profiles?.last_name || ''}`.trim(),
-        avatar: course.profiles?.avatar_url || '',
-        title: 'Instructor',
-        coursesCount: 0,
-        studentsCount: 0,
-        reviewsCount: 0
-      };
+        // Safely access profile data
+        const profile = course.profiles || {};
 
-      return {
-        id: course.id,
-        title: course.title,
-        description: course.description,
-        thumbnail: course.thumbnail,
-        category: course.category,
-        level: course.level,
-        price: course.price,
-        duration: course.duration || '',
-        instructor,
-        rating: 0,
-        reviews: 0,
-        updatedAt: course.updated_at,
-        isTrending: course.is_trending,
-        progress: enrollment.progress,
-        lastAccessed: enrollment.last_accessed_at,
-      } as Course;
-    }).filter(Boolean) as Course[];
+        const instructor: Instructor = {
+          id: profile.id || course.instructor_id || '',
+          name: `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Instructor',
+          avatar: profile.avatar_url || '',
+          title: 'Instructor',
+          coursesCount: 0,
+          studentsCount: 0,
+          reviewsCount: 0
+        };
+
+        return {
+          id: course.id,
+          title: course.title,
+          description: course.description,
+          thumbnail: course.thumbnail || '',
+          category: course.category,
+          level: course.level,
+          price: course.price,
+          duration: course.duration || '',
+          instructor,
+          rating: 0,
+          reviews: 0,
+          updatedAt: course.updated_at,
+          isTrending: course.is_trending,
+          progress: enrollment.progress,
+          lastAccessed: enrollment.last_accessed_at,
+        } as Course;
+      }).filter(Boolean) as Course[]; // Filter out any nulls
 
     return courses;
   } catch (error) {

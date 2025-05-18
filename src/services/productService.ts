@@ -1,6 +1,6 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import { Product } from '@/types/product';
+import { Product, ProductReview } from '@/types/product';
 
 // Fetch all products
 export const fetchProducts = async (): Promise<Product[]> => {
@@ -31,6 +31,9 @@ export const fetchProducts = async (): Promise<Product[]> => {
       ? reviews.reduce((sum: number, review: any) => sum + (review?.rating || 0), 0) / reviews.length 
       : 0;
 
+    // Convert reviews to ProductReview[] format or use empty array
+    const productReviews: ProductReview[] = [];
+
     return {
       id: product.id,
       title: product.title,
@@ -39,7 +42,8 @@ export const fetchProducts = async (): Promise<Product[]> => {
       discountedPrice: product.discounted_price || undefined,
       category: product.category,
       rating: Math.round(rating * 10) / 10,
-      reviews: reviews.length,
+      reviewsCount: reviews.length,
+      reviews: productReviews,
       inStock: product.stock > 0,
       isHandmade: product.is_handmade || false,
       isFeatured: product.featured || false,
@@ -70,7 +74,7 @@ export const fetchFeaturedProducts = async (): Promise<Product[]> => {
     throw error;
   }
 
-  // Transform data (same logic as fetchProducts)
+  // Transform data with proper types
   return data.map(product => {
     const images = product.product_images || [];
     const primaryImage = images.length > 0 
@@ -82,6 +86,9 @@ export const fetchFeaturedProducts = async (): Promise<Product[]> => {
       ? reviews.reduce((sum: number, review: any) => sum + (review?.rating || 0), 0) / reviews.length 
       : 0;
 
+    // Convert reviews to ProductReview[] format or use empty array
+    const productReviews: ProductReview[] = [];
+
     return {
       id: product.id,
       title: product.title,
@@ -90,7 +97,8 @@ export const fetchFeaturedProducts = async (): Promise<Product[]> => {
       discountedPrice: product.discounted_price || undefined,
       category: product.category,
       rating: Math.round(rating * 10) / 10,
-      reviews: reviews.length,
+      reviewsCount: reviews.length,
+      reviews: productReviews,
       inStock: product.stock > 0,
       isHandmade: product.is_handmade || false,
       isFeatured: true,

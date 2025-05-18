@@ -12,6 +12,7 @@ export const digitalCourses: Course[] = [
     price: 59.99,
     duration: '5 weeks',
     instructor: {
+      id: 'instructor-4', // Added instructor ID
       name: 'Karim Fadel',
       avatar: 'https://randomuser.me/api/portraits/men/22.jpg',
       title: 'Digital Marketing Consultant & Entrepreneur',
@@ -118,6 +119,7 @@ export const digitalCourses: Course[] = [
     price: 0,
     duration: '6 weeks',
     instructor: {
+      id: 'instructor-5', // Added instructor ID
       name: 'Yasmine Nasrallah',
       avatar: 'https://randomuser.me/api/portraits/women/28.jpg',
       title: 'Front-End Developer & Design Educator',
@@ -230,6 +232,7 @@ export const digitalCourses: Course[] = [
     price: 79.99,
     duration: '8 weeks',
     instructor: {
+      id: 'instructor-6', // Added instructor ID
       name: 'Fadi Abou-Rizk',
       avatar: 'https://randomuser.me/api/portraits/men/29.jpg',
       title: 'Senior UX Designer & App Developer',

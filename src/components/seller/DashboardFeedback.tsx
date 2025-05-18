@@ -88,8 +88,8 @@ const DashboardFeedback: React.FC<DashboardFeedbackProps> = ({ reviews = [], avg
                       </div>
                       <Badge
                         variant={
-                          review.rating >= 4 ? "success" : 
-                          review.rating === 3 ? "warning" : 
+                          review.rating >= 4 ? "default" : // Fixed: Changed "success" to "default"
+                          review.rating === 3 ? "secondary" : // Fixed: Changed "warning" to "secondary"
                           "destructive"
                         }
                       >

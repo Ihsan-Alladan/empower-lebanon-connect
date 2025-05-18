@@ -1,3 +1,4 @@
+
 import { Course } from '@/types/course';
 
 export const handmadeCourses: Course[] = [
@@ -11,6 +12,7 @@ export const handmadeCourses: Course[] = [
     price: 49.99,
     duration: '6 weeks',
     instructor: {
+      id: 'instructor-1', // Added instructor ID
       name: 'Layla Hakim',
       avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
       title: 'Master Artisan & Cultural Preservationist',
@@ -104,6 +106,7 @@ export const handmadeCourses: Course[] = [
     price: 39.99,
     duration: '4 weeks',
     instructor: {
+      id: 'instructor-2', // Added instructor ID
       name: 'Omar Nassar',
       avatar: 'https://randomuser.me/api/portraits/men/11.jpg',
       title: 'Artisanal Soap Maker & Herbalist',
@@ -198,6 +201,7 @@ export const handmadeCourses: Course[] = [
     price: 79.99,
     duration: '8 weeks',
     instructor: {
+      id: 'instructor-3', // Added instructor ID
       name: 'Nadia Khoury',
       avatar: 'https://randomuser.me/api/portraits/women/22.jpg',
       title: 'Master Silversmith & Jewelry Designer',
