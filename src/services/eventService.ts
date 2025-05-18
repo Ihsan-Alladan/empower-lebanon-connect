@@ -99,7 +99,7 @@ export const registerForEvent = async (eventId: string, userId: string): Promise
     }
 
     try {
-      // Call the RPC function directly using supabase.rpc()
+      // Fix: Use the rpc method correctly with the function name as a string parameter
       const { error } = await supabase.rpc('increment_event_attendees', {
         event_id: eventId
       });

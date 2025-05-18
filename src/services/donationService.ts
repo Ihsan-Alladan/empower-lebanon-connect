@@ -64,14 +64,17 @@ export const getRecentDonations = async (limit: number = 10): Promise<any[]> => 
     return data.map(donation => {
       let donorName = 'Anonymous';
       
-      if (!donation.is_anonymous && donation.profiles) {
-        // Safely access profile data with optional chaining and nullish coalescing
-        const profile = donation.profiles || {};
-        
-        const firstName = profile.first_name || '';
-        const lastName = profile.last_name || '';
-        if (firstName || lastName) {
-          donorName = `${firstName} ${lastName}`.trim();
+      if (!donation.is_anonymous && donation.user_id) {
+        // Safely access profile data with type checking
+        if (donation.profiles && typeof donation.profiles === 'object') {
+          const profile = donation.profiles as any;
+          
+          const firstName = profile?.first_name || '';
+          const lastName = profile?.last_name || '';
+          
+          if (firstName || lastName) {
+            donorName = `${firstName} ${lastName}`.trim();
+          }
         }
       }
       

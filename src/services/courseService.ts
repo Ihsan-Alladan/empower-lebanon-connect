@@ -25,18 +25,37 @@ export const getAllCourses = async (): Promise<Course[]> => {
     }
 
     const courses = data.map((course) => {
-      // Safely access profile data with optional chaining and nullish coalescing
-      const profile = course.profiles || {};
-      
-      const instructor: Instructor = {
-        id: profile.id || course.instructor_id || '',
-        name: `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Instructor',
-        avatar: profile.avatar_url || '',
+      // Create a default instructor with empty values
+      let instructor: Instructor = {
+        id: course.instructor_id || '',
+        name: 'Instructor',
+        avatar: '',
         title: 'Instructor',
         coursesCount: 0,
         studentsCount: 0,
         reviewsCount: 0
       };
+
+      // Only try to access profile data if it exists
+      if (course.profiles && typeof course.profiles === 'object') {
+        const profile = course.profiles as any;
+        
+        if (profile) {
+          const firstName = profile.first_name || '';
+          const lastName = profile.last_name || '';
+          const avatarUrl = profile.avatar_url || '';
+          
+          instructor = {
+            id: profile.id || course.instructor_id || '',
+            name: `${firstName} ${lastName}`.trim() || 'Instructor',
+            avatar: avatarUrl,
+            title: 'Instructor',
+            coursesCount: 0,
+            studentsCount: 0,
+            reviewsCount: 0
+          };
+        }
+      }
 
       return {
         id: course.id,
@@ -86,18 +105,37 @@ export const getCoursesByCategory = async (category: string): Promise<Course[]> 
     }
 
     const courses = data.map((course) => {
-      // Safely access profile data with optional chaining and nullish coalescing
-      const profile = course.profiles || {};
-      
-      const instructor: Instructor = {
-        id: profile.id || course.instructor_id || '',
-        name: `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Instructor',
-        avatar: profile.avatar_url || '',
+      // Create a default instructor with empty values
+      let instructor: Instructor = {
+        id: course.instructor_id || '',
+        name: 'Instructor',
+        avatar: '',
         title: 'Instructor',
         coursesCount: 0,
         studentsCount: 0,
         reviewsCount: 0
       };
+
+      // Only try to access profile data if it exists
+      if (course.profiles && typeof course.profiles === 'object') {
+        const profile = course.profiles as any;
+        
+        if (profile) {
+          const firstName = profile.first_name || '';
+          const lastName = profile.last_name || '';
+          const avatarUrl = profile.avatar_url || '';
+          
+          instructor = {
+            id: profile.id || course.instructor_id || '',
+            name: `${firstName} ${lastName}`.trim() || 'Instructor',
+            avatar: avatarUrl,
+            title: 'Instructor',
+            coursesCount: 0,
+            studentsCount: 0,
+            reviewsCount: 0
+          };
+        }
+      }
 
       return {
         id: course.id,
@@ -147,18 +185,37 @@ export const getTrendingCourses = async (): Promise<Course[]> => {
     }
 
     const courses = data.map((course) => {
-      // Safely access profile data with optional chaining and nullish coalescing
-      const profile = course.profiles || {};
-      
-      const instructor: Instructor = {
-        id: profile.id || course.instructor_id || '',
-        name: `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Instructor',
-        avatar: profile.avatar_url || '',
+      // Create a default instructor with empty values
+      let instructor: Instructor = {
+        id: course.instructor_id || '',
+        name: 'Instructor',
+        avatar: '',
         title: 'Instructor',
         coursesCount: 0,
         studentsCount: 0,
         reviewsCount: 0
       };
+
+      // Only try to access profile data if it exists
+      if (course.profiles && typeof course.profiles === 'object') {
+        const profile = course.profiles as any;
+        
+        if (profile) {
+          const firstName = profile.first_name || '';
+          const lastName = profile.last_name || '';
+          const avatarUrl = profile.avatar_url || '';
+          
+          instructor = {
+            id: profile.id || course.instructor_id || '',
+            name: `${firstName} ${lastName}`.trim() || 'Instructor',
+            avatar: avatarUrl,
+            title: 'Instructor',
+            coursesCount: 0,
+            studentsCount: 0,
+            reviewsCount: 0
+          };
+        }
+      }
 
       return {
         id: course.id,
@@ -251,18 +308,37 @@ export const getCourseById = async (id: string): Promise<Course | null> => {
       averageRating = reviewsCount > 0 ? totalRating / reviewsCount : 0;
     }
 
-    // Safely access profile data with optional chaining and nullish coalescing
-    const profile = data.profiles || {};
-
-    const instructor: Instructor = {
-      id: profile.id || data.instructor_id || '',
-      name: `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Instructor',
-      avatar: profile.avatar_url || '',
+    // Create a default instructor with empty values
+    let instructor: Instructor = {
+      id: data.instructor_id || '',
+      name: 'Instructor',
+      avatar: '',
       title: 'Instructor',
       coursesCount: 0,
       studentsCount: 0,
       reviewsCount: 0
     };
+
+    // Only try to access profile data if it exists
+    if (data.profiles && typeof data.profiles === 'object') {
+      const profile = data.profiles as any;
+      
+      if (profile) {
+        const firstName = profile.first_name || '';
+        const lastName = profile.last_name || '';
+        const avatarUrl = profile.avatar_url || '';
+        
+        instructor = {
+          id: profile.id || data.instructor_id || '',
+          name: `${firstName} ${lastName}`.trim() || 'Instructor',
+          avatar: avatarUrl,
+          title: 'Instructor',
+          coursesCount: 0,
+          studentsCount: 0,
+          reviewsCount: 0
+        };
+      }
+    }
 
     // Map learning objectives
     const learningObjectives = data.course_objectives
@@ -299,10 +375,17 @@ export const getCourseById = async (id: string): Promise<Course | null> => {
     // Map student reviews
     const studentReviews = data.course_reviews
       ? data.course_reviews.map((review: any) => {
-          const reviewProfile = review.profiles || {};
+          // Create a default review with empty values
+          const reviewProfile = (review.profiles && typeof review.profiles === 'object') ? 
+                               review.profiles : {};
+          
+          const firstName = reviewProfile.first_name || '';
+          const lastName = reviewProfile.last_name || '';
+          const avatarUrl = reviewProfile.avatar_url || '';
+          
           return {
-            name: `${reviewProfile.first_name || ''} ${reviewProfile.last_name || ''}`.trim() || 'Student',
-            avatar: reviewProfile.avatar_url || '',
+            name: `${firstName} ${lastName}`.trim() || 'Student',
+            avatar: avatarUrl,
             rating: review.rating,
             comment: review.comment,
             date: review.created_at
@@ -422,18 +505,37 @@ export const getUserCourses = async (userId: string): Promise<Course[]> => {
         const course = enrollment.courses;
         if (!course) return null;
 
-        // Safely access profile data with optional chaining and nullish coalescing
-        const profile = course.profiles || {};
-
-        const instructor: Instructor = {
-          id: profile.id || course.instructor_id || '',
-          name: `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Instructor',
-          avatar: profile.avatar_url || '',
+        // Create a default instructor with empty values
+        let instructor: Instructor = {
+          id: course.instructor_id || '',
+          name: 'Instructor',
+          avatar: '',
           title: 'Instructor',
           coursesCount: 0,
           studentsCount: 0,
           reviewsCount: 0
         };
+
+        // Only try to access profile data if it exists
+        if (course.profiles && typeof course.profiles === 'object') {
+          const profile = course.profiles as any;
+          
+          if (profile) {
+            const firstName = profile.first_name || '';
+            const lastName = profile.last_name || '';
+            const avatarUrl = profile.avatar_url || '';
+            
+            instructor = {
+              id: profile.id || course.instructor_id || '',
+              name: `${firstName} ${lastName}`.trim() || 'Instructor',
+              avatar: avatarUrl,
+              title: 'Instructor',
+              coursesCount: 0,
+              studentsCount: 0,
+              reviewsCount: 0
+            };
+          }
+        }
 
         return {
           id: course.id,
