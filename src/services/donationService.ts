@@ -48,7 +48,10 @@ export const getRecentDonations = async (limit: number = 10): Promise<any[]> => 
         is_anonymous,
         created_at,
         user_id,
-        profiles (first_name, last_name)
+        profiles:user_id (
+          first_name, 
+          last_name
+        )
       `)
       .order('created_at', { ascending: false })
       .limit(limit);
@@ -62,7 +65,7 @@ export const getRecentDonations = async (limit: number = 10): Promise<any[]> => 
       let donorName = 'Anonymous';
       
       if (!donation.is_anonymous && donation.profiles) {
-        // Safely access profile data
+        // Safely access profile data with optional chaining and nullish coalescing
         const profile = donation.profiles || {};
         
         const firstName = profile.first_name || '';

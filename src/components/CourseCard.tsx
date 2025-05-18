@@ -18,11 +18,11 @@ interface CourseCardProps {
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const queryClient = useQueryClient();
   
   const enrollMutation = useMutation({
-    mutationFn: () => enrollInCourse(course.id, course.id), // This should use the user ID
+    mutationFn: () => enrollInCourse(user?.id || '', course.id), // Use actual user ID from auth context
     onSuccess: () => {
       toast.success(`Successfully enrolled in ${course.title}!`);
       queryClient.invalidateQueries({ queryKey: ['enrolledCourses'] });

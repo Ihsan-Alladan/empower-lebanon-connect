@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { Course, Instructor } from '@/types/course';
 
@@ -8,7 +9,7 @@ export const getAllCourses = async (): Promise<Course[]> => {
       .from('courses')
       .select(`
         *,
-        profiles (
+        profiles:instructor_id (
           id,
           first_name, 
           last_name, 
@@ -24,7 +25,7 @@ export const getAllCourses = async (): Promise<Course[]> => {
     }
 
     const courses = data.map((course) => {
-      // Safely access profile data
+      // Safely access profile data with optional chaining and nullish coalescing
       const profile = course.profiles || {};
       
       const instructor: Instructor = {
@@ -68,7 +69,7 @@ export const getCoursesByCategory = async (category: string): Promise<Course[]> 
       .from('courses')
       .select(`
         *,
-        profiles (
+        profiles:instructor_id (
           id,
           first_name, 
           last_name, 
@@ -85,7 +86,7 @@ export const getCoursesByCategory = async (category: string): Promise<Course[]> 
     }
 
     const courses = data.map((course) => {
-      // Safely access profile data
+      // Safely access profile data with optional chaining and nullish coalescing
       const profile = course.profiles || {};
       
       const instructor: Instructor = {
@@ -129,7 +130,7 @@ export const getTrendingCourses = async (): Promise<Course[]> => {
       .from('courses')
       .select(`
         *,
-        profiles (
+        profiles:instructor_id (
           id,
           first_name, 
           last_name, 
@@ -146,7 +147,7 @@ export const getTrendingCourses = async (): Promise<Course[]> => {
     }
 
     const courses = data.map((course) => {
-      // Safely access profile data
+      // Safely access profile data with optional chaining and nullish coalescing
       const profile = course.profiles || {};
       
       const instructor: Instructor = {
@@ -190,7 +191,7 @@ export const getCourseById = async (id: string): Promise<Course | null> => {
       .from('courses')
       .select(`
         *,
-        profiles (
+        profiles:instructor_id (
           id,
           first_name, 
           last_name, 
@@ -250,7 +251,7 @@ export const getCourseById = async (id: string): Promise<Course | null> => {
       averageRating = reviewsCount > 0 ? totalRating / reviewsCount : 0;
     }
 
-    // Safely access profile data
+    // Safely access profile data with optional chaining and nullish coalescing
     const profile = data.profiles || {};
 
     const instructor: Instructor = {
@@ -400,7 +401,7 @@ export const getUserCourses = async (userId: string): Promise<Course[]> => {
         last_accessed_at,
         courses:course_id (
           *,
-          profiles (
+          profiles:instructor_id (
             id,
             first_name, 
             last_name, 
@@ -421,7 +422,7 @@ export const getUserCourses = async (userId: string): Promise<Course[]> => {
         const course = enrollment.courses;
         if (!course) return null;
 
-        // Safely access profile data
+        // Safely access profile data with optional chaining and nullish coalescing
         const profile = course.profiles || {};
 
         const instructor: Instructor = {

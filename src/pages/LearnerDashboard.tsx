@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getUserCourses } from '@/services/courseService'; // Fixed: Use correct function name
+import { getUserCourses } from '@/services/courseService';
 import { useAuth } from '@/contexts/AuthContext';
 import { Course } from '@/types/course';
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
