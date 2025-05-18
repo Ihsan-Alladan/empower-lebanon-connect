@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Session, User } from '@supabase/supabase-js';
 import { toast } from 'sonner';
+import { getUserRole } from '@/services/authService';
 
 export interface AuthUser {
   id: string;
@@ -79,7 +80,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .eq('user_id', authUser.id)
         .single();
         
-      if (roleError) throw roleError;
+      if (roleError && roleError.code !== 'PGRST116') {
+        console.error('Error fetching role:', roleError);
+        // If role not found, we'll default to customer below
+      }
       
       // Fetch additional profile info if needed
       const { data: profileData, error: profileError } = await supabase
@@ -88,9 +92,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .eq('id', authUser.id)
         .single();
         
-      if (profileError && profileError.code !== 'PGRST116') throw profileError;
+      if (profileError && profileError.code !== 'PGRST116') {
+        console.error('Error fetching profile:', profileError);
+      }
       
-      const role = roleData?.role || 'customer'; // Default to customer if no role found
+      // If role isn't in the database, check from the user metadata
+      let role = roleData?.role;
+      if (!role && authUser.user_metadata) {
+        role = authUser.user_metadata.role;
+        
+        // If we found the role in metadata but not in the database, add it
+        if (role) {
+          const { error: insertError } = await supabase
+            .from('user_roles')
+            .insert({
+              user_id: authUser.id,
+              role: role
+            });
+            
+          if (insertError) {
+            console.error('Error adding user role from metadata:', insertError);
+          }
+        }
+      }
+      
+      // Default to customer if no role found
+      role = role || 'customer'; 
       setUserRole(role);
       
       const formattedUser: AuthUser = {
@@ -101,7 +128,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               : authUser.email?.split('@')[0] || 'User',
         role: role,
         avatar: profileData?.avatar_url || undefined,
-        bio: profileData?.bio || undefined
+        bio: profileData?.bio || undefined,
+        phoneNumber: authUser.user_metadata?.phone || undefined,
+        address: authUser.user_metadata?.address || undefined
       };
       
       setUser(formattedUser);

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -38,6 +39,7 @@ type SignupFormValues = z.infer<typeof signupSchema>;
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('login');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { login, isAuthenticated, user } = useAuth();
@@ -69,6 +71,8 @@ const Login = () => {
   // Redirect authenticated users
   useEffect(() => {
     if (isAuthenticated && user) {
+      console.log('User authenticated, redirecting based on role:', user.role);
+      
       // Redirect based on user role
       switch (user.role) {
         case 'admin':
@@ -95,17 +99,21 @@ const Login = () => {
 
   const onLoginSubmit = async (values: LoginFormValues) => {
     try {
+      setIsSubmitting(true);
       const result = await login(values.email, values.password);
       if (!result) {
         toast.error('Invalid email or password. Please try again.');
       }
     } catch (error) {
       toast.error('Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const onSignupSubmit = async (values: SignupFormValues) => {
     try {
+      setIsSubmitting(true);
       const result = await authService.signUpUser({
         email: values.email,
         password: values.password,
@@ -121,8 +129,10 @@ const Login = () => {
       } else {
         toast.error('Failed to create account. Please try again.');
       }
-    } catch (error) {
-      toast.error('Something went wrong. Please try again.');
+    } catch (error: any) {
+      toast.error(error.message || 'Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -212,9 +222,9 @@ const Login = () => {
                         <Button
                           type="submit"
                           className="w-full bg-empower-terracotta hover:bg-empower-terracotta/90"
-                          disabled={loginForm.formState.isSubmitting}
+                          disabled={isSubmitting || loginForm.formState.isSubmitting}
                         >
-                          {loginForm.formState.isSubmitting ? "Logging in..." : "Login"}
+                          {isSubmitting ? "Logging in..." : "Login"}
                         </Button>
                       </form>
                     </Form>
@@ -350,9 +360,9 @@ const Login = () => {
                         <Button
                           type="submit"
                           className="w-full bg-empower-terracotta hover:bg-empower-terracotta/90"
-                          disabled={signupForm.formState.isSubmitting}
+                          disabled={isSubmitting || signupForm.formState.isSubmitting}
                         >
-                          {signupForm.formState.isSubmitting ? "Creating Account..." : "Sign Up"}
+                          {isSubmitting ? "Creating Account..." : "Sign Up"}
                         </Button>
                       </form>
                     </Form>

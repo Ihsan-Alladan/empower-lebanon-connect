@@ -1,6 +1,6 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from '@/contexts/AuthContext';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { CartProvider } from '@/hooks/useCart';
 import { FavoritesProvider } from '@/hooks/useFavorites';
 import Index from '@/pages/Index';
@@ -38,120 +38,172 @@ import Workshops from '@/pages/Workshops';
 import Events from '@/pages/Events';
 import NewsletterPage from '@/pages/Newsletter';
 import './App.css';
-import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 // Protected route component
-const ProtectedRoute: React.FC<{ element: React.ReactNode; role?: string }> = ({ 
+interface ProtectedRouteProps {
+  element: React.ReactNode;
+  requiredRole?: string;
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   element, 
-  role
+  requiredRole 
 }) => {
-  // Get user from localStorage directly to avoid issues with context not being ready
-  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : null;
-  const isAuthenticated = user !== null;
-  const userRole = user?.role;
+  const { isAuthenticated, user, loading } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+  useEffect(() => {
+    // If user data is loaded and user is not authenticated, redirect to login
+    if (!loading && !isAuthenticated) {
+      toast.error("Please sign in to access this page");
+      navigate('/login', { state: { from: location } });
+    }
+    
+    // If user is authenticated but doesn't have the required role
+    if (!loading && isAuthenticated && requiredRole && user?.role !== requiredRole) {
+      toast.error(`Access denied. You need to be a ${requiredRole} to view this page.`);
+      navigate('/');
+    }
+  }, [isAuthenticated, user, loading, navigate, location, requiredRole]);
+  
+  // Show nothing while checking auth status
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
   
-  if (role && userRole !== role) {
-    return <Navigate to="/" />;
-  }
-  
-  return <>{element}</>;
+  // If authenticated and has correct role, render the element
+  return isAuthenticated && (!requiredRole || user?.role === requiredRole) ? (
+    <>{element}</>
+  ) : null;
 };
+
+// Main App component
+function AppContent() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        
+        {/* Shop Routes */}
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/shop/product/:id" element={<ProductDetail />} />
+        <Route path="/shop/seller/:id" element={<SellerShop />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/favorites" element={<Favorites />} />
+        
+        {/* Seller Routes */}
+        <Route path="/seller-signup" element={<SellerSignup />} />
+        <Route 
+          path="/seller-dashboard/*" 
+          element={
+            <ProtectedRoute element={<SellerDashboard />} requiredRole="seller" />
+          } 
+        />
+        
+        {/* Customer Routes */}
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute element={<CustomerProfile />} requiredRole="customer" />
+          } 
+        />
+        
+        {/* Instructor Routes */}
+        <Route 
+          path="/instructor-dashboard/*" 
+          element={
+            <ProtectedRoute element={<InstructorDashboard />} requiredRole="instructor" />
+          } 
+        />
+        
+        {/* Course Routes */}
+        <Route path="/courses" element={<Courses />} />
+        <Route path="/courses/:id" element={<CourseDetail />} />
+        
+        {/* Learner Routes */}
+        <Route 
+          path="/learner-dashboard" 
+          element={
+            <ProtectedRoute element={<LearnerDashboard />} requiredRole="learner" />
+          }
+        />
+        <Route 
+          path="/learner-classroom" 
+          element={
+            <ProtectedRoute element={<LearnerClassroom />} requiredRole="learner" />
+          }
+        />
+        
+        {/* Workshop & Event Routes */}
+        <Route path="/workshops" element={<Workshops />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/newsletter" element={<NewsletterPage />} />
+        
+        {/* Authentication Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signup/learner" element={<LearnerSignup />} />
+        <Route path="/signup/instructor" element={<InstructorSignup />} />
+        <Route path="/signup/customer" element={<CustomerSignup />} />
+        
+        {/* Admin Routes */}
+        <Route 
+          path="/admin" 
+          element={<ProtectedRoute element={<AdminDashboard />} requiredRole="admin" />}
+        />
+        <Route 
+          path="/admin/content" 
+          element={<ProtectedRoute element={<ContentManagement />} requiredRole="admin" />}
+        />
+        <Route 
+          path="/admin/users" 
+          element={<ProtectedRoute element={<UserManagement />} requiredRole="admin" />}
+        />
+        <Route 
+          path="/admin/shop" 
+          element={<ProtectedRoute element={<ShopManagement />} requiredRole="admin" />}
+        />
+        <Route 
+          path="/admin/events" 
+          element={<ProtectedRoute element={<EventsManagement />} requiredRole="admin" />}
+        />
+        <Route 
+          path="/admin/newsletter" 
+          element={<ProtectedRoute element={<Newsletter />} requiredRole="admin" />}
+        />
+        <Route 
+          path="/admin/analytics" 
+          element={<ProtectedRoute element={<Analytics />} requiredRole="admin" />}
+        />
+        <Route 
+          path="/admin/settings" 
+          element={<ProtectedRoute element={<Settings />} requiredRole="admin" />}
+        />
+        <Route 
+          path="/admin/home-design" 
+          element={<ProtectedRoute element={<HomeDesign />} requiredRole="admin" />}
+        />
+        <Route path="/admin/*" element={<Navigate to="/admin" />} />
+        
+        {/* Donation Routes */}
+        <Route path="/donate" element={<Donate />} />
+        <Route path="/donate/checkout/:causeId" element={<DonationCheckout />} />
+        
+        {/* Other Routes */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
 
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
         <FavoritesProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              
-              {/* Shop Routes */}
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/shop/product/:id" element={<ProductDetail />} />
-              <Route path="/shop/seller/:id" element={<SellerShop />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/favorites" element={<Favorites />} />
-              
-              {/* Seller Routes */}
-              <Route path="/seller-signup" element={<SellerSignup />} />
-              <Route 
-                path="/seller-dashboard/*" 
-                element={
-                  <ProtectedRoute element={<SellerDashboard />} role="seller" />
-                } 
-              />
-              
-              {/* Customer Routes */}
-              <Route 
-                path="/profile" 
-                element={
-                  <ProtectedRoute element={<CustomerProfile />} role="customer" />
-                } 
-              />
-              
-              {/* Instructor Routes */}
-              <Route 
-                path="/instructor-dashboard/*" 
-                element={
-                  <ProtectedRoute element={<InstructorDashboard />} role="instructor" />
-                } 
-              />
-              
-              {/* Course Routes */}
-              <Route path="/courses" element={<Courses />} />
-              <Route path="/courses/:id" element={<CourseDetail />} />
-              
-              {/* Learner Routes */}
-              <Route 
-                path="/learner-dashboard" 
-                element={
-                  <ProtectedRoute element={<LearnerDashboard />} role="learner" />
-                }
-              />
-              <Route 
-                path="/learner-classroom" 
-                element={
-                  <ProtectedRoute element={<LearnerClassroom />} role="learner" />
-                }
-              />
-              
-              {/* Workshop & Event Routes */}
-              <Route path="/workshops" element={<Workshops />} />
-              <Route path="/events" element={<Events />} />
-              <Route path="/newsletter" element={<NewsletterPage />} />
-              
-              {/* Authentication Routes */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/signup/learner" element={<LearnerSignup />} />
-              <Route path="/signup/instructor" element={<InstructorSignup />} />
-              <Route path="/signup/customer" element={<CustomerSignup />} />
-              
-              {/* Admin Routes */}
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/content" element={<ContentManagement />} />
-              <Route path="/admin/users" element={<UserManagement />} />
-              <Route path="/admin/shop" element={<ShopManagement />} />
-              <Route path="/admin/events" element={<EventsManagement />} />
-              <Route path="/admin/newsletter" element={<Newsletter />} />
-              <Route path="/admin/analytics" element={<Analytics />} />
-              <Route path="/admin/settings" element={<Settings />} />
-              <Route path="/admin/home-design" element={<HomeDesign />} />
-              <Route path="/admin/*" element={<Navigate to="/admin" />} />
-              
-              {/* Donation Routes */}
-              <Route path="/donate" element={<Donate />} />
-              <Route path="/donate/checkout/:causeId" element={<DonationCheckout />} />
-              
-              {/* Other Routes */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+          <AppContent />
         </FavoritesProvider>
       </CartProvider>
     </AuthProvider>

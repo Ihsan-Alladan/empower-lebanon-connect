@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -160,7 +159,7 @@ const CustomerSignup = () => {
     }
   }, [toast]);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Only submit if phone is valid
     if (!phoneValid) {
       toast({
@@ -171,24 +170,39 @@ const CustomerSignup = () => {
       return;
     }
     
-    // Include the full phone number (with country code)
-    const submitData = {
-      ...values,
-      phone: fullPhoneNumber,
-    };
-    
-    // Mock signup - in a real app this would connect to your authentication system
-    console.log(submitData);
-    
-    toast({
-      title: "Account Created Successfully",
-      description: "Welcome to EmpowEra!",
-    });
-    
-    // Redirect to home page after successful signup
-    setTimeout(() => {
-      navigate("/");
-    }, 1000);
+    try {
+      // Include the full phone number (with country code) and address information
+      const submitData = {
+        email: values.email,
+        password: values.password,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        role: 'customer' as const, // Explicitly set role
+        phone: fullPhoneNumber,
+        address: `${values.street}, ${cities.find(c => c.id === values.city)?.name || ''}, ${countries.find(c => c.id === values.country)?.name || ''}`,
+      };
+      
+      // Register user with the customer role using authService
+      const result = await authService.signUpUser(submitData);
+      
+      if (result) {
+        toast({
+          title: "Account Created Successfully",
+          description: "Welcome to EmpowEra! You can now log in.",
+        });
+        
+        // Redirect to login page after successful signup
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create account",
+        variant: "destructive",
+      });
+    }
   }
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);

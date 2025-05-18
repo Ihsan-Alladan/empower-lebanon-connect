@@ -11,11 +11,13 @@ export interface SignUpData {
   firstName: string;
   lastName: string;
   role?: UserRole;
+  phone?: string;
+  address?: string;
 }
 
 // Sign up user
 export const signUpUser = async (data: SignUpData): Promise<any> => {
-  const { email, password, firstName, lastName, role = 'customer' } = data;
+  const { email, password, firstName, lastName, role = 'customer', phone, address } = data;
   
   const { data: authData, error } = await supabase.auth.signUp({
     email,
@@ -24,7 +26,9 @@ export const signUpUser = async (data: SignUpData): Promise<any> => {
       data: {
         first_name: firstName,
         last_name: lastName,
-        role: role
+        role: role,
+        phone: phone,
+        address: address
       },
     }
   });
@@ -32,6 +36,26 @@ export const signUpUser = async (data: SignUpData): Promise<any> => {
   if (error) {
     console.error('Error signing up:', error);
     throw error;
+  }
+
+  // Ensure role is added to user_roles table
+  if (authData?.user) {
+    try {
+      const { error: roleError } = await supabase
+        .from('user_roles')
+        .insert({
+          user_id: authData.user.id,
+          role: role
+        });
+      
+      if (roleError) {
+        console.error('Error adding user role:', roleError);
+        // Continue despite error - the trigger should handle this in most cases
+      }
+    } catch (roleErr) {
+      console.error('Exception adding user role:', roleErr);
+      // Continue despite error - the trigger should handle this in most cases
+    }
   }
 
   return authData;

@@ -21,6 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import PageTransition from "@/components/PageTransition";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { authService } from "@/services/authService";
 
 const formSchema = z.object({
   firstName: z.string().min(2, {
@@ -51,6 +52,7 @@ const LearnerSignup = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [phoneValid, setPhoneValid] = useState(false);
   const [fullPhoneNumber, setFullPhoneNumber] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
@@ -67,7 +69,7 @@ const LearnerSignup = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Only submit if phone is valid
     if (!phoneValid) {
       toast({
@@ -78,24 +80,48 @@ const LearnerSignup = () => {
       return;
     }
     
-    // Include the full phone number (with country code)
-    const submitData = {
-      ...values,
-      phone: fullPhoneNumber,
-    };
+    setIsSubmitting(true);
     
-    // Mock signup - in a real app this would connect to your authentication system
-    console.log(submitData);
-    
-    toast({
-      title: "Account Created Successfully",
-      description: "Welcome to EmpowEra!",
-    });
-    
-    // Redirect to home page after successful signup
-    setTimeout(() => {
-      navigate("/");
-    }, 1000);
+    try {
+      // Include the full phone number (with country code)
+      const submitData = {
+        email: values.email,
+        password: values.password,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        role: 'learner' as const,
+        phone: fullPhoneNumber,
+      };
+      
+      // Register user with the learner role
+      const result = await authService.signUpUser(submitData);
+      
+      if (result) {
+        toast({
+          title: "Account Created Successfully",
+          description: "Welcome to EmpowEra! You can now log in.",
+        });
+        
+        // Redirect to login page after successful signup
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+      } else {
+        toast({
+          title: "Signup Failed",
+          description: "There was an error creating your account. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create account",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -293,8 +319,9 @@ const LearnerSignup = () => {
                   <Button 
                     type="submit" 
                     className="w-full bg-empower-terracotta hover:bg-empower-terracotta/90 flex items-center justify-center gap-2 mt-6 rounded-xl py-6"
+                    disabled={isSubmitting}
                   >
-                    Create Account
+                    {isSubmitting ? "Creating Account..." : "Create Account"}
                   </Button>
                   
                   <div className="text-center mt-4">
