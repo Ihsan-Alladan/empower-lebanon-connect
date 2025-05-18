@@ -7,6 +7,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Star, Clock, Heart } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { Course } from '@/types/course';
+import { toast } from 'sonner';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { enrollInCourse } from '@/services/courseService';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface CourseCardProps {
   course: Course;
@@ -14,9 +18,35 @@ interface CourseCardProps {
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
+  
+  const enrollMutation = useMutation({
+    mutationFn: () => enrollInCourse(course.id),
+    onSuccess: () => {
+      toast.success(`Successfully enrolled in ${course.title}!`);
+      queryClient.invalidateQueries({ queryKey: ['enrolledCourses'] });
+      navigate(`/learner-classroom`, { state: { courseId: course.id } });
+    },
+    onError: (error) => {
+      console.error('Error enrolling in course:', error);
+      toast.error('Failed to enroll in this course. Please try again.');
+    }
+  });
   
   const handleEnroll = () => {
-    navigate(`/courses/${course.id}`);
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      toast.error("Please log in to enroll in this course", {
+        action: {
+          label: "Login",
+          onClick: () => navigate('/login'),
+        },
+      });
+      return;
+    }
+    
+    enrollMutation.mutate();
   };
   
   return (
@@ -86,8 +116,9 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
         <Button 
           onClick={handleEnroll} 
           className="w-full bg-empower-terracotta hover:bg-empower-terracotta/90 transition-all duration-300"
+          disabled={enrollMutation.isPending}
         >
-          Enroll Now
+          {enrollMutation.isPending ? 'Enrolling...' : 'Enroll Now'}
         </Button>
       </CardFooter>
     </Card>

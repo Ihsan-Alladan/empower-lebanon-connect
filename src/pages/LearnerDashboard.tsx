@@ -1,6 +1,7 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
@@ -8,24 +9,24 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { GraduationCap, Book, Clock, Calendar, ChevronRight } from 'lucide-react';
-import { toast } from '@/components/ui/sonner';
+import { toast } from 'sonner';
 import PageTransition from '@/components/PageTransition';
-
-// Type for enrolled course
-interface EnrolledCourse {
-  id: string;
-  title: string;
-  instructor: string;
-  thumbnail: string;
-  lastAccessed?: string;
-  progress?: number;
-}
+import { getEnrolledCourses } from '@/services/courseService';
 
 const LearnerDashboard = () => {
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const [enrolledCourses, setEnrolledCourses] = useState<EnrolledCourse[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  
+  const { data: enrolledCourses = [], isLoading, error } = useQuery({
+    queryKey: ['enrolledCourses'],
+    queryFn: getEnrolledCourses,
+    enabled: isAuthenticated && user?.role === 'learner',
+    retry: false,
+    onError: (err) => {
+      console.error("Failed to fetch enrolled courses:", err);
+      toast.error("Failed to load your courses. Please try again later.");
+    }
+  });
 
   useEffect(() => {
     // Redirect if not authenticated or not a learner
@@ -38,78 +39,6 @@ const LearnerDashboard = () => {
       navigate('/');
       return;
     }
-
-    // Simulate fetching enrolled courses
-    // In a real app, this would come from a database
-    const fetchEnrolledCourses = () => {
-      setIsLoading(true);
-      
-      // Check localStorage for enrolled courses
-      const enrolledCourseIds = Object.keys(localStorage)
-        .filter(key => key.startsWith('enrolled-'))
-        .map(key => key.replace('enrolled-', ''));
-      
-      // Simulate API call delay
-      setTimeout(() => {
-        // If no enrolled courses, set empty array
-        if (enrolledCourseIds.length === 0) {
-          // Add a default course for demonstration purpose
-          const defaultCourses: EnrolledCourse[] = [
-            {
-              id: 'google-classroom-demo',
-              title: 'Google Classroom Style Demo Course',
-              instructor: 'Alex Johnson',
-              thumbnail: '/lovable-uploads/lovable-uploads/course2.webp',
-              lastAccessed: 'Just now',
-              progress: 0
-            }
-          ];
-          setEnrolledCourses(defaultCourses);
-          setIsLoading(false);
-          return;
-        }
-
-        // Mock data for enrolled courses based on localStorage
-        const mockEnrolledCourses: EnrolledCourse[] = [
-          {
-            id: 'course-1',
-            title: 'Introduction to Crochet',
-            instructor: 'Sarah Johnson',
-            thumbnail: '/lovable-uploads/dccc32b9-798a-4692-9816-6e03d3cfedf2.png',
-            lastAccessed: '2 days ago',
-            progress: 45
-          },
-          {
-            id: 'course-2',
-            title: 'Web Development Fundamentals',
-            instructor: 'Michael Chen',
-            thumbnail: '/lovable-uploads/88cb08a3-5df1-4252-b772-5ebb5ed8b0d5.png',
-            lastAccessed: '1 week ago',
-            progress: 30
-          }
-        ];
-        
-        // Filter courses based on enrolled IDs
-        const userEnrolledCourses = mockEnrolledCourses.filter(
-          course => enrolledCourseIds.includes(course.id)
-        );
-        
-        // Add the default course for demonstration
-        userEnrolledCourses.unshift({
-          id: 'google-classroom-demo',
-          title: 'Google Classroom Style Demo Course',
-          instructor: 'Alex Johnson',
-          thumbnail: '/lovable-uploads/lovable-uploads/course2.webp',
-          lastAccessed: 'Just now',
-          progress: 0
-        });
-        
-        setEnrolledCourses(userEnrolledCourses);
-        setIsLoading(false);
-      }, 800);
-    };
-
-    fetchEnrolledCourses();
   }, [isAuthenticated, user, navigate]);
 
   const handleCourseClick = (courseId: string) => {
@@ -173,23 +102,23 @@ const LearnerDashboard = () => {
                       </div>
                       <CardHeader className="pb-2">
                         <h3 className="font-semibold text-lg">{course.title}</h3>
-                        <p className="text-sm text-gray-500">Instructor: {course.instructor}</p>
+                        <p className="text-sm text-gray-500">Instructor: {course.instructor.name}</p>
                       </CardHeader>
                       <CardContent className="pb-3">
                         <div className="flex justify-between text-sm text-gray-600">
                           <div className="flex items-center gap-1">
                             <Clock size={14} />
-                            <span>Last accessed: {course.lastAccessed}</span>
+                            <span>Last accessed: {course.lastAccessed ? new Date(course.lastAccessed).toLocaleString() : 'Never'}</span>
                           </div>
                         </div>
                         <div className="mt-2">
                           <div className="w-full bg-gray-200 rounded-full h-2.5">
                             <div 
                               className="bg-empower-terracotta h-2.5 rounded-full" 
-                              style={{ width: `${course.progress}%` }}
+                              style={{ width: `${course.progress || 0}%` }}
                             ></div>
                           </div>
-                          <p className="text-xs text-right mt-1">{course.progress}% complete</p>
+                          <p className="text-xs text-right mt-1">{course.progress || 0}% complete</p>
                         </div>
                       </CardContent>
                       <CardFooter className="pt-0">

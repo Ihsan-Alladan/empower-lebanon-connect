@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { products } from '@/data/products';
 import ProductCard from '@/components/shop/ProductCard';
 import ShopFilters from '@/components/shop/ShopFilters';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,6 +15,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { fetchProducts } from '@/services/productService';
+import { toast } from 'sonner';
 
 const Shop: React.FC = () => {
   const navigate = useNavigate();
@@ -22,6 +24,18 @@ const Shop: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedPrice, setSelectedPrice] = useState('all');
   const [currentSlide, setCurrentSlide] = useState(0);
+  
+  const { data: products = [], isLoading, error } = useQuery({
+    queryKey: ['products'],
+    queryFn: fetchProducts
+  });
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Failed to load products. Please try again later.");
+      console.error("Error loading products:", error);
+    }
+  }, [error]);
   
   const categories = ['Home Decor', 'Home Textiles', 'Kitchen & Dining'];
   
@@ -162,7 +176,13 @@ const Shop: React.FC = () => {
               </TabsList>
               
               <TabsContent value="all" className="animate-fade-in">
-                {filteredProducts.length === 0 ? (
+                {isLoading ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
+                      <div key={index} className="bg-gray-200 animate-pulse h-80 rounded-lg"></div>
+                    ))}
+                  </div>
+                ) : filteredProducts.length === 0 ? (
                   <div className="text-center py-12">
                     <p className="text-empower-brown text-lg">No products match your search criteria. Try adjusting your filters.</p>
                   </div>
@@ -177,7 +197,11 @@ const Shop: React.FC = () => {
               
               <TabsContent value="newest">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {filteredProducts
+                  {isLoading ? (
+                    [1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
+                      <div key={index} className="bg-gray-200 animate-pulse h-80 rounded-lg"></div>
+                    ))
+                  ) : filteredProducts
                     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
                     .slice(0, 8)
                     .map((product) => (
@@ -188,7 +212,11 @@ const Shop: React.FC = () => {
               
               <TabsContent value="popular">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {filteredProducts
+                  {isLoading ? (
+                    [1, 2, 3, 4].map((_, index) => (
+                      <div key={index} className="bg-gray-200 animate-pulse h-80 rounded-lg"></div>
+                    ))
+                  ) : filteredProducts
                     .sort((a, b) => b.rating - a.rating)
                     .slice(0, 8)
                     .map((product) => (

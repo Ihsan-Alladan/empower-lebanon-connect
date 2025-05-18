@@ -1,274 +1,375 @@
 
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Eye, EyeOff, Lock, LogIn, User } from "lucide-react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Eye, EyeOff, UserCircle, Mail, Lock } from 'lucide-react';
+import { authService } from '@/services/authService';
+import PageTransition from '@/components/PageTransition';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/sonner";
-import Navbar from "@/components/Navbar";
-import { Checkbox } from "@/components/ui/checkbox";
-import PageTransition from "@/components/PageTransition";
-import { useAuth } from "@/contexts/AuthContext";
-import { isAdminUser, setAdminAuthenticated } from "@/utils/adminAuth";
-import Footer from "@/components/Footer";
-
-const formSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  password: z.string().min(6, {
-    message: "Password must be at least 6 characters.",
-  }),
-  rememberMe: z.boolean().default(false),
+// Login form schema
+const loginSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
 });
 
+// Signup form schema
+const signupSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  firstName: z.string().min(1, { message: 'First name is required' }),
+  lastName: z.string().optional(),
+  role: z.enum(['learner', 'instructor', 'customer', 'seller']), 
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
+type SignupFormValues = z.infer<typeof signupSchema>;
+
 const Login = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>('login');
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const { login, isAuthenticated, user } = useAuth();
+  
+  // Get return URL from location state or default to home
+  const from = location.state?.from?.pathname || '/';
+  
+  // Login form
+  const loginForm = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
-      rememberMe: false,
+      email: '',
+      password: '',
+    },
+  });
+  
+  // Signup form
+  const signupForm = useForm<SignupFormValues>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      firstName: '',
+      lastName: '',
+      role: 'learner',
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    console.log("Login attempt with:", values);
-    
-    try {
-      // Check if this is an admin login
-      if (isAdminUser(values.email, values.password)) {
-        toast.success("Admin Login Successful", {
-          description: "Welcome to the admin dashboard!"
-        });
-        
-        // Set admin as authenticated
-        setAdminAuthenticated(true);
-        
-        // Redirect to admin dashboard after successful login
-        setTimeout(() => {
-          navigate("/admin");
-        }, 1000);
-        
-        return;
+  // Redirect authenticated users
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      // Redirect based on user role
+      switch (user.role) {
+        case 'admin':
+          navigate('/admin-dashboard');
+          break;
+        case 'instructor':
+          navigate('/instructor-dashboard');
+          break;
+        case 'learner':
+          navigate('/learner-dashboard');
+          break;
+        case 'seller':
+          navigate('/seller-dashboard');
+          break;
+        case 'customer':
+          navigate('/');
+          break;
+        default:
+          navigate(from);
       }
-      
-      // Regular login
-      const user = await login(values.email, values.password);
-      
-      if (user) {
-        toast.success("Login Successful", {
-          description: `Welcome back, ${user.name}!`
-        });
-        
-        // Redirect based on user role
-        if (user.role === "seller") {
-          navigate("/seller-dashboard");
-        } else if (user.role === "learner") {
-          // Changed redirection for learners to their dashboard
-          navigate("/learner-dashboard");
-        } else if (user.role === "instructor") {
-          navigate("/instructor-dashboard");
-        } else if (user.role === "customer") {
-          navigate("/profile");
-        } else {
-          navigate("/");
-        }
-      } else {
-        toast.error("Login Failed", {
-          description: "Invalid email or password. Please try again."
-        });
+      toast.success(`Welcome back, ${user.name}!`);
+    }
+  }, [isAuthenticated, user, navigate, from]);
+
+  const onLoginSubmit = async (values: LoginFormValues) => {
+    try {
+      const result = await login(values.email, values.password);
+      if (!result) {
+        toast.error('Invalid email or password. Please try again.');
       }
     } catch (error) {
-      toast.error("An error occurred", {
-        description: "Please try again later"
-      });
-      console.error("Login error:", error);
-    } finally {
-      setIsLoading(false);
+      toast.error('Something went wrong. Please try again.');
     }
-  }
+  };
 
-  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const onSignupSubmit = async (values: SignupFormValues) => {
+    try {
+      const result = await authService.register(
+        values.email,
+        values.password,
+        values.role,
+        {
+          first_name: values.firstName,
+          last_name: values.lastName || '',
+        }
+      );
+      
+      if (result) {
+        toast.success('Account created successfully! You can now log in.');
+        setActiveTab('login');
+        loginForm.setValue('email', values.email);
+      } else {
+        toast.error('Failed to create account. Please try again.');
+      }
+    } catch (error) {
+      toast.error('Something went wrong. Please try again.');
+    }
+  };
 
   return (
-    <PageTransition route={location.pathname}>
+    <PageTransition>
       <div className="min-h-screen flex flex-col">
         <Navbar />
         
-        <div 
-          className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80')",
-            backgroundSize: "cover",
-            backgroundPosition: "center"
-          }}
-        >
-          {/* Overlay with blur effect */}
-          <div className="absolute inset-0 backdrop-blur-md bg-black/30" />
-          
-          <div className="max-w-md w-full space-y-8 relative z-10">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="bg-white rounded-lg shadow-2xl p-8"
-            >
-              <div className="text-center mb-6">
-                <h2 className="text-3xl font-bold text-empower-brown">
-                  Welcome Back
-                </h2>
-                <p className="mt-2 text-sm text-empower-brown/80">
-                  Sign in to your account to continue your journey with EmpowEra
-                </p>
-              </div>
-              
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-empower-brown">Email</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <Input 
-                              placeholder="your@email.com" 
-                              {...field} 
-                              className="pl-10" 
-                            />
-                            <User className="absolute left-3 top-3 h-4 w-4 text-empower-brown/60" />
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-empower-brown">Password</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <Input 
-                              type={showPassword ? "text" : "password"} 
-                              placeholder="••••••••" 
-                              {...field} 
-                              className="pl-10" 
-                            />
-                            <Lock className="absolute left-3 top-3 h-4 w-4 text-empower-brown/60" />
-                            <button 
-                              type="button"
-                              onClick={togglePasswordVisibility}
-                              className="absolute right-3 top-3"
-                            >
-                              {showPassword ? (
-                                <EyeOff className="h-4 w-4 text-empower-brown/60" />
-                              ) : (
-                                <Eye className="h-4 w-4 text-empower-brown/60" />
-                              )}
-                            </button>
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <div className="flex items-center justify-between">
-                    <FormField
-                      control={form.control}
-                      name="rememberMe"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row items-center space-x-2 space-y-0">
-                          <FormControl>
-                            <Checkbox 
-                              checked={field.value} 
-                              onCheckedChange={field.onChange} 
-                              className="text-empower-terracotta" 
-                            />
-                          </FormControl>
-                          <FormLabel className="text-sm cursor-pointer text-empower-brown/80">
-                            Remember me
-                          </FormLabel>
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <a 
-                      href="#" 
-                      className="text-sm font-medium text-empower-terracotta hover:text-empower-brown transition-colors"
-                    >
-                      Forgot password?
-                    </a>
-                  </div>
-                  
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-empower-terracotta hover:bg-empower-terracotta/90 flex items-center justify-center gap-2"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      "Signing in..."
-                    ) : (
-                      <>
-                        <LogIn className="h-4 w-4" />
-                        Sign in
-                      </>
-                    )}
-                  </Button>
-                  
-                  <div className="text-center mt-4">
-                    <p className="text-sm text-empower-brown/80">
-                      Don't have an account?{" "}
-                      <a 
-                        href="/signup" 
-                        className="font-medium text-empower-terracotta hover:text-empower-brown transition-colors"
-                      >
-                        Sign up
-                      </a>
-                    </p>
-                  </div>
-                  
-                  <div className="pt-2 text-center">
-                    <p className="text-xs text-gray-500">
-                      Test Accounts:
-                    </p>
-                    <div className="grid grid-cols-3 gap-2 text-xs text-gray-500 mt-1">
-                      <div>Admin: admin@admin.com / admin321</div>
-                      <div>Seller: seller@seller.com / seller321</div>
-                      <div>Customer: customer@customer.com / customer321</div>
-                    </div>
-                  </div>
-                </form>
-              </Form>
-            </motion.div>
+        <main className="flex-1 container flex items-center justify-center py-12">
+          <div className="w-full max-w-md">
+            <div className="text-center mb-6">
+              <h1 className="text-3xl font-bold">Welcome to EmpowEra</h1>
+              <p className="text-muted-foreground">Sign in to your account or create a new one</p>
+            </div>
+            
+            <Card className="border-empower-terracotta/20">
+              <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab}>
+                <TabsList className="grid grid-cols-2">
+                  <TabsTrigger value="login">Login</TabsTrigger>
+                  <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                </TabsList>
+                
+                {/* Login Tab */}
+                <TabsContent value="login">
+                  <CardHeader>
+                    <CardTitle>Login</CardTitle>
+                    <CardDescription>
+                      Enter your credentials to access your account
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Form {...loginForm}>
+                      <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
+                        <FormField
+                          control={loginForm.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Email</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                                  <Input
+                                    placeholder="you@example.com"
+                                    className="pl-10"
+                                    {...field}
+                                  />
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={loginForm.control}
+                          name="password"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Password</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                                  <Input
+                                    type={showPassword ? "text" : "password"}
+                                    className="pl-10 pr-10"
+                                    {...field}
+                                  />
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    className="absolute right-0 top-0 h-full px-3 py-2"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                  >
+                                    {showPassword ? (
+                                      <EyeOff className="h-4 w-4" />
+                                    ) : (
+                                      <Eye className="h-4 w-4" />
+                                    )}
+                                  </Button>
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <Button
+                          type="submit"
+                          className="w-full bg-empower-terracotta hover:bg-empower-terracotta/90"
+                          disabled={loginForm.formState.isSubmitting}
+                        >
+                          {loginForm.formState.isSubmitting ? "Logging in..." : "Login"}
+                        </Button>
+                      </form>
+                    </Form>
+                  </CardContent>
+                </TabsContent>
+                
+                {/* Sign Up Tab */}
+                <TabsContent value="signup">
+                  <CardHeader>
+                    <CardTitle>Create an Account</CardTitle>
+                    <CardDescription>
+                      Join EmpowEra to access courses, workshops and more
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Form {...signupForm}>
+                      <form onSubmit={signupForm.handleSubmit(onSignupSubmit)} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <FormField
+                            control={signupForm.control}
+                            name="firstName"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>First Name</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <UserCircle className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                                    <Input
+                                      placeholder="First name"
+                                      className="pl-10"
+                                      {...field}
+                                    />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={signupForm.control}
+                            name="lastName"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Last Name</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Last name"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <FormField
+                          control={signupForm.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Email</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                                  <Input
+                                    placeholder="you@example.com"
+                                    className="pl-10"
+                                    {...field}
+                                  />
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={signupForm.control}
+                          name="password"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Password</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                                  <Input
+                                    type={showPassword ? "text" : "password"}
+                                    className="pl-10 pr-10"
+                                    {...field}
+                                  />
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    className="absolute right-0 top-0 h-full px-3 py-2"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                  >
+                                    {showPassword ? (
+                                      <EyeOff className="h-4 w-4" />
+                                    ) : (
+                                      <Eye className="h-4 w-4" />
+                                    )}
+                                  </Button>
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={signupForm.control}
+                          name="role"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Account Type</FormLabel>
+                              <FormControl>
+                                <select
+                                  className="w-full px-3 py-2 border rounded-md"
+                                  {...field}
+                                >
+                                  <option value="learner">Learner (Access Courses)</option>
+                                  <option value="instructor">Instructor (Create Courses)</option>
+                                  <option value="customer">Customer (Shop Products)</option>
+                                  <option value="seller">Seller (Sell Products)</option>
+                                </select>
+                              </FormControl>
+                              <FormDescription>
+                                This determines what you can do on the platform
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <Button
+                          type="submit"
+                          className="w-full bg-empower-terracotta hover:bg-empower-terracotta/90"
+                          disabled={signupForm.formState.isSubmitting}
+                        >
+                          {signupForm.formState.isSubmitting ? "Creating Account..." : "Sign Up"}
+                        </Button>
+                      </form>
+                    </Form>
+                  </CardContent>
+                </TabsContent>
+              </Tabs>
+              <CardFooter className="flex flex-col space-y-2 border-t p-4">
+                <div className="text-sm text-muted-foreground">
+                  By continuing, you agree to our <Link to="/terms" className="text-empower-terracotta hover:underline">Terms of Service</Link> and <Link to="/privacy" className="text-empower-terracotta hover:underline">Privacy Policy</Link>.
+                </div>
+              </CardFooter>
+            </Card>
           </div>
-        </div>
+        </main>
         
         <Footer />
       </div>

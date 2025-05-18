@@ -1,53 +1,6 @@
 
-import { toast } from "@/components/ui/sonner";
-
-// Mock user data - in a real application, this would come from a database
-const users = [
-  {
-    id: "seller1",
-    email: "seller@seller.com",
-    password: "seller321", // In a real app, passwords would be hashed
-    name: "Artisanal Creations",
-    role: "seller",
-    avatar: "https://images.unsplash.com/photo-1472396961693-142e6e269027"
-  },
-  {
-    id: "admin1",
-    email: "admin@admin.com",
-    password: "admin321",
-    name: "Admin User",
-    role: "admin",
-    avatar: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79"
-  },
-  {
-    id: "learner1",
-    email: "learner@learner.com",
-    password: "learner321",
-    name: "Emma Johnson",
-    role: "learner",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330"
-  },
-  {
-    id: "instructor1",
-    email: "instructor@instructor.com",
-    password: "instructor321",
-    name: "Sarah Williams",
-    role: "instructor",
-    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956",
-    bio: "Master craftsperson with over 15 years of experience in traditional weaving and textile arts. Passionate about preserving cultural techniques while innovating with sustainable approaches.",
-    expertise: ["Traditional Weaving", "Sustainable Textiles", "Cultural Crafts"]
-  },
-  {
-    id: "customer1",
-    email: "customer@customer.com",
-    password: "customer321",
-    name: "Alex Rivera",
-    role: "customer",
-    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956",
-    phoneNumber: "+1 (555) 123-4567",
-    address: "123 Main Street, Anytown, USA"
-  }
-];
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from "sonner";
 
 export interface User {
   id: string;
@@ -62,65 +15,205 @@ export interface User {
 }
 
 export const authService = {
-  login: (email: string, password: string): Promise<User | null> => {
-    return new Promise((resolve) => {
-      // Simulate API call delay
-      setTimeout(() => {
-        const user = users.find(
-          (u) => u.email === email && u.password === password
-        );
-        
-        if (user) {
-          // We need to ensure we're not including the password but keeping all other properties
-          const { password: _, ...userWithoutPassword } = user;
-          
-          // Store user in local storage - make sure role is included
-          console.log("Storing user in localStorage:", userWithoutPassword);
-          localStorage.setItem("user", JSON.stringify(userWithoutPassword));
-          resolve(userWithoutPassword);
-        } else {
-          resolve(null);
+  // Register a new user
+  register: async (email: string, password: string, role: string, metadata: any = {}): Promise<User | null> => {
+    try {
+      // Include role in metadata
+      const metaWithRole = { ...metadata, role };
+      
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: metaWithRole,
         }
-      }, 300);
-    });
+      });
+      
+      if (error) throw error;
+      
+      if (!data.user) return null;
+      
+      // Return user data
+      return {
+        id: data.user.id,
+        email: data.user.email || '',
+        name: metadata.first_name 
+          ? `${metadata.first_name} ${metadata.last_name || ''}`.trim()
+          : email.split('@')[0],
+        role: role,
+      };
+    } catch (error: any) {
+      console.error("Registration error:", error);
+      toast.error(error.message || "Registration failed");
+      return null;
+    }
   },
   
-  logout: (): void => {
-    localStorage.removeItem("user");
-    toast.success("Logged out successfully");
+  // Login an existing user
+  login: async (email: string, password: string): Promise<User | null> => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+      
+      if (error) throw error;
+      
+      if (!data.user) return null;
+      
+      // Fetch user role
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', data.user.id)
+        .single();
+        
+      if (roleError && roleError.code !== 'PGRST116') throw roleError;
+      
+      // Fetch profile data
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('first_name, last_name, avatar_url')
+        .eq('id', data.user.id)
+        .single();
+        
+      if (profileError && profileError.code !== 'PGRST116') throw profileError;
+      
+      const role = roleData?.role || 'customer'; // Default to customer if no role found
+      
+      return {
+        id: data.user.id,
+        email: data.user.email || '',
+        name: profileData?.first_name 
+          ? `${profileData.first_name} ${profileData.last_name || ''}`.trim()
+          : email.split('@')[0],
+        role: role,
+        avatar: profileData?.avatar_url
+      };
+    } catch (error: any) {
+      console.error("Login error:", error);
+      toast.error(error.message || "Login failed");
+      return null;
+    }
   },
   
-  getCurrentUser: (): User | null => {
-    const user = localStorage.getItem("user");
-    return user ? JSON.parse(user) : null;
+  // Logout the current user
+  logout: async (): Promise<void> => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      toast.success("Logged out successfully");
+    } catch (error: any) {
+      console.error("Logout error:", error);
+      toast.error(error.message || "Logout failed");
+    }
   },
   
-  isAuthenticated: (): boolean => {
-    return localStorage.getItem("user") !== null;
+  // Get the current user
+  getCurrentUser: async (): Promise<User | null> => {
+    const { data } = await supabase.auth.getUser();
+    
+    if (!data.user) return null;
+    
+    try {
+      // Fetch user role
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', data.user.id)
+        .single();
+        
+      if (roleError && roleError.code !== 'PGRST116') throw roleError;
+      
+      // Fetch profile data
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('first_name, last_name, avatar_url, bio')
+        .eq('id', data.user.id)
+        .single();
+        
+      if (profileError && profileError.code !== 'PGRST116') throw profileError;
+      
+      const role = roleData?.role || 'customer'; // Default to customer if no role found
+      
+      return {
+        id: data.user.id,
+        email: data.user.email || '',
+        name: profileData?.first_name 
+          ? `${profileData.first_name} ${profileData.last_name || ''}`.trim()
+          : data.user.email?.split('@')[0] || 'User',
+        role: role,
+        avatar: profileData?.avatar_url,
+        bio: profileData?.bio
+      };
+    } catch (error) {
+      console.error("Error getting current user details:", error);
+      return {
+        id: data.user.id,
+        email: data.user.email || '',
+        name: data.user.email?.split('@')[0] || 'User',
+        role: 'customer', // Default role
+      };
+    }
   },
   
-  isSeller: (): boolean => {
-    const user = authService.getCurrentUser();
-    return user?.role === "seller";
+  // Check if user is authenticated
+  isAuthenticated: async (): Promise<boolean> => {
+    const { data } = await supabase.auth.getUser();
+    return !!data.user;
   },
   
-  isAdmin: (): boolean => {
-    const user = authService.getCurrentUser();
-    return user?.role === "admin";
+  // Check if user has a specific role
+  hasRole: async (role: string): Promise<boolean> => {
+    const { data } = await supabase.auth.getUser();
+    
+    if (!data.user) return false;
+    
+    try {
+      // Fetch user roles
+      const { data: roleData, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', data.user.id)
+        .eq('role', role);
+        
+      if (error) throw error;
+      
+      return roleData && roleData.length > 0;
+    } catch (error) {
+      console.error(`Error checking ${role} role:`, error);
+      return false;
+    }
   },
   
-  isLearner: (): boolean => {
-    const user = authService.getCurrentUser();
-    return user?.role === "learner";
-  },
-  
-  isInstructor: (): boolean => {
-    const user = authService.getCurrentUser();
-    return user?.role === "instructor";
-  },
-  
-  isCustomer: (): boolean => {
-    const user = authService.getCurrentUser();
-    return user?.role === "customer";
+  // Update user profile
+  updateProfile: async (profile: Partial<User>): Promise<User | null> => {
+    const { data: userData } = await supabase.auth.getUser();
+    
+    if (!userData.user) {
+      throw new Error('User not authenticated');
+    }
+    
+    try {
+      // Update profiles table
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          first_name: profile.name?.split(' ')[0],
+          last_name: profile.name?.split(' ').slice(1).join(' '),
+          avatar_url: profile.avatar,
+          bio: profile.bio
+        })
+        .eq('id', userData.user.id);
+        
+      if (error) throw error;
+      
+      return await authService.getCurrentUser();
+    } catch (error: any) {
+      console.error("Profile update error:", error);
+      toast.error(error.message || "Failed to update profile");
+      return null;
+    }
   }
 };

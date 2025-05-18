@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -22,6 +21,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/sonner';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { authService } from '@/services/authService';
 
 // Mock data for orders and donations
 const orderHistory = [
@@ -73,10 +74,11 @@ const donationHistory = [
 ];
 
 const CustomerProfile: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
   const { cartItems, removeFromCart, updateQuantity, cartTotal } = useCart();
   const { favorites, removeFromFavorites, addToFavorites, isFavorite } = useFavorites();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [activeTab, setActiveTab] = useState('profile');
   const [editProfileOpen, setEditProfileOpen] = useState(false);
@@ -99,10 +101,25 @@ const CustomerProfile: React.FC = () => {
     }
   }, [user, navigate]);
 
-  const handleUpdateProfile = () => {
-    // In a real application, this would update the user's profile in the database
-    toast.success("Profile updated successfully!");
-    setEditProfileOpen(false);
+  // Add this mutation for profile updates
+  const updateProfileMutation = useMutation({
+    mutationFn: (profileData: Partial<User>) => authService.updateProfile(profileData),
+    onSuccess: () => {
+      toast.success('Profile updated successfully');
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+    },
+    onError: (error) => {
+      console.error('Error updating profile:', error);
+      toast.error('Failed to update profile');
+    }
+  });
+
+  const handleUpdateProfile = (data: any) => {
+    updateProfileMutation.mutate({
+      name: `${data.firstName} ${data.lastName}`.trim(),
+      bio: data.bio,
+      // Add other fields as needed
+    });
   };
 
   const handleDeleteAccount = () => {
