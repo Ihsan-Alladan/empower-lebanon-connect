@@ -14,7 +14,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { getTrendingCourses } from '@/services/courseService'; // Fixed: Use the correct function name
+import { getTrendingCourses } from '@/services/courseService';
 import { toast } from 'sonner';
 import { Course } from '@/types/course';
 
@@ -62,7 +62,7 @@ const TrendingCourses: React.FC = () => {
               </CarouselItem>
             ))
           ) : (
-            (trendingCourses as Course[]).map((course) => ( // Fixed: Add explicit type cast
+            (trendingCourses as Course[]).map((course) => (
               <CarouselItem key={course.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
                 <Card className="overflow-hidden shadow-md hover-zoom">
                   <div className="relative">

@@ -1,4 +1,3 @@
-
 import { Course } from '@/types/course';
 
 export const handmadeCourses: Course[] = [
@@ -12,6 +11,7 @@ export const handmadeCourses: Course[] = [
     price: 49.99,
     duration: '6 weeks',
     instructor: {
+      id: 'instr-001', // Added missing id
       name: 'Layla Hakim',
       avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
       title: 'Master Artisan & Cultural Preservationist',
@@ -105,6 +105,7 @@ export const handmadeCourses: Course[] = [
     price: 39.99,
     duration: '4 weeks',
     instructor: {
+      id: 'instr-002', // Added missing id
       name: 'Omar Nassar',
       avatar: 'https://randomuser.me/api/portraits/men/11.jpg',
       title: 'Artisanal Soap Maker & Herbalist',
@@ -199,6 +200,7 @@ export const handmadeCourses: Course[] = [
     price: 79.99,
     duration: '8 weeks',
     instructor: {
+      id: 'instr-003', // Added missing id
       name: 'Nadia Khoury',
       avatar: 'https://randomuser.me/api/portraits/women/22.jpg',
       title: 'Master Silversmith & Jewelry Designer',
@@ -309,6 +311,7 @@ export const digitalCourses: Course[] = [
     price: 59.99,
     duration: '5 weeks',
     instructor: {
+      id: 'instr-004', // Added missing id
       name: 'Karim Fadel',
       avatar: 'https://randomuser.me/api/portraits/men/22.jpg',
       title: 'Digital Marketing Consultant & Entrepreneur',
@@ -415,6 +418,7 @@ export const digitalCourses: Course[] = [
     price: 0,
     duration: '6 weeks',
     instructor: {
+      id: 'instr-005', // Added missing id
       name: 'Yasmine Nasrallah',
       avatar: 'https://randomuser.me/api/portraits/women/28.jpg',
       title: 'Front-End Developer & Design Educator',
@@ -527,6 +531,7 @@ export const digitalCourses: Course[] = [
     price: 79.99,
     duration: '8 weeks',
     instructor: {
+      id: 'instr-006', // Added missing id
       name: 'Fadi Abou-Rizk',
       avatar: 'https://randomuser.me/api/portraits/men/29.jpg',
       title: 'Senior UX Designer & App Developer',

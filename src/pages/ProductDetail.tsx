@@ -465,7 +465,12 @@ const ProductDetail: React.FC = () => {
             </TabsContent>
             
             <TabsContent value="reviews" className="animate-fade-in">
-              <ProductReviewSection productId={product.id} />
+              <ProductReviewSection 
+                productId={product.id} 
+                averageRating={product.rating} 
+                reviews={product.reviews || []} 
+                totalReviews={product.reviewsCount || 0}
+              />
             </TabsContent>
           </Tabs>
         </div>

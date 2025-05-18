@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { Event, SupabaseEvent } from '@/types/event';
 
@@ -99,7 +98,8 @@ export const registerForEvent = async (eventId: string, userId: string): Promise
     }
 
     try {
-      // Call function to increment the attendee count using rpc
+      // Call function to increment the attendee count
+      // Note: We're using a custom RPC call here
       const { error } = await supabase.rpc('increment_event_attendees', {
         event_id: eventId
       });

@@ -22,7 +22,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   const queryClient = useQueryClient();
   
   const enrollMutation = useMutation({
-    mutationFn: () => enrollInCourse(course.id, course.id), // Fixed: Pass both required arguments
+    mutationFn: () => enrollInCourse(course.id, course.id), // This should use the user ID
     onSuccess: () => {
       toast.success(`Successfully enrolled in ${course.title}!`);
       queryClient.invalidateQueries({ queryKey: ['enrolledCourses'] });
