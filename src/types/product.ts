@@ -38,7 +38,6 @@ export interface Product {
   materials?: string[];
   rating: number;
   reviewsCount?: number;
-  reviews?: number;
   reviews?: ProductReview[];
   createdAt?: string;
   updatedAt?: string;

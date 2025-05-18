@@ -1,158 +1,161 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import { Event } from '@/types/event';
+import { Event, SupabaseEvent } from '@/types/event';
 
-// Fetch all events
-export const fetchEvents = async (): Promise<Event[]> => {
-  const { data, error } = await supabase
-    .from('events')
-    .select('*');
+// Get all events
+export const getAllEvents = async (): Promise<Event[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('events')
+      .select(`
+        *,
+        event_images (*),
+        event_speakers (*),
+        event_highlights (*)
+      `)
+      .order('date', { ascending: true });
 
-  if (error) {
-    console.error('Error fetching events:', error);
-    throw error;
+    if (error) {
+      console.error('Error fetching events:', error);
+      return [];
+    }
+
+    return transformEvents(data);
+  } catch (error) {
+    console.error('Error in getAllEvents:', error);
+    return [];
   }
-
-  // Transform data to match Event interface
-  return data.map(event => ({
-    id: event.id,
-    title: event.title,
-    description: event.description,
-    date: event.date,
-    time: event.time,
-    location: event.location,
-    category: event.category,
-    image: event.image_url,
-    imageUrl: event.image_url,
-    capacity: event.capacity,
-    registeredAttendees: event.registered_attendees || 0,
-    images: [],
-    speakers: []
-  }));
 };
 
-// Fetch events by category
-export const fetchEventsByCategory = async (category: string): Promise<Event[]> => {
-  const { data, error } = await supabase
-    .from('events')
-    .select('*')
-    .eq('category', category);
+// Get events by category
+export const getEventsByCategory = async (category: string): Promise<Event[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('events')
+      .select(`
+        *,
+        event_images (*),
+        event_speakers (*),
+        event_highlights (*)
+      `)
+      .eq('category', category)
+      .order('date', { ascending: true });
 
-  if (error) {
-    console.error(`Error fetching ${category} events:`, error);
-    throw error;
+    if (error) {
+      console.error(`Error fetching events for category ${category}:`, error);
+      return [];
+    }
+
+    return transformEvents(data);
+  } catch (error) {
+    console.error(`Error in getEventsByCategory for ${category}:`, error);
+    return [];
   }
-
-  // Transform data (same logic as fetchEvents)
-  return data.map(event => ({
-    id: event.id,
-    title: event.title,
-    description: event.description,
-    date: event.date,
-    time: event.time,
-    location: event.location,
-    category: event.category,
-    image: event.image_url,
-    imageUrl: event.image_url,
-    capacity: event.capacity,
-    registeredAttendees: event.registered_attendees || 0,
-    images: [],
-    speakers: []
-  }));
 };
 
-// Register for event
-export const registerForEvent = async (eventId: string): Promise<boolean> => {
-  const { data: userData } = await supabase.auth.getUser();
-  
-  if (!userData.user) {
-    throw new Error('User not authenticated');
+// Get event by ID
+export const getEventById = async (id: string): Promise<Event | null> => {
+  try {
+    const { data, error } = await supabase
+      .from('events')
+      .select(`
+        *,
+        event_images (*),
+        event_speakers (*),
+        event_highlights (*)
+      `)
+      .eq('id', id)
+      .maybeSingle();
+
+    if (error) {
+      console.error(`Error fetching event with ID ${id}:`, error);
+      return null;
+    }
+
+    if (!data) return null;
+
+    const events = transformEvents([data]);
+    return events.length > 0 ? events[0] : null;
+  } catch (error) {
+    console.error(`Error in getEventById for ${id}:`, error);
+    return null;
   }
-  
-  const { error } = await supabase
-    .from('event_registrations')
-    .insert([
-      { 
-        event_id: eventId, 
-        user_id: userData.user.id
+};
+
+// Register for an event
+export const registerForEvent = async (eventId: string, userId: string): Promise<boolean> => {
+  try {
+    // First, register the user for the event
+    const { error: registrationError } = await supabase
+      .from('event_registrations')
+      .insert([{
+        event_id: eventId,
+        user_id: userId
+      }]);
+
+    if (registrationError) {
+      console.error('Error registering for event:', registrationError);
+      return false;
+    }
+
+    try {
+      // Call function to increment the attendee count
+      const { error } = await supabase.rpc('increment_event_attendees', {
+        event_id: eventId
+      });
+
+      if (error) {
+        console.error('Error incrementing attendee count:', error);
+        // We don't return false here, as the user is still registered
       }
-    ]);
+    } catch (functionError) {
+      console.error('Error calling increment_event_attendees function:', functionError);
+    }
 
-  if (error) {
-    console.error('Error registering for event:', error);
-    throw error;
+    return true;
+  } catch (error) {
+    console.error('Error in registerForEvent:', error);
+    return false;
   }
-
-  // Update registered attendees count using a stored procedure
-  const { error: updateError } = await supabase.rpc('increment_event_attendees', { 
-    event_id: eventId 
-  });
-
-  if (updateError) {
-    console.error('Error updating event attendees count:', updateError);
-  }
-
-  return true;
 };
 
 // Check if user is registered for an event
-export const isRegisteredForEvent = async (eventId: string): Promise<boolean> => {
-  const { data: userData } = await supabase.auth.getUser();
-  
-  if (!userData.user) {
+export const isUserRegistered = async (eventId: string, userId: string): Promise<boolean> => {
+  try {
+    const { data, error } = await supabase
+      .from('event_registrations')
+      .select('*')
+      .eq('event_id', eventId)
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
+      console.error('Error checking event registration:', error);
+      return false;
+    }
+
+    return !!data;
+  } catch (error) {
+    console.error('Error in isUserRegistered:', error);
     return false;
   }
-  
-  const { data, error } = await supabase
-    .from('event_registrations')
-    .select('id')
-    .eq('event_id', eventId)
-    .eq('user_id', userData.user.id);
-
-  if (error) {
-    console.error('Error checking event registration:', error);
-    return false;
-  }
-
-  return data && data.length > 0;
 };
 
-// Get registered events for current user
-export const getUserRegisteredEvents = async (): Promise<Event[]> => {
-  const { data: userData } = await supabase.auth.getUser();
-  
-  if (!userData.user) {
-    throw new Error('User not authenticated');
-  }
-  
-  const { data, error } = await supabase
-    .from('event_registrations')
-    .select(`
-      events:event_id (*)
-    `)
-    .eq('user_id', userData.user.id);
-
-  if (error) {
-    console.error('Error fetching user registered events:', error);
-    throw error;
-  }
-
-  return data.map(registration => {
-    const event = registration.events;
-    return {
-      id: event.id,
-      title: event.title,
-      description: event.description,
-      date: event.date,
-      time: event.time,
-      location: event.location,
-      category: event.category,
-      image: event.image_url,
-      imageUrl: event.image_url,
-      capacity: event.capacity,
-      registeredAttendees: event.registered_attendees || 0,
-      images: [],
-      speakers: []
-    };
-  });
+// Helper function to transform event data
+const transformEvents = (data: SupabaseEvent[]): Event[] => {
+  return data.map(event => ({
+    id: event.id,
+    title: event.title,
+    description: event.description,
+    date: event.date,
+    time: event.time,
+    location: event.location,
+    capacity: event.capacity,
+    registeredAttendees: event.registered_attendees,
+    category: event.category,
+    imageUrl: event.image_url,
+    images: event.event_images?.map(img => img.url) || [],
+    speakers: event.event_speakers || [],
+    highlights: event.event_highlights?.map(h => h.highlight) || []
+  }));
 };

@@ -18,7 +18,7 @@ import {
   CardTitle 
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { toast } from '@/components/ui/sonner';
+import { toast } from 'sonner';
 import { Store, Lock, Mail } from 'lucide-react';
 
 const formSchema = z.object({

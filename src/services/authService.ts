@@ -170,3 +170,18 @@ export const registerUser = async (data: SignUpData, role: UserRole) => {
   
   return await signUpUser(userData);
 };
+
+// Create a named export for the authService object to match what's being imported
+export const authService = {
+  signUpUser,
+  signInUser,
+  signOutUser,
+  getCurrentSession,
+  getCurrentUser,
+  getUserProfile,
+  getUserRole,
+  updateUserProfile,
+  resetPassword,
+  changePassword,
+  registerUser
+};

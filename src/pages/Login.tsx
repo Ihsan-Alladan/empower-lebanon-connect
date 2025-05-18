@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -107,15 +106,13 @@ const Login = () => {
 
   const onSignupSubmit = async (values: SignupFormValues) => {
     try {
-      const result = await authService.register(
-        values.email,
-        values.password,
-        values.role,
-        {
-          first_name: values.firstName,
-          last_name: values.lastName || '',
-        }
-      );
+      const result = await authService.signUpUser({
+        email: values.email,
+        password: values.password,
+        firstName: values.firstName,
+        lastName: values.lastName || '',
+        role: values.role
+      });
       
       if (result) {
         toast.success('Account created successfully! You can now log in.');
