@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { Course, Instructor } from '@/types/course';
 
@@ -342,12 +341,14 @@ export const getCourseById = async (id: string): Promise<Course | null> => {
 
     // Map learning objectives
     const learningObjectives = data.course_objectives
-      ? data.course_objectives.map((obj: any) => obj.objective)
+      ? Array.isArray(data.course_objectives) ? 
+        data.course_objectives.map(obj => obj.objective) : []
       : [];
 
     // Map requirements
     const requirements = data.course_requirements
-      ? data.course_requirements.map((req: any) => req.requirement)
+      ? Array.isArray(data.course_requirements) ? 
+        data.course_requirements.map(req => req.requirement) : []
       : [];
 
     // Map modules and lessons
@@ -374,7 +375,8 @@ export const getCourseById = async (id: string): Promise<Course | null> => {
 
     // Map student reviews
     const studentReviews = data.course_reviews
-      ? data.course_reviews.map((review: any) => {
+      ? Array.isArray(data.course_reviews) ? 
+        data.course_reviews.map((review: any) => {
           // Create a default review with empty values
           const reviewProfile = (review.profiles && typeof review.profiles === 'object') ? 
                                review.profiles : {};
@@ -391,6 +393,7 @@ export const getCourseById = async (id: string): Promise<Course | null> => {
             date: review.created_at
           };
         })
+      : []
       : [];
 
     return {

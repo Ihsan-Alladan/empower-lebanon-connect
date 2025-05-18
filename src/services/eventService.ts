@@ -20,7 +20,8 @@ export const getAllEvents = async (): Promise<Event[]> => {
       return [];
     }
 
-    return transformEvents(data);
+    // Ensure data is an array before transforming
+    return Array.isArray(data) ? transformEvents(data as SupabaseEvent[]) : [];
   } catch (error) {
     console.error('Error in getAllEvents:', error);
     return [];
@@ -46,7 +47,8 @@ export const getEventsByCategory = async (category: string): Promise<Event[]> =>
       return [];
     }
 
-    return transformEvents(data);
+    // Ensure data is an array before transforming
+    return Array.isArray(data) ? transformEvents(data as SupabaseEvent[]) : [];
   } catch (error) {
     console.error(`Error in getEventsByCategory for ${category}:`, error);
     return [];
@@ -74,7 +76,9 @@ export const getEventById = async (id: string): Promise<Event | null> => {
 
     if (!data) return null;
 
-    const events = transformEvents([data]);
+    // Handle single event data safely
+    const safeData = data as unknown as SupabaseEvent;
+    const events = transformEvents([safeData]);
     return events.length > 0 ? events[0] : null;
   } catch (error) {
     console.error(`Error in getEventById for ${id}:`, error);
@@ -155,8 +159,10 @@ const transformEvents = (data: SupabaseEvent[]): Event[] => {
     registeredAttendees: event.registered_attendees,
     category: event.category,
     imageUrl: event.image_url,
-    images: event.event_images?.map(img => img.url) || [],
-    speakers: event.event_speakers || [],
-    highlights: event.event_highlights?.map(h => h.highlight) || []
+    // Handle potentially missing or error relations
+    images: Array.isArray(event.event_images) ? event.event_images.map(img => img.url) : [],
+    speakers: Array.isArray(event.event_speakers) ? event.event_speakers : [],
+    highlights: Array.isArray(event.event_highlights) ? 
+      event.event_highlights.map(h => h.highlight) : []
   }));
 };

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -5,6 +6,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Lock, Mail, User, MapPin } from "lucide-react";
+import { authService } from "@/services/authService"; // Add this import
 
 import { Button } from "@/components/ui/button";
 import {
