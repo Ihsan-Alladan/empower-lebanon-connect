@@ -21,7 +21,14 @@ export const getAllEvents = async (): Promise<Event[]> => {
     }
 
     // Ensure data is an array before transforming
-    return Array.isArray(data) ? transformEvents(data as SupabaseEvent[]) : [];
+    if (!Array.isArray(data)) {
+      console.error('Expected array data from events query');
+      return [];
+    }
+
+    // Cast the data array to unknown first and then to SupabaseEvent[]
+    // This safely handles potential type mismatches
+    return transformEvents(data as unknown as SupabaseEvent[]);
   } catch (error) {
     console.error('Error in getAllEvents:', error);
     return [];
@@ -48,7 +55,13 @@ export const getEventsByCategory = async (category: string): Promise<Event[]> =>
     }
 
     // Ensure data is an array before transforming
-    return Array.isArray(data) ? transformEvents(data as SupabaseEvent[]) : [];
+    if (!Array.isArray(data)) {
+      console.error(`Expected array data from category ${category} query`);
+      return [];
+    }
+
+    // Cast the data array to unknown first and then to SupabaseEvent[]
+    return transformEvents(data as unknown as SupabaseEvent[]);
   } catch (error) {
     console.error(`Error in getEventsByCategory for ${category}:`, error);
     return [];
@@ -77,8 +90,8 @@ export const getEventById = async (id: string): Promise<Event | null> => {
     if (!data) return null;
 
     // Handle single event data safely
-    const safeData = data as unknown as SupabaseEvent;
-    const events = transformEvents([safeData]);
+    // Cast to unknown first to safely handle type conversion
+    const events = transformEvents([data as unknown as SupabaseEvent]);
     return events.length > 0 ? events[0] : null;
   } catch (error) {
     console.error(`Error in getEventById for ${id}:`, error);
@@ -148,21 +161,50 @@ export const isUserRegistered = async (eventId: string, userId: string): Promise
 
 // Helper function to transform event data
 const transformEvents = (data: SupabaseEvent[]): Event[] => {
-  return data.map(event => ({
-    id: event.id,
-    title: event.title,
-    description: event.description,
-    date: event.date,
-    time: event.time,
-    location: event.location,
-    capacity: event.capacity,
-    registeredAttendees: event.registered_attendees,
-    category: event.category,
-    imageUrl: event.image_url,
-    // Handle potentially missing or error relations
-    images: Array.isArray(event.event_images) ? event.event_images.map(img => img.url) : [],
-    speakers: Array.isArray(event.event_speakers) ? event.event_speakers : [],
-    highlights: Array.isArray(event.event_highlights) ? 
-      event.event_highlights.map(h => h.highlight) : []
-  }));
+  return data.map(event => {
+    // Process event_images safely
+    let images: string[] = [];
+    if (event.event_images) {
+      // Check if event_images is an array and not an error object
+      if (Array.isArray(event.event_images)) {
+        images = event.event_images
+          .filter(img => img && typeof img === 'object' && 'url' in img)
+          .map(img => img.url);
+      }
+    }
+    
+    // Process event_speakers safely
+    let speakers = [];
+    if (event.event_speakers) {
+      if (Array.isArray(event.event_speakers)) {
+        speakers = event.event_speakers;
+      }
+    }
+    
+    // Process event_highlights safely
+    let highlights: string[] = [];
+    if (event.event_highlights) {
+      if (Array.isArray(event.event_highlights)) {
+        highlights = event.event_highlights
+          .filter(h => h && typeof h === 'object' && 'highlight' in h)
+          .map(h => h.highlight);
+      }
+    }
+    
+    return {
+      id: event.id,
+      title: event.title,
+      description: event.description,
+      date: event.date,
+      time: event.time,
+      location: event.location,
+      capacity: event.capacity,
+      registeredAttendees: event.registered_attendees,
+      category: event.category,
+      imageUrl: event.image_url,
+      images,
+      speakers,
+      highlights
+    };
+  });
 };
