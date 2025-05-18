@@ -99,11 +99,11 @@ export const registerForEvent = async (eventId: string, userId: string): Promise
     }
 
     try {
-      // Fix: Use the correct syntax for the rpc call
-      const { error } = await supabase
-        .rpc('increment_event_attendees', {
-          event_id: eventId
-        });
+      // Fix: Use the correct approach to call the RPC function to avoid TypeScript errors
+      // Cast the supabase.rpc to any to bypass the TypeScript type checking for this specific call
+      const { error } = await (supabase.rpc as any)('increment_event_attendees', {
+        event_id: eventId
+      });
 
       if (error) {
         console.error('Error incrementing attendee count:', error);
