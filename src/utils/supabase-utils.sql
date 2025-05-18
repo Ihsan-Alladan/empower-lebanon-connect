@@ -13,3 +13,4 @@ BEGIN
   WHERE id = event_id;
 END;
 $$;
+

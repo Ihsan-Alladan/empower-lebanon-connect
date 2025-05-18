@@ -57,17 +57,25 @@ export const getRecentDonations = async (limit: number = 10): Promise<any[]> => 
     throw error;
   }
 
-  return data.map(donation => ({
-    id: donation.id,
-    amount: donation.amount,
-    currency: donation.currency,
-    message: donation.message,
-    isAnonymous: donation.is_anonymous,
-    donorName: donation.is_anonymous 
-      ? 'Anonymous'
-      : donation.profiles 
-        ? `${donation.profiles.first_name} ${donation.profiles.last_name}`.trim()
-        : 'Anonymous',
-    date: donation.created_at
-  }));
+  return data.map(donation => {
+    let donorName = 'Anonymous';
+    
+    if (!donation.is_anonymous && donation.profiles) {
+      const firstName = donation.profiles?.first_name || '';
+      const lastName = donation.profiles?.last_name || '';
+      if (firstName || lastName) {
+        donorName = `${firstName} ${lastName}`.trim();
+      }
+    }
+    
+    return {
+      id: donation.id,
+      amount: donation.amount,
+      currency: donation.currency,
+      message: donation.message,
+      isAnonymous: donation.is_anonymous,
+      donorName,
+      date: donation.created_at
+    };
+  });
 };

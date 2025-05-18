@@ -23,8 +23,11 @@ export const fetchEvents = async (): Promise<Event[]> => {
     location: event.location,
     category: event.category,
     image: event.image_url,
+    imageUrl: event.image_url,
     capacity: event.capacity,
-    registeredAttendees: event.registered_attendees || 0
+    registeredAttendees: event.registered_attendees || 0,
+    images: [],
+    speakers: []
   }));
 };
 
@@ -50,8 +53,11 @@ export const fetchEventsByCategory = async (category: string): Promise<Event[]> 
     location: event.location,
     category: event.category,
     image: event.image_url,
+    imageUrl: event.image_url,
     capacity: event.capacity,
-    registeredAttendees: event.registered_attendees || 0
+    registeredAttendees: event.registered_attendees || 0,
+    images: [],
+    speakers: []
   }));
 };
 
@@ -77,7 +83,7 @@ export const registerForEvent = async (eventId: string): Promise<boolean> => {
     throw error;
   }
 
-  // Update registered attendees count
+  // Update registered attendees count using a stored procedure
   const { error: updateError } = await supabase.rpc('increment_event_attendees', { 
     event_id: eventId 
   });
@@ -142,8 +148,11 @@ export const getUserRegisteredEvents = async (): Promise<Event[]> => {
       location: event.location,
       category: event.category,
       image: event.image_url,
+      imageUrl: event.image_url,
       capacity: event.capacity,
-      registeredAttendees: event.registered_attendees || 0
+      registeredAttendees: event.registered_attendees || 0,
+      images: [],
+      speakers: []
     };
   });
 };

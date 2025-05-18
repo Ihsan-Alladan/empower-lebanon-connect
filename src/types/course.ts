@@ -1,12 +1,13 @@
 
 export interface Instructor {
+  id: string;
   name: string;
   avatar: string;
-  title: string;
-  bio: string;
-  coursesCount: number;
-  studentsCount: number;
-  reviewsCount: number;
+  title?: string;
+  bio?: string;
+  coursesCount?: number;
+  studentsCount?: number;
+  reviewsCount?: number;
 }
 
 export interface Lesson {
@@ -40,21 +41,24 @@ export interface Course {
   title: string;
   description: string;
   thumbnail: string;
-  category: 'handmade' | 'digital';
-  level: 'beginner' | 'intermediate' | 'advanced';
+  category: 'handmade' | 'digital' | string;
+  level: 'beginner' | 'intermediate' | 'advanced' | string;
   price: number;
   duration: string;
   instructor: Instructor;
   rating: number;
   reviews: number;
-  updatedAt: string;
-  studentsEnrolled: number;
-  learningObjectives: string[];
-  requirements: string[];
-  targetAudience: string;
-  modules: Module[];
-  totalLessons: number;
-  ratingBreakdown: RatingBreakdown[];
-  studentReviews: StudentReview[];
+  enrolled?: number;
+  updatedAt?: string;
+  studentsEnrolled?: number;
+  learningObjectives?: string[];
+  requirements?: string[];
+  targetAudience?: string;
+  modules?: Module[];
+  totalLessons?: number;
+  ratingBreakdown?: RatingBreakdown[];
+  studentReviews?: StudentReview[];
   isTrending?: boolean;
+  progress?: number;
+  lastAccessed?: string;
 }

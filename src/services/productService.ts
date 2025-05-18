@@ -22,13 +22,13 @@ export const fetchProducts = async (): Promise<Product[]> => {
     // Get primary image or first available image
     const images = product.product_images || [];
     const primaryImage = images.length > 0 
-      ? images.sort((a: any, b: any) => (a.display_order || 0) - (b.display_order || 0))[0].url 
+      ? images.sort((a: any, b: any) => (a.display_order || 0) - (b.display_order || 0))[0]?.url 
       : '';
       
     // Calculate average rating
     const reviews = product.product_reviews || [];
     const rating = reviews.length > 0 
-      ? reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / reviews.length 
+      ? reviews.reduce((sum: number, review: any) => sum + (review?.rating || 0), 0) / reviews.length 
       : 0;
 
     return {
@@ -74,12 +74,12 @@ export const fetchFeaturedProducts = async (): Promise<Product[]> => {
   return data.map(product => {
     const images = product.product_images || [];
     const primaryImage = images.length > 0 
-      ? images.sort((a: any, b: any) => (a.display_order || 0) - (b.display_order || 0))[0].url 
+      ? images.sort((a: any, b: any) => (a.display_order || 0) - (b.display_order || 0))[0]?.url 
       : '';
       
     const reviews = product.product_reviews || [];
     const rating = reviews.length > 0 
-      ? reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / reviews.length 
+      ? reviews.reduce((sum: number, review: any) => sum + (review?.rating || 0), 0) / reviews.length 
       : 0;
 
     return {

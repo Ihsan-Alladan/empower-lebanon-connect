@@ -1,5 +1,5 @@
 
-export type EventCategory = 'social' | 'educational' | 'fundraising' | 'workshop' | 'networking' | 'community' | 'career';
+export type EventCategory = 'social' | 'educational' | 'fundraising' | 'workshop' | 'networking' | 'community' | 'career' | string;
 
 export interface Speaker {
   name: string;
@@ -18,9 +18,10 @@ export interface Event {
   capacity: number;
   registeredAttendees: number;
   category: EventCategory;
-  imageUrl: string;
-  images: string[];
-  speakers: Speaker[];
+  imageUrl?: string;
+  image?: string;
+  images?: string[];
+  speakers?: Speaker[];
   highlights?: string[];
 }
 

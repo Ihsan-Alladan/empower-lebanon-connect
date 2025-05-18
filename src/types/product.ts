@@ -21,28 +21,32 @@ export interface Product {
   description: string;
   price: number;
   discountedPrice?: number;
-  currency: string;
-  images: ProductImage[];
+  currency?: string;
+  images?: ProductImage[];
   category: string;
   subcategory?: string;
-  tags: string[];
+  tags?: string[];
   seller: {
     id: string;
     name: string;
-    avatar: string;
-    rating: number;
+    avatar?: string;
+    rating?: number;
   };
-  stock: number;
+  stock?: number;
   colors?: string[];
   sizes?: string[];
   materials?: string[];
   rating: number;
-  reviewsCount: number;
+  reviewsCount?: number;
+  reviews?: number;
   reviews?: ProductReview[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
   featured?: boolean;
   isHandmade: boolean;
+  isFeatured?: boolean;
+  image?: string;
+  inStock?: boolean;
 }
 
 export interface CartItem {

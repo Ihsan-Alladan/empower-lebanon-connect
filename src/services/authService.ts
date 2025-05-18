@@ -1,219 +1,172 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from "sonner";
 
-export interface User {
-  id: string;
+// Type for user role
+export type UserRole = 'admin' | 'instructor' | 'learner' | 'customer' | 'seller';
+
+// Interface for user signup data
+export interface SignUpData {
   email: string;
-  name: string;
-  role: string;
-  avatar?: string;
-  phoneNumber?: string;
-  address?: string;
-  bio?: string;
-  expertise?: string[];
+  password: string;
+  firstName: string;
+  lastName: string;
+  role?: UserRole;
 }
 
-export const authService = {
-  // Register a new user
-  register: async (email: string, password: string, role: string, metadata: any = {}): Promise<User | null> => {
-    try {
-      // Include role in metadata
-      const metaWithRole = { ...metadata, role };
-      
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: metaWithRole,
-        }
-      });
-      
-      if (error) throw error;
-      
-      if (!data.user) return null;
-      
-      // Return user data
-      return {
-        id: data.user.id,
-        email: data.user.email || '',
-        name: metadata.first_name 
-          ? `${metadata.first_name} ${metadata.last_name || ''}`.trim()
-          : email.split('@')[0],
-        role: role,
-      };
-    } catch (error: any) {
-      console.error("Registration error:", error);
-      toast.error(error.message || "Registration failed");
-      return null;
-    }
-  },
+// Sign up user
+export const signUpUser = async (data: SignUpData): Promise<any> => {
+  const { email, password, firstName, lastName, role = 'customer' } = data;
   
-  // Login an existing user
-  login: async (email: string, password: string): Promise<User | null> => {
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-      
-      if (error) throw error;
-      
-      if (!data.user) return null;
-      
-      // Fetch user role
-      const { data: roleData, error: roleError } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', data.user.id)
-        .single();
-        
-      if (roleError && roleError.code !== 'PGRST116') throw roleError;
-      
-      // Fetch profile data
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('first_name, last_name, avatar_url')
-        .eq('id', data.user.id)
-        .single();
-        
-      if (profileError && profileError.code !== 'PGRST116') throw profileError;
-      
-      const role = roleData?.role || 'customer'; // Default to customer if no role found
-      
-      return {
-        id: data.user.id,
-        email: data.user.email || '',
-        name: profileData?.first_name 
-          ? `${profileData.first_name} ${profileData.last_name || ''}`.trim()
-          : email.split('@')[0],
-        role: role,
-        avatar: profileData?.avatar_url
-      };
-    } catch (error: any) {
-      console.error("Login error:", error);
-      toast.error(error.message || "Login failed");
-      return null;
+  const { data: authData, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        first_name: firstName,
+        last_name: lastName,
+        role: role
+      },
     }
-  },
-  
-  // Logout the current user
-  logout: async (): Promise<void> => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      
-      toast.success("Logged out successfully");
-    } catch (error: any) {
-      console.error("Logout error:", error);
-      toast.error(error.message || "Logout failed");
-    }
-  },
-  
-  // Get the current user
-  getCurrentUser: async (): Promise<User | null> => {
-    const { data } = await supabase.auth.getUser();
-    
-    if (!data.user) return null;
-    
-    try {
-      // Fetch user role
-      const { data: roleData, error: roleError } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', data.user.id)
-        .single();
-        
-      if (roleError && roleError.code !== 'PGRST116') throw roleError;
-      
-      // Fetch profile data
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('first_name, last_name, avatar_url, bio')
-        .eq('id', data.user.id)
-        .single();
-        
-      if (profileError && profileError.code !== 'PGRST116') throw profileError;
-      
-      const role = roleData?.role || 'customer'; // Default to customer if no role found
-      
-      return {
-        id: data.user.id,
-        email: data.user.email || '',
-        name: profileData?.first_name 
-          ? `${profileData.first_name} ${profileData.last_name || ''}`.trim()
-          : data.user.email?.split('@')[0] || 'User',
-        role: role,
-        avatar: profileData?.avatar_url,
-        bio: profileData?.bio
-      };
-    } catch (error) {
-      console.error("Error getting current user details:", error);
-      return {
-        id: data.user.id,
-        email: data.user.email || '',
-        name: data.user.email?.split('@')[0] || 'User',
-        role: 'customer', // Default role
-      };
-    }
-  },
-  
-  // Check if user is authenticated
-  isAuthenticated: async (): Promise<boolean> => {
-    const { data } = await supabase.auth.getUser();
-    return !!data.user;
-  },
-  
-  // Check if user has a specific role
-  hasRole: async (role: string): Promise<boolean> => {
-    const { data } = await supabase.auth.getUser();
-    
-    if (!data.user) return false;
-    
-    try {
-      // Fetch user roles
-      const { data: roleData, error } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', data.user.id)
-        .eq('role', role);
-        
-      if (error) throw error;
-      
-      return roleData && roleData.length > 0;
-    } catch (error) {
-      console.error(`Error checking ${role} role:`, error);
-      return false;
-    }
-  },
-  
-  // Update user profile
-  updateProfile: async (profile: Partial<User>): Promise<User | null> => {
-    const { data: userData } = await supabase.auth.getUser();
-    
-    if (!userData.user) {
-      throw new Error('User not authenticated');
-    }
-    
-    try {
-      // Update profiles table
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          first_name: profile.name?.split(' ')[0],
-          last_name: profile.name?.split(' ').slice(1).join(' '),
-          avatar_url: profile.avatar,
-          bio: profile.bio
-        })
-        .eq('id', userData.user.id);
-        
-      if (error) throw error;
-      
-      return await authService.getCurrentUser();
-    } catch (error: any) {
-      console.error("Profile update error:", error);
-      toast.error(error.message || "Failed to update profile");
-      return null;
-    }
+  });
+
+  if (error) {
+    console.error('Error signing up:', error);
+    throw error;
   }
+
+  return authData;
+};
+
+// Sign in user
+export const signInUser = async (email: string, password: string): Promise<any> => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    console.error('Error signing in:', error);
+    throw error;
+  }
+
+  return data;
+};
+
+// Sign out user
+export const signOutUser = async (): Promise<void> => {
+  const { error } = await supabase.auth.signOut();
+  
+  if (error) {
+    console.error('Error signing out:', error);
+    throw error;
+  }
+};
+
+// Get current session
+export const getCurrentSession = async () => {
+  const { data, error } = await supabase.auth.getSession();
+  
+  if (error) {
+    console.error('Error getting session:', error);
+    throw error;
+  }
+  
+  return data.session;
+};
+
+// Get current user
+export const getCurrentUser = async () => {
+  const { data, error } = await supabase.auth.getUser();
+  
+  if (error) {
+    console.error('Error getting user:', error);
+    return null;
+  }
+  
+  return data.user;
+};
+
+// Get user profile
+export const getUserProfile = async (userId: string) => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single();
+  
+  if (error) {
+    console.error('Error fetching user profile:', error);
+    return null;
+  }
+  
+  return data;
+};
+
+// Get user role
+export const getUserRole = async (userId: string): Promise<UserRole | null> => {
+  const { data, error } = await supabase
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', userId)
+    .single();
+  
+  if (error) {
+    console.error('Error fetching user role:', error);
+    return null;
+  }
+  
+  return data.role as UserRole;
+};
+
+// Update user profile
+export const updateUserProfile = async (userId: string, updates: any) => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .update(updates)
+    .eq('id', userId);
+  
+  if (error) {
+    console.error('Error updating profile:', error);
+    throw error;
+  }
+  
+  return data;
+};
+
+// Reset password
+export const resetPassword = async (email: string) => {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/reset-password`,
+  });
+  
+  if (error) {
+    console.error('Error resetting password:', error);
+    throw error;
+  }
+  
+  return true;
+};
+
+// Change password
+export const changePassword = async (password: string) => {
+  const { error } = await supabase.auth.updateUser({
+    password,
+  });
+  
+  if (error) {
+    console.error('Error changing password:', error);
+    throw error;
+  }
+  
+  return true;
+};
+
+// Register a new user with a specific role
+export const registerUser = async (data: SignUpData, role: UserRole) => {
+  const userData = {
+    ...data,
+    role
+  };
+  
+  return await signUpUser(userData);
 };

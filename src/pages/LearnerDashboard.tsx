@@ -22,9 +22,11 @@ const LearnerDashboard = () => {
     queryFn: getEnrolledCourses,
     enabled: isAuthenticated && user?.role === 'learner',
     retry: false,
-    onError: (err) => {
-      console.error("Failed to fetch enrolled courses:", err);
-      toast.error("Failed to load your courses. Please try again later.");
+    meta: {
+      onError: (err: Error) => {
+        console.error("Failed to fetch enrolled courses:", err);
+        toast.error("Failed to load your courses. Please try again later.");
+      }
     }
   });
 
@@ -40,6 +42,13 @@ const LearnerDashboard = () => {
       return;
     }
   }, [isAuthenticated, user, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      console.error("Error loading enrolled courses:", error);
+      toast.error("Failed to load your courses. Please try again later.");
+    }
+  }, [error]);
 
   const handleCourseClick = (courseId: string) => {
     // Navigate to the classroom with the selected course
