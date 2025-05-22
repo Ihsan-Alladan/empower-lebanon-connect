@@ -1,8 +1,7 @@
-
 import { supabase } from '@/integrations/supabase/client';
 
 // Type for user role - update to match the database roles
-export type UserRole = 'admin' | 'instructor' | 'customer' | 'seller' | 'learner';
+export type UserRole = 'admin' | 'instructor' | 'customer' | 'seller';
 
 // Interface for user signup data
 export interface SignUpData {
@@ -38,25 +37,8 @@ export const signUpUser = async (data: SignUpData): Promise<any> => {
     throw error;
   }
 
-  // Ensure role is added to user_roles table
-  if (authData?.user) {
-    try {
-      const { error: roleError } = await supabase
-        .from('user_roles')
-        .insert({
-          user_id: authData.user.id,
-          role: role
-        });
-      
-      if (roleError) {
-        console.error('Error adding user role:', roleError);
-        // Continue despite error - the trigger should handle this in most cases
-      }
-    } catch (roleErr) {
-      console.error('Exception adding user role:', roleErr);
-      // Continue despite error - the trigger should handle this in most cases
-    }
-  }
+  // No user_roles table insertion for now, as requested
+  console.log("User signed up successfully but not adding to user_roles as requested");
 
   return authData;
 };

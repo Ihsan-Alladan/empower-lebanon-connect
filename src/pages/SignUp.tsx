@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Book, ShoppingCart, Store, BookOpen } from "lucide-react";
 
 import Navbar from "@/components/Navbar";
