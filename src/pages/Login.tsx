@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -30,7 +29,7 @@ const signupSchema = z.object({
   password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
   firstName: z.string().min(1, { message: 'First name is required' }),
   lastName: z.string().optional(),
-  role: z.enum(['learner', 'instructor', 'customer', 'seller']), 
+  role: z.enum(['customer', 'instructor', 'seller']), 
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
