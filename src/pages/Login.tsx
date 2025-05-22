@@ -29,7 +29,7 @@ const signupSchema = z.object({
   password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
   firstName: z.string().min(1, { message: 'First name is required' }),
   lastName: z.string().optional(),
-  role: z.enum(['customer', 'instructor', 'seller']), 
+  role: z.enum(['customer', 'instructor', 'seller', 'learner']), 
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;

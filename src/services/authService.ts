@@ -2,7 +2,7 @@
 import { supabase } from '@/integrations/supabase/client';
 
 // Type for user role - update to match the database roles
-export type UserRole = 'admin' | 'instructor' | 'customer' | 'seller';
+export type UserRole = 'admin' | 'instructor' | 'customer' | 'seller' | 'learner';
 
 // Interface for user signup data
 export interface SignUpData {
